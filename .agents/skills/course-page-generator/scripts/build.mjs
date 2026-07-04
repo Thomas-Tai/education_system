@@ -382,6 +382,7 @@ function parseContent(md) {
   const sections = [];
   let current = null;
   let currentSub = null;
+  let currentSubId = '';
   let i = 0;
   let sectionNum = 0;
   let subNum = 0;
@@ -420,6 +421,7 @@ function parseContent(md) {
       const id = uniqueId(generateId(title) || `section-${sectionNum}`);
       current = { type: 'section', num: sectionNum, label, h2, id, lead: '', subs: [], blocks: [] };
       currentSub = null;
+      currentSubId = '';
       sections.push(current);
 
       // Skip optional blank lines between # heading and > lead (standard Markdown convention)
@@ -442,6 +444,7 @@ function parseContent(md) {
       subNum++;
       const subId = uniqueId('sub-' + (generateId(title) || `section-${subNum}`));
       currentSub = { title, id: subId };
+      currentSubId = subId;
       if (current) {
         current.subs.push(currentSub);
         current.blocks.push({ type: 'sub-title', title, id: subId });
@@ -680,7 +683,7 @@ function parseContent(md) {
       }
       i++;
       const quizId = 'q-' + question.toLowerCase().replace(/[^\w一-鿿]/g, '').slice(0, 20);
-      if (current) current.blocks.push({ type: 'quiz', quizType, quizId, question, options, correctIdx, hint });
+      if (current) current.blocks.push({ type: 'quiz', quizType, quizId, question, options, correctIdx, hint, reviewAnchor: currentSubId });
       continue;
     }
 
@@ -1353,7 +1356,8 @@ ${childrenHtml}
     }
 
     case 'quiz': {
-      let s = `<div class="quiz-block" data-quiz-id="${esc(block.quizId)}" data-quiz-answer="${block.correctIdx}" data-quiz-type="${esc(block.quizType || 'single')}">\n`;
+      const reviewAttr = block.reviewAnchor ? ` data-review-anchor="${esc(block.reviewAnchor)}"` : '';
+      let s = `<div class="quiz-block" data-quiz-id="${esc(block.quizId)}" data-quiz-answer="${block.correctIdx}" data-quiz-type="${esc(block.quizType || 'single')}"${reviewAttr}>\n`;
       s += `      <div class="quiz-q">${esc(block.question)}</div>\n`;
       s += `      <div class="quiz-opts">\n`;
       block.options.forEach((opt, idx) => {

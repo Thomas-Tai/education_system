@@ -2869,6 +2869,8 @@
       var fbEl = block.querySelector('.quiz-fb');
       var answerIdx = parseInt(block.dataset.quizAnswer);
       btns.forEach(function (b) { b.disabled = true; b.querySelectorAll('.quiz-result-icon').forEach(function (ic) { ic.remove(); }); });
+      // Remove any existing review link to avoid duplicates
+      block.querySelectorAll('.quiz-review-link').forEach(function (el) { el.remove(); });
       if (correct) {
         btns[chosenIdx] && btns[chosenIdx].classList.add('quiz-btn--correct');
         if (btns[chosenIdx]) btns[chosenIdx].insertAdjacentHTML('afterbegin', '<span class="quiz-result-icon" aria-label="正確">&#10003;</span>');
@@ -2882,7 +2884,21 @@
         }
         if (hintEl) hintEl.removeAttribute('hidden');
         if (fbEl) { fbEl.textContent = '答錯了，正確答案已標示'; fbEl.className = 'quiz-fb quiz-fb--wrong'; fbEl.removeAttribute('hidden'); }
+        // Add review link button if this quiz has a review anchor
+        var anchorId = block.getAttribute('data-review-anchor');
+        if (anchorId && fbEl) {
+          var reviewBtn = document.createElement('button');
+          reviewBtn.className = 'quiz-review-link';
+          reviewBtn.textContent = '複習此概念 →';
+          reviewBtn.addEventListener('click', function () {
+            var target = document.getElementById(anchorId);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+          fbEl.insertAdjacentElement('afterend', reviewBtn);
+        }
       }
+      // Notify error summary panel of state change
+      if (window.__quizSummaryUpdate) window.__quizSummaryUpdate();
     }
 
     function restoreQuizBlock(block) {
@@ -3557,4 +3573,122 @@
 
     // Restore from localStorage
     if (localStorage.getItem(PRES_KEY) === '1') enterPresMode();
+  })();
+
+  /* ===== QUIZ ERROR SUMMARY ===== */
+  ;(function(){
+    // Create floating button
+    var btn = document.createElement('button');
+    btn.className = 'quiz-summary-btn';
+    btn.innerHTML = '答題紀錄 <span class="badge" id="quizSummaryBadge">0</span>';
+    document.body.appendChild(btn);
+
+    // Create overlay + modal
+    var overlay = document.createElement('div');
+    overlay.className = 'quiz-summary-overlay';
+    overlay.innerHTML = '<div class="quiz-summary-modal" id="quizSummaryModal"></div>';
+    document.body.appendChild(overlay);
+
+    var QUIZ_KEY = 'quizResults_' + location.pathname;
+
+    function getResults() {
+      try { return JSON.parse(localStorage.getItem(QUIZ_KEY) || '{}'); } catch(e) { return {}; }
+    }
+
+    function updateBtn() {
+      var results = getResults();
+      var total = Object.keys(results).length;
+      document.getElementById('quizSummaryBadge').textContent = total;
+      if (total > 0) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    }
+
+    function buildSummary() {
+      var results = getResults();
+      var total = Object.keys(results).length;
+      var correct = 0, wrong = 0;
+      var wrongItems = [];
+
+      for (var qid in results) {
+        var r = results[qid];
+        if (r === 'correct') { correct++; continue; }
+        wrong++;
+        // Find the quiz block on page
+        var block = document.querySelector('[data-quiz-id="' + qid + '"]');
+        if (!block) continue;
+        // Find parent group header
+        var groupHeader = block.closest('.group-block');
+        var section = block.closest('.section');
+        var groupTitle = '其他題目';
+        if (groupHeader) {
+          var gh = groupHeader.querySelector('.group-header');
+          if (gh) groupTitle = gh.textContent.trim();
+        } else if (section) {
+          var sh = section.querySelector('.section-label');
+          if (sh) groupTitle = sh.textContent.trim();
+        }
+        // Get question text
+        var qEl = block.querySelector('.quiz-q');
+        var qText = qEl ? qEl.textContent.trim().slice(0, 60) : qid;
+
+        wrongItems.push({ group: groupTitle, text: qText, id: qid });
+      }
+
+      // Build modal HTML
+      var html = '<h3>答題紀錄</h3>';
+      html += '<div class="quiz-summary-stats">';
+      html += '<div class="quiz-summary-stat"><div class="num">' + total + '</div><div class="label">已作答</div></div>';
+      html += '<div class="quiz-summary-stat"><div class="num">' + correct + '</div><div class="label">正確</div></div>';
+      html += '<div class="quiz-summary-stat wrong"><div class="num">' + wrong + '</div><div class="label">錯誤</div></div>';
+      html += '</div>';
+
+      if (wrong === 0 && total > 0) {
+        html += '<div class="quiz-summary-empty">全部正確！表現優異！</div>';
+      } else if (wrong > 0) {
+        // Group by section
+        var groups = {};
+        wrongItems.forEach(function(item) {
+          if (!groups[item.group]) groups[item.group] = [];
+          groups[item.group].push(item);
+        });
+        for (var g in groups) {
+          html += '<div class="quiz-summary-group">';
+          html += '<div class="quiz-summary-group-title">' + g + ' (' + groups[g].length + ' 題錯誤)</div>';
+          groups[g].forEach(function(item) {
+            html += '<div class="quiz-summary-item"><span style="color:var(--bad);">&#10007;</span>';
+            html += '<a href="#' + item.id + '" onclick="document.getElementById(\'' + item.id + '\').scrollIntoView({behavior:\'smooth\',block:\'center\'});document.querySelector(\'.quiz-summary-overlay\').classList.remove(\'open\');">' + item.text + '...</a>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+      }
+
+      html += '<button class="quiz-summary-close" onclick="this.closest(\'.quiz-summary-overlay\').classList.remove(\'open\')">關閉</button>';
+      document.getElementById('quizSummaryModal').innerHTML = html;
+    }
+
+    // Click handlers
+    btn.addEventListener('click', function() {
+      buildSummary();
+      overlay.classList.add('open');
+    });
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+
+    // Monitor quiz changes via MutationObserver on quiz result elements
+    var observer = new MutationObserver(function() { updateBtn(); });
+    document.querySelectorAll('.quiz-opts').forEach(function(opts) {
+      observer.observe(opts, { attributes: true, subtree: true, attributeFilter: ['class'] });
+    });
+
+    // Also check on load (restore from localStorage)
+    updateBtn();
+
+    // Expose for other scripts
+    window.__quizSummaryUpdate = updateBtn;
   })();
