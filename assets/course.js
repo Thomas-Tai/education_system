@@ -152,22 +152,22 @@
     // Theme toggle
     var themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', function () {
-      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      if (isLight) {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
         document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'dark');
-        themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
         themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
       }
     });
     window.__toggleDarkLight = function () { themeToggle.click(); };
     window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change', function (e) {
       if (localStorage.getItem('theme')) return;
-      if (e.matches) { document.documentElement.removeAttribute('data-theme'); themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' }
-      else { document.documentElement.setAttribute('data-theme', 'light'); themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' }
+      if (e.matches) { document.documentElement.setAttribute('data-theme', 'dark'); themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' }
+      else { document.documentElement.removeAttribute('data-theme'); themeToggle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' }
     });
 
     // Shared markdown helpers (used by bonus modal and PDF export)
@@ -485,21 +485,21 @@
       if (savedPalette) {
         try {
           var sp = JSON.parse(savedPalette);
-          var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          var isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
           applyPalette(sp, isLight);
           document.querySelectorAll('.color-swatch').forEach(function (sw) {
             if (sw.dataset.accent === sp.accent) sw.classList.add('selected');
           });
         } catch (e) { }
       } else {
-        var firstSwatch = document.querySelector('.color-swatch[data-theme-id="red"]');
+        var firstSwatch = document.querySelector('.color-swatch[data-theme-id="terracotta"]');
         if (firstSwatch) firstSwatch.classList.add('selected');
       }
 
       document.querySelectorAll('.color-swatch').forEach(function (sw) {
         sw.addEventListener('click', function () {
           var data = getSwatchData(sw);
-          var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          var isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
           applyPalette(data, isLight);
           localStorage.setItem('colorPalette', JSON.stringify(data));
           updateSwatchSelection(sw.dataset.themeId);
@@ -520,7 +520,7 @@
         try {
           var pd = JSON.parse(paletteData);
           setTimeout(function () {
-            var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            var isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
             applyPalette(pd, isLight);
           }, 0);
         } catch (e) { }
@@ -778,7 +778,7 @@
 
       // Force light theme for PDF export, restore after
       var origTheme = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.removeAttribute('data-theme');
 
       var printSlides = document.createElement('div');
       printSlides.id = 'print-slides';

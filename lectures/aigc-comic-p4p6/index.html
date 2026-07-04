@@ -952,36 +952,26 @@
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="color-swatches" id="color-swatches">
-        <button class="color-swatch" data-theme-id="red" title="正紅" data-accent="#e03040"
-          data-accent-light="#b01828" data-accent2="#e87858" data-accent2-light="#c05030" data-accent3="#d06080"
-          data-accent3-light="#a03060"
-          style="background:linear-gradient(135deg,#e03040 40%,#e87858 70%,#d06080)"></button>
-        <button class="color-swatch" data-theme-id="coral" title="暖陽珊瑚" data-accent="#e8845a"
-          data-accent-light="#c45c28" data-accent2="#e8b878" data-accent2-light="#9a7028" data-accent3="#e08898"
-          data-accent3-light="#b04860"
-          style="background:linear-gradient(135deg,#e8845a 40%,#e8b878 70%,#e08898)"></button>
-        <button class="color-swatch" data-theme-id="ocean" title="深海藍" data-accent="#60a5fa" data-accent-light="#2563eb"
-          data-accent2="#5eead4" data-accent2-light="#0d9488" data-accent3="#a5b4fc" data-accent3-light="#6366f1"
-          style="background:linear-gradient(135deg,#60a5fa 40%,#5eead4 70%,#a5b4fc)"></button>
-        <button class="color-swatch" data-theme-id="forest" title="翡翠森林" data-accent="#50d890"
-          data-accent-light="#15803d" data-accent2="#c8d858" data-accent2-light="#6a7a18" data-accent3="#50c0a8"
-          data-accent3-light="#0d7060"
-          style="background:linear-gradient(135deg,#50d890 40%,#c8d858 70%,#50c0a8)"></button>
-        <button class="color-swatch" data-theme-id="galaxy" title="星河紫" data-accent="#a78bfa"
-          data-accent-light="#7c3aed" data-accent2="#e8a8e0" data-accent2-light="#a21caf" data-accent3="#7db8f8"
-          data-accent3-light="#2563eb"
-          style="background:linear-gradient(135deg,#a78bfa 40%,#e8a8e0 70%,#7db8f8)"></button>
-        <button class="color-swatch" data-theme-id="sakura" title="花見櫻" data-accent="#f472b6"
-          data-accent-light="#db2777" data-accent2="#b0a8f0" data-accent2-light="#6d28d9" data-accent3="#f0a8a0"
-          data-accent3-light="#c05050"
-          style="background:linear-gradient(135deg,#f472b6 40%,#b0a8f0 70%,#f0a8a0)"></button>
-        <button class="color-swatch" data-theme-id="amber" title="琥珀" data-accent="#f0b840" data-accent-light="#a87808"
-          data-accent2="#e09870" data-accent2-light="#a86040" data-accent3="#c8b080" data-accent3-light="#887048"
-          style="background:linear-gradient(135deg,#f0b840 40%,#e09870 70%,#c8b080)"></button>
-        <button class="color-swatch" data-theme-id="white" title="銀白" data-accent="#c8cdd8"
-          data-accent-light="#607090" data-accent2="#b0c0c8" data-accent2-light="#506870" data-accent3="#c0bcd8"
-          data-accent3-light="#706888"
-          style="background:linear-gradient(135deg,#e0e2ec 40%,#c8d0dc 70%,#d4cce8)"></button>
+        <button class="color-swatch selected" data-theme-id="terracotta" title="赤陶" data-accent="#A4452F"
+          data-accent-light="#A4452F" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#A4452F 40%,#3F5B7E 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="slate" title="岩灰藍" data-accent="#3F5B7E"
+          data-accent-light="#3F5B7E" data-accent2="#A4452F" data-accent2-light="#A4452F" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#3F5B7E 40%,#A4452F 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="forest" title="森綠" data-accent="#2F6B4A"
+          data-accent-light="#2F6B4A" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#2F6B4A 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="ochre" title="赭黃" data-accent="#B5781E"
+          data-accent-light="#B5781E" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#B5781E 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="plum" title="梅紫" data-accent="#6A4F7C"
+          data-accent-light="#6A4F7C" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#6A4F7C 40%,#3F5B7E 70%,#A4452F)"></button>
       </div>
     </div>
     <div class="settings-divider"></div>
@@ -1244,15 +1234,15 @@
       var s = localStorage.getItem('theme');
       var d = window.matchMedia('(prefers-color-scheme:dark)').matches;
       var t = s || (d ? 'dark' : 'light');
-      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       var b = document.getElementById('theme-toggle');
-      if (b) b.innerHTML = t === 'light' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      if (b) b.innerHTML = t === 'dark' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
       // Restore accent color
       var accentData = localStorage.getItem('accentTheme');
       if (accentData) {
         try {
           var ac = JSON.parse(accentData);
-          var isLight = t === 'light';
+          var isLight = t !== 'dark';
           document.documentElement.style.setProperty('--accent', isLight ? ac.light : ac.dark);
         } catch (e) { }
       }
