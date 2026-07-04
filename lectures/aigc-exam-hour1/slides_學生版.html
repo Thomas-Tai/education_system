@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 AIGC 初級｜第一小時：互動刷題實戰（學生版）</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@300;400;500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Base styles — from styles.css (deck-stage template)
+   ============================================================ */
+:root {
+  --cream:        #F2EEE5;
+  --cream-soft:   #EAE4D5;
+  --cream-line:   #DCD4BF;
+  --ink:          #1B1F24;
+  --ink-muted:    #5A5E66;
+  --ink-faint:    #6D7079;
+  --slate:        #3F5B7E;
+  --slate-dark:   #2A3B53;
+  --slate-tint:   #DDE3EB;
+  --accent:       #A4452F;
+  --accent-soft:  #EFD5CC;
+  --ok:     #2F6B4A;
+  --warn:   #B5781E;
+  --bad:    #A33524;
+  --body-font:  "Atkinson Hyperlegible", "Verdana", system-ui, sans-serif;
+  --ui-font:    "Lexend", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --mono: "JetBrains Mono","Fira Code","SF Mono",Menlo,Consolas,monospace;
+}
+
+deck-stage:not(:defined) { visibility: hidden; }
+deck-stage {
+  background: #0a0a0a;
+  font-family: var(--body-font);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+deck-stage > section {
+  background: var(--cream);
+  color: var(--ink);
+  padding: 80px 120px;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; text-wrap: balance; }
+p, li, td, th  { margin: 0; line-height: 1.5; }
+
+.eyebrow {
+  font-family: var(--ui-font);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.assertion {
+  font-size: 56px;
+  line-height: 1.12;
+  font-weight: 700;
+  color: var(--ink);
+  max-width: 1500px;
+  letter-spacing: -0.015em;
+}
+.assertion .focal { color: var(--accent); }
+
+.lead {
+  font-size: 28px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  max-width: 1300px;
+}
+
+.caption {
+  font-family: var(--ui-font);
+  font-size: 16px;
+  color: var(--ink-faint);
+  letter-spacing: 0.03em;
+}
+
+.focal { color: var(--accent); }
+
+.slide-meta {
+  position: absolute;
+  bottom: 48px;
+  left: 120px;
+  right: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--ui-font);
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.slide-meta .num { color: var(--slate); font-weight: 500; }
+
+.section-tag {
+  font-family: var(--ui-font);
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slate);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-tag::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--slate);
+  display: inline-block;
+}
+
+.stack { display: flex; flex-direction: column; gap: 36px; }
+.row   { display: flex; gap: 48px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.fill { flex: 1; min-width: 0; }
+
+.slide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 56px;
+}
+
+.card {
+  background: #FAF7EF;
+  border: 1px solid var(--cream-line);
+  border-radius: 4px;
+  padding: 32px 36px;
+}
+.card.tinted { background: var(--cream-soft); border-color: transparent; }
+.card.slate  { background: var(--slate); color: #FAF7EF; border-color: transparent; }
+.card.slate .caption, .card.slate .eyebrow { color: rgba(255,255,255,0.7); }
+.card.slate p { color: rgba(255,255,255,0.8); }
+.card.outlined { background: transparent; }
+.card h3 { font-size: 24px; margin-bottom: 12px; }
+.card p  { font-size: 20px; color: var(--ink-muted); }
+.card.slate h3 { color: #FAF7EF; }
+
+.kpi {
+  font-family: var(--ui-font);
+  font-size: 96px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--slate);
+}
+.kpi.accent { color: var(--accent); }
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20px;
+}
+table.data caption {
+  text-align: left;
+  font-family: var(--ui-font);
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--slate);
+  padding-bottom: 12px;
+}
+table.data th, table.data td {
+  padding: 16px 20px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--cream-line);
+}
+table.data thead th {
+  font-family: var(--ui-font);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate);
+  border-bottom: 2px solid var(--slate);
+  padding-bottom: 14px;
+}
+table.data tbody th {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+section.dark {
+  background: var(--slate-dark);
+  color: #F2EEE5;
+}
+section.dark .assertion,
+section.dark h1, section.dark h2 { color: #F8F4EA; }
+section.dark .lead, section.dark p { color: rgba(248,244,234,0.78); }
+section.dark .eyebrow { color: rgba(248,244,234,0.6); }
+section.dark .slide-meta { color: rgba(248,244,234,0.5); }
+section.dark .slide-meta .num { color: var(--accent-soft); }
+section.dark .section-tag { color: rgba(248,244,234,0.7); }
+section.dark .section-tag::before { background: rgba(248,244,234,0.5); }
+section.dark .card { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+section.dark .card h3 { color: #F8F4EA; }
+section.dark .card p { color: rgba(248,244,234,0.7); }
+
+.divider { height: 1px; background: var(--cream-line); margin: 16px 0; border: none; }
+section.dark .divider { background: rgba(248,244,234,0.18); }
+
+.num-label {
+  font-family: var(--ui-font);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.progress-rail {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  display: flex;
+  gap: 3px;
+  padding: 0 12px;
+  background: transparent;
+  pointer-events: none;
+  z-index: 5;
+}
+.progress-rail .tick {
+  flex: 1;
+  height: 3px;
+  background: rgba(0,0,0,0.07);
+  transition: background 0.2s;
+  align-self: flex-start;
+  margin-top: 3px;
+}
+.progress-rail .tick.past   { background: rgba(0,0,0,0.18); }
+.progress-rail .tick.active { background: var(--accent); height: 6px; margin-top: 0; }
+section.dark .progress-rail .tick        { background: rgba(255,255,255,0.10); }
+section.dark .progress-rail .tick.past   { background: rgba(255,255,255,0.25); }
+section.dark .progress-rail .tick.active { background: var(--accent); }
+
+/* Quiz reveal pattern */
+[data-quiz] .quiz-opt {
+  background: #FAF7EF;
+  border: 1px solid var(--cream-line);
+  border-radius: 4px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+[data-quiz] .quiz-opt:hover { border-color: var(--slate); background: var(--cream); }
+[data-quiz] .quiz-opt .letter {
+  font-family: var(--ui-font); font-weight: 600; font-size: 24px;
+  color: var(--slate);
+  width: 48px; height: 48px;
+  border: 1.5px solid var(--slate);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 48px;
+  transition: all 0.25s;
+}
+[data-quiz] .quiz-opt .label { font-size: 22px; }
+[data-quiz][data-revealed="true"] .quiz-opt[data-correct] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+[data-quiz][data-revealed="true"] .quiz-opt[data-correct] .letter {
+  background: white;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+[data-quiz][data-revealed="true"] .quiz-opt[data-correct] .label {
+  color: var(--ink);
+  font-weight: 700;
+}
+[data-quiz][data-revealed="true"] .quiz-opt:not([data-correct]) {
+  opacity: 0.5;
+}
+[data-quiz] .quiz-hint {
+  font-family: var(--ui-font);
+  font-size: 16px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 32px;
+}
+[data-quiz][data-revealed="true"] .quiz-hint::before { content: "Answer  ·  "; color: var(--accent); }
+[data-quiz]:not([data-revealed="true"]) .quiz-hint::before { content: "Click an option to reveal  ·  "; }
+
+/* ============================================================
+   Deck-specific styles — quiz PPT customisations
+   ============================================================ */
+:root {
+  --phase-r1: #3F5B7E; --phase-r2: #A4452F; --phase-r3: #2F6B4A; --phase-r4: #B5781E;
+}
+
+body { font-family: "Noto Sans HK","Noto Sans TC","Atkinson Hyperlegible","PingFang HK","Microsoft JhengHei",system-ui,sans-serif; background:#0a0a0a; }
+
+/* ---- Title slide ---- */
+.title-slide .cover-title { font-size: 120px; line-height:1; letter-spacing:-0.025em; font-weight:700; max-width:90%; color:var(--ink); }
+.title-slide .cover-title .accent { color:var(--accent); }
+.title-slide .cover-sub { font-size: 32px; color:var(--ink-muted); line-height:1.45; max-width:70%; margin-top: 36px; }
+
+/* ---- Pills ---- */
+.pill {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ui-font); font-size: 16px; letter-spacing:0.04em;
+  padding:5px 14px; border-radius:999px;
+  background:var(--cream-soft); color:var(--ink); border:1px solid var(--cream-line);
+}
+.pill.slate { background:var(--slate-tint); color:var(--slate-dark); border-color:transparent; }
+.pill.accent { background:var(--accent-soft); color:var(--accent); border-color:transparent; }
+.pill.ok { background:#DCE9DF; color:var(--ok); border-color:transparent; }
+.pill.bad { background:#F1D9D4; color:var(--bad); border-color:transparent; }
+.pill.warn { background:#F5E8CE; color:var(--warn); border-color:transparent; }
+
+/* ---- Round pill ---- */
+.round-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ui-font); font-size: 14px; font-weight:600; letter-spacing:0.16em;
+  padding:4px 12px; border-radius:999px;
+  background:var(--cream-soft); color:var(--ink); border:1px solid var(--cream-line);
+}
+.round-pill[data-round="r1"] { background:rgba(63,91,126,0.10); color:var(--phase-r1); border-color:rgba(63,91,126,0.25); }
+.round-pill[data-round="r2"] { background:rgba(164,69,47,0.10); color:var(--phase-r2); border-color:rgba(164,69,47,0.25); }
+.round-pill[data-round="r3"] { background:rgba(47,107,74,0.10); color:var(--phase-r3); border-color:rgba(47,107,74,0.25); }
+.round-pill[data-round="r4"] { background:rgba(181,120,30,0.10); color:var(--phase-r4); border-color:rgba(181,120,30,0.25); }
+
+/* ---- Timer chip ---- */
+.timer-chip { font-family:var(--ui-font); font-size: 13px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+
+/* ---- Focal block (callout) ---- */
+.focal-block {
+  background:var(--cream-soft); border-left:4px solid var(--accent);
+  padding: 28px 36px; border-radius:2px;
+  font-size: 26px; line-height:1.55; color:var(--ink);
+}
+.focal-block strong { color:var(--accent); }
+.focal-block.slate { border-left-color:var(--slate); }
+.focal-block.slate strong { color:var(--slate); }
+.focal-block.ok { border-left-color:var(--ok); }
+.focal-block.ok strong { color:var(--ok); }
+.focal-block.warn { border-left-color:var(--warn); }
+.focal-block.warn strong { color:var(--warn); }
+
+/* ---- Tip box ---- */
+.tip-box {
+  background:rgba(63,91,126,0.07); border:1px solid var(--cream-line); border-left:4px solid var(--slate);
+  padding: 22px 26px; border-radius:2px;
+  line-height:1.7; color:var(--ink-muted);
+}
+.tip-box strong { color:var(--slate); }
+
+/* ---- Formula box ---- */
+.formula-box { background:var(--slate); color:#F2EEE5; padding: 32px 40px; text-align:center; border-radius:2px; }
+.formula-box .line { font-size: 40px; font-weight:700; letter-spacing:0.02em; line-height:1.3; }
+.formula-box .line .focal { color:#F4C7BB; }
+.formula-box .sub { font-family:var(--ui-font); font-size: 16px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(242,238,229,0.65); margin-top:10px; }
+
+/* ---- Task frame (agenda/code-style block) ---- */
+.task-frame {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-left:4px solid var(--slate);
+  padding: 22px 28px;
+  font-family:var(--mono); font-size: 18px; line-height:1.7; color:var(--ink);
+  white-space:pre-wrap; border-radius:2px;
+}
+.task-frame.accent { border-left-color:var(--accent); }
+
+/* ---- Vote prompt (guess prompt) ---- */
+.vote-prompt {
+  background:rgba(154,107,20,0.06); border:2px dashed var(--phase-r4);
+  padding: 24px 32px; text-align:center;
+  font-size: 22px; font-weight:600; color:var(--phase-r4); border-radius:2px;
+}
+.vote-prompt small { display:block; font-size: 16px; font-weight:400; color:var(--ink-muted); margin-top:6px; }
+
+/* ---- Reveal banner ---- */
+.reveal-banner {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--ui-font); font-size: 14px; font-weight:600;
+  letter-spacing:0.28em; text-transform:uppercase; color:var(--ok);
+  padding:6px 16px; background:rgba(47,107,74,0.08); border-radius:999px;
+  margin-bottom: 20px;
+}
+
+/* ---- Quiz box ---- */
+.quiz-box {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-radius:4px;
+  padding: 32px 40px;
+  font-size: 22px; line-height:2;
+}
+.quiz-box .opt {
+  display:block; padding: 10px 16px; border-radius:4px;
+  transition:background 0.2s;
+}
+.quiz-box .opt.correct { color:var(--ok); font-weight:700; background:rgba(47,107,74,0.08); }
+.quiz-box .opt.wrong { color:var(--bad); font-weight:700; }
+.quiz-box .opt .dim { color:var(--ink-faint); font-size:0.85em; }
+
+/* ---- Keypoint box ---- */
+.keypoint {
+  background:#FAF7EF; border:2px solid var(--slate); border-radius:4px;
+  padding: 32px 36px;
+  margin-top: 20px;
+  font-size: 22px; line-height:1.65; position:relative;
+}
+.keypoint::before {
+  content:attr(data-label); position:absolute; top:-13px; left:20px;
+  background:var(--slate); color:var(--cream);
+  padding:3px 14px; border-radius:2px;
+  font-family:var(--ui-font); font-size: 12px; font-weight:600;
+  letter-spacing:0.18em; text-transform:uppercase;
+}
+.keypoint.accent-border { border-color:var(--accent); }
+.keypoint.accent-border::before { background:var(--accent); }
+.keypoint.ok-border { border-color:var(--ok); }
+.keypoint.ok-border::before { background:var(--ok); }
+.keypoint.warn-border { border-color:var(--warn); }
+.keypoint.warn-border::before { background:var(--warn); }
+
+/* ---- Code block ---- */
+.code-block {
+  background:var(--slate-dark); color:#F2EEE5;
+  padding: 20px 28px; border-radius:4px;
+  font-family:var(--mono); font-size: 18px; line-height:1.7;
+  white-space:pre-wrap;
+}
+.code-block .hl { color:var(--accent-soft); font-weight:700; }
+.code-block .ok-hl { color:#93d4ae; font-weight:700; }
+
+/* ---- Three-port mnemonic ---- */
+.three-port {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap: 24px; margin-top: 16px;
+}
+.three-port .port {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-radius:4px;
+  padding: 32px 28px;
+  text-align:center; border-top:4px solid var(--slate);
+}
+.three-port .port:nth-child(2) { border-top-color:var(--accent); }
+.three-port .port:nth-child(3) { border-top-color:var(--ok); }
+.three-port .port-icon { font-size: 48px; }
+.three-port .port-title {
+  font-family:var(--ui-font); font-size: 24px; font-weight:700;
+  margin: 12px 0; color:var(--slate);
+}
+.three-port .port:nth-child(2) .port-title { color:var(--accent); }
+.three-port .port:nth-child(3) .port-title { color:var(--ok); }
+.three-port .port-rule {
+  font-size: 24px; color:var(--warn); font-weight:700;
+  margin-bottom: 12px;
+}
+.three-port .port-detail { font-size: 18px; color:var(--ink-muted); line-height:1.7; }
+
+/* ---- Countdown grid ---- */
+.countdown-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap: 24px; margin-top: 24px;
+}
+.countdown-card {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-radius:4px;
+  padding: 28px 20px; text-align:center;
+}
+.countdown-card .count-number {
+  font-family:var(--ui-font); font-size: 48px; font-weight:600;
+  color:var(--slate); letter-spacing:-0.03em;
+}
+.countdown-card .count-number.accent { color:var(--accent); }
+.countdown-card .count-label {
+  font-size: 16px; color:var(--ink-muted);
+  margin-top: 8px; line-height:1.5;
+}
+
+/* ---- Warning box ---- */
+.warning-box {
+  background:rgba(163,53,36,0.06); border:1px solid rgba(163,53,36,0.25);
+  border-radius:4px; padding: 16px 24px;
+  margin-top: 16px;
+  font-size: 18px; color:var(--bad);
+}
+
+/* ---- Callout (inline) ---- */
+.callout {
+  background:var(--cream-soft); border:1px solid var(--cream-line); border-radius:2px;
+  padding: 22px 28px;
+  font-size: 20px; color:var(--ink-muted); line-height:1.6;
+}
+
+/* ---- Inline color helpers ---- */
+.slate-c { color:var(--slate); font-weight:700; }
+.ok-c { color:var(--ok); font-weight:700; }
+.warn-c { color:var(--warn); font-weight:700; }
+.bad-c { color:var(--bad); font-weight:700; }
+.muted { color:var(--ink-muted); }
+.dim { color:var(--ink-faint); font-size:0.85em; }
+.bold { font-weight:700; }
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ═══════════════ 01 · 封面 ═══════════════ -->
+<section class="slide title-slide" data-label="01 Title">
+  <div style="position:absolute;inset:0;padding:80px 120px;display:flex;flex-direction:column;justify-content:space-between;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <span class="section-tag">2026 AIGC 初級考試輔助課程</span>
+      <span class="timer-chip">學生版</span>
+    </div>
+    <div>
+      <div class="cover-title">第一小時：<br><span class="accent">互動刷題實戰</span></div>
+      <p class="cover-sub">100 題（單選 60 + 多選 40）｜ 70 分鐘（含開場與收尾）<br>用四輪刷題建立答題肌肉</p>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <span class="pill slate">公眾培訓</span>
+        <span class="pill accent">四輪刷題</span>
+        <span class="pill ok">即時解析</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div><div class="num-label" style="color:var(--ink-faint);margin-bottom:4px;">課程結構</div><div style="font-family:var(--ui-font);font-size:22px;color:var(--slate);letter-spacing:0.04em;">4 輪 · 49 張投影片</div></div>
+      <div style="text-align:right;"><div class="num-label" style="color:var(--ink-faint);margin-bottom:4px;">第一小時</div><div style="font-family:var(--ui-font);font-size:22px;color:var(--slate);letter-spacing:0.04em;">70 分鐘</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 · 學習路徑 ═══════════════ -->
+<section class="slide" data-label="02 Today Timeline">
+  <div class="slide-header"><span class="eyebrow">今日學習路徑</span><span class="caption">從現在到考前的完整路徑</span></div>
+  <h2 class="assertion" style="margin-bottom:48px;">從現在到考前的<span class="focal">完整路徑</span></h2>
+  <table class="data">
+    <caption>今日 + 課後自學</caption>
+    <thead><tr><th>階段</th><th>時間</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><th><span class="pill slate">第一小時</span> 現在</th><td>70 分</td><td>互動刷題 × 四輪 × 輪末重點回顧</td></tr>
+      <tr><th><span class="pill accent">第二小時</span></th><td>60 分</td><td>算法精講 + 多選擊破 + 實操指引</td></tr>
+      <tr><th><span class="pill warn">今晚作業</span></th><td>自學</td><td>上官網把全部理論題 + 實操題各做一次</td></tr>
+      <tr><th><span class="pill ok">三天內</span></th><td>自學</td><td>錯題回看 + 整理 3 題不確定的</td></tr>
+    </tbody>
+  </table>
+  <div class="focal-block warn" style="margin-top:24px;text-align:center;">課堂 100 題是<span class="warn-c">「預熱版」</span>，<strong style="color:var(--accent);">真正計分的考試在官網</strong>。</div>
+  <div class="slide-meta"><span>今日學習路徑</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 03 · 議程 ═══════════════ -->
+<section class="slide" data-label="03 Agenda">
+  <div class="slide-header"><span class="eyebrow">一小時議程</span><span class="caption">本節課六段時間軸</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">本節課<span class="focal">六段時間軸</span></h2>
+  <table class="data" style="width:100%;margin-top:36px;">
+    <thead><tr><th style="width:22%;">時段</th><th style="width:22%;">板塊</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr><td class="dim">00:00 - 00:05</td><td><span class="warn-c">開場</span></td><td>真假圖投票 + 發 QR 碼</td></tr>
+      <tr><td class="dim">00:05 - 00:23</td><td><span class="slate-c">Round 1</span></td><td>AIGC 基礎 + 數據安全（18 分）</td></tr>
+      <tr><td class="dim">00:23 - 00:45</td><td><span class="focal">Round 2</span></td><td>核心算法模型（22 分）</td></tr>
+      <tr><td class="dim">00:45 - 00:59</td><td><span class="ok-c">Round 3</span></td><td>提示詞 + 文案（14 分）</td></tr>
+      <tr><td class="dim">00:59 - 01:07</td><td><span class="warn-c">Round 4</span></td><td>倫理 + 鞏固（8 分）</td></tr>
+      <tr><td class="dim">01:07 - 01:10</td><td><span class="slate-c">收尾</span></td><td>重點回顧 + 課後任務</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:20px;">本節進行方式：你自己刷題 + 老師輪末挑重點題回顧。題目即時顯示答案和解析。</div>
+  <div class="slide-meta"><span>一小時議程</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 04 · 四輪分佈 ═══════════════ -->
+<section class="slide" data-label="04 Round Distribution">
+  <div class="slide-header"><span class="eyebrow">四輪題目分佈</span><span class="caption">總計 100 題 · 70 分鐘</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">總計 <span class="focal">100 題</span> ｜ 70 分鐘</h2>
+  <table class="data">
+    <thead><tr><th>輪次</th><th>主題</th><th style="text-align:center;">題數</th><th style="text-align:center;">建議時間</th><th style="text-align:center;">難度</th></tr></thead>
+    <tbody>
+      <tr><th><span class="round-pill" data-round="r1">R1</span></th><td>AIGC 基礎概念 + 數據安全</td><td style="text-align:center;">26</td><td style="text-align:center;"><strong>18 分</strong></td><td style="text-align:center;"><span style="color:var(--warn);">&#x25CF;&#x25CF;</span><span style="color:var(--cream-line);">&#x25CF;&#x25CF;</span></td></tr>
+      <tr><th><span class="round-pill" data-round="r2">R2</span></th><td>核心算法模型</td><td style="text-align:center;">34</td><td style="text-align:center;"><strong>22 分</strong></td><td style="text-align:center;"><span style="color:var(--accent);">&#x25CF;&#x25CF;&#x25CF;&#x25CF;</span></td></tr>
+      <tr><th><span class="round-pill" data-round="r3">R3</span></th><td>提示詞工程 + 文案生成</td><td style="text-align:center;">35</td><td style="text-align:center;"><strong>14 分</strong></td><td style="text-align:center;"><span style="color:var(--ok);">&#x25CF;&#x25CF;&#x25CF;</span><span style="color:var(--cream-line);">&#x25CF;</span></td></tr>
+      <tr><th><span class="round-pill" data-round="r4">R4</span></th><td>倫理與社會影響 + 回補</td><td style="text-align:center;">5</td><td style="text-align:center;"><strong>8 分</strong></td><td style="text-align:center;"><span style="color:var(--phase-r4);">&#x25CF;</span><span style="color:var(--cream-line);">&#x25CF;&#x25CF;&#x25CF;</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tip-box" style="margin-top:20px;">放輕鬆刷，題目卡住就先標起來，輪末會挑重點題一起看。</div>
+  <div class="slide-meta"><span>四輪題目分佈</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 05 · QR 碼 ═══════════════ -->
+<section class="slide" data-label="05 QR Code">
+  <div class="slide-header"><span class="eyebrow">開場 5 分鐘</span><span class="caption">掃 QR 進入刷題工具</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">掃 QR 進入<span class="focal">刷題工具</span></h2>
+  <div class="grid-2" style="margin-top:36px;align-items:start;">
+    <div style="text-align:center;">
+      <div style="background:#fff;padding:28px;border-radius:4px;display:inline-block;">
+        <img src="02_互動刷題_QRCode.png" alt="刷題工具 QR 碼" style="width:280px;display:block;">
+      </div>
+      <div style="margin-top:12px;font-family:var(--ui-font);font-size:14px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate);">掃我開始刷題</div>
+    </div>
+    <div class="stack" style="gap:20px;">
+      <div class="task-frame" style="font-size:18px;line-height:2;">
+1. 用手機 / 筆電掃左邊 <span class="slate-c">QR</span>
+2. 進到刷題首頁，會看到四輪分佈
+3. <span class="warn-c">接下來四輪你們自己刷</span>
+4. 題目會即時顯示答案和解析
+5. 老師<span class="ok-c">輪末</span>挑重點題回顧</div>
+      <div class="tip-box" style="font-size:16px;word-break:break-all;">
+        掃不到？直接輸入網址：<br>
+        <code style="font-family:var(--mono);color:var(--ink);">https://thomas-tai.github.io/lesson/02_互動刷題.html</code>
+      </div>
+      <div class="warning-box">掃碼有問題請舉手，我們等全班都進到首頁再開始 R1。</div>
+    </div>
+  </div>
+  <div class="slide-meta"><span>開場 · QR 碼</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 06 · R1 封面 ═══════════════ -->
+<section class="slide dark title-slide" data-label="06 R1 Cover" data-pause-timer="1020" data-manual>
+  <div style="position:absolute;inset:0;padding:80px 120px;display:flex;flex-direction:column;justify-content:space-between;">
+    <span class="round-pill" data-round="r1" style="align-self:flex-start;">Round 1 · 第一輪</span>
+    <div>
+      <p style="font-size:24px;color:rgba(248,244,234,0.6);margin-bottom:20px;letter-spacing:0.12em;">AIGC 基礎 + 數據安全</p>
+      <div class="cover-title" style="color:#F8F4EA;"><span style="color:var(--accent-soft);">26 題</span> ｜ 18 分鐘</div>
+      <p class="cover-sub" style="color:rgba(248,244,234,0.6);">難度 &#x25CF;&#x25CF;</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <span class="num-label" style="color:rgba(248,244,234,0.5);">自刷 → 輪末回顧</span>
+      <span class="timer-chip" style="color:rgba(248,244,234,0.5);">00:05 – 00:23</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 · R1 主題全貌 ═══════════════ -->
+<section class="slide" data-label="07 R1 Themes">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span></span><span class="caption">本輪會考什麼？</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">本輪會考<span class="focal">什麼</span>？</h2>
+  <table class="data">
+    <thead><tr><th>主題</th><th style="text-align:center;">大約題數</th><th>易錯點</th></tr></thead>
+    <tbody>
+      <tr><th>AIGC 定義與發展驅動</th><td style="text-align:center;">4–5</td><td>AIGC vs PGC vs UGC 混淆</td></tr>
+      <tr><th><span class="slate-c">數據安全 三端風險</span></th><td style="text-align:center;">5–6</td><td>輸入端 vs 傳輸端 vs 輸出端</td></tr>
+      <tr><th><span class="slate-c">數據安全 三法框架</span></th><td style="text-align:center;">3–4</td><td>干擾項「市場準入法」</td></tr>
+      <tr><th>倫理與隱私（基礎）</th><td style="text-align:center;">4–5</td><td>「危害不包括」反向題</td></tr>
+      <tr><th>多模態 / 應用領域</th><td style="text-align:center;">6–7</td><td>應用場景對應</td></tr>
+    </tbody>
+  </table>
+  <div class="focal-block slate" style="margin-top:20px;">本輪重點題：<span class="slate-c">Q51</span>（AIGC 定義）、<span class="slate-c">Q22</span>（輸入端風險）、<span class="slate-c">Q11</span>（三法框架）</div>
+  <div class="slide-meta"><span>R1 · 主題全貌</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 08 · R1 引導 ═══════════════ -->
+<section class="slide" data-label="08 R1 Anchor">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span></span><span class="caption">14 分鐘自刷</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">先想一個問題，<span class="focal">再開刷</span></h2>
+  <div class="keypoint" data-label="引導思考">
+    你<span class="warn-c">有沒有看過新聞</span>說有公司
+    把客戶資料洩露給 AI？
+    <br><br>
+    那就是這一輪會考的場景。
+    <br><br>
+    <span class="ok-c">自己做完 26 題，我們再一起看重點。</span>
+  </div>
+  <div class="tip-box" style="margin-top:16px;">每題都即時顯示答案和解析。卡住就先選一個答案看解析，不要糾結。</div>
+  <div class="slide-meta"><span>R1 · 開始</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 09 · Q51 題目 ═══════════════ -->
+<section class="slide" data-label="09 Q51 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 1/3</span><span class="caption">AIGC 定義</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q51. AIGC 是指<span class="focal">？</span></h2>
+  <div class="quiz-box">
+    <span class="opt">A. 專業內容生成</span>
+    <span class="opt">B. 用戶內容生成</span>
+    <span class="opt">C. AI 輔助內容生成</span>
+    <span class="opt">D. 人工智能內容生成</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R1 · Q51</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 10 · Q51 解答 ═══════════════ -->
+<section class="slide" data-label="10 Q51 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 1/3</span><span class="caption">AIGC 定義</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q51 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 專業內容生成</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 用戶內容生成</div>
+    <div class="quiz-opt" data-quiz-option="c">C. AI 輔助內容生成</div>
+    <div class="quiz-opt" data-quiz-option="d" data-correct>D. 人工智能內容生成</div>
+  </div>
+  <div class="grid-2" style="margin-top:24px;gap:32px;">
+    <div class="keypoint accent-border" data-label="記憶點" style="margin-top:0;">
+      &bull; AIGC = AI <span class="slate-c">G</span>enerated Content，<span class="slate-c">G = Generated</span><br>
+      &bull; AI <span class="focal">端到端生成</span>，不是「輔助」、不是「用戶生成」<br>
+      &bull; C 是干擾項——多了「<span class="warn-c">輔助</span>」二字，把主動權交給 AI 才是 AIGC 核心
+    </div>
+    <div class="keypoint ok-border" data-label="考試金句" style="margin-top:0;text-align:center;font-size:24px;display:flex;align-items:center;justify-content:center;">
+      <span class="focal">AI 端到端生成，不是輔助、不是用戶生成。</span>
+    </div>
+  </div>
+  <div class="slide-meta"><span>R1 · Q51 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 11 · Q22 題目 ═══════════════ -->
+<section class="slide" data-label="11 Q22 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 2/3</span><span class="caption">數據輸入端風險</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q22. 數據輸入端的<span class="focal">風險</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 數據非法獲取與投毒風險</span>
+    <span class="opt">B. 數據訓練偏見風險</span>
+    <span class="opt">C. 數據泄露風險</span>
+    <span class="opt">D. 惡意內容生成風險</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R1 · Q22</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 12 · Q22 解答 ═══════════════ -->
+<section class="slide" data-label="12 Q22 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 2/3</span><span class="caption">數據輸入端風險</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q22 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a" data-correct>A. 數據非法獲取與投毒風險</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 數據訓練偏見風險 <span class="dim">&larr; 訓練端</span></div>
+    <div class="quiz-opt" data-quiz-option="c">C. 數據泄露風險 <span class="dim">&larr; 傳輸端</span></div>
+    <div class="quiz-opt" data-quiz-option="d">D. 惡意內容生成風險 <span class="dim">&larr; 輸出端</span></div>
+  </div>
+  <div class="keypoint ok-border" data-label="考試金句" style="text-align:center;font-size:26px;">
+    <span class="focal">輸入怕偷怕毒，傳輸怕攔怕改，輸出怕壞人用。</span>
+  </div>
+  <div class="slide-meta"><span>R1 · Q22 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 13 · 三端口訣 ═══════════════ -->
+<section class="slide" data-label="13 Three-Port Mnemonic">
+  <div class="slide-header"><span class="eyebrow">必記口訣</span><span class="caption">三端風險口訣</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">三端風險<span class="focal">口訣</span></h2>
+  <div class="three-port">
+    <div class="port">
+      <div class="port-icon" style="background:var(--slate);color:#fff;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;">IN</div>
+      <div class="port-title">輸入端</div>
+      <div class="port-rule">怕偷怕毒</div>
+      <div class="port-detail">非法獲取<br>數據投毒</div>
+    </div>
+    <div class="port">
+      <div class="port-icon" style="background:var(--accent);color:#fff;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;">TX</div>
+      <div class="port-title">傳輸端</div>
+      <div class="port-rule">怕攔怕改</div>
+      <div class="port-detail">攔截<br>篡改<br>未授權訪問</div>
+    </div>
+    <div class="port">
+      <div class="port-icon" style="background:var(--ok);color:#fff;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;">OUT</div>
+      <div class="port-title">輸出端</div>
+      <div class="port-rule">怕壞人用</div>
+      <div class="port-detail">指令注入<br>生成惡意內容</div>
+    </div>
+  </div>
+  <div class="focal-block" style="margin-top:20px;text-align:center;font-size:24px;">跟我念一次：<span class="focal">「輸入怕偷怕毒 ／ 傳輸怕攔怕改 ／ 輸出怕壞人用」</span></div>
+  <div class="slide-meta"><span>必記口訣 · 三端風險</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 14 · 三端情境 ═══════════════ -->
+<section class="slide" data-label="14 Scenario Vote">
+  <div class="slide-header"><span class="eyebrow">三端情境練習</span><span class="caption">舉手投票 1 分鐘</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">這是<span class="focal">哪一端</span>的風險？</h2>
+  <div class="grid-3">
+    <div class="card">
+      <h3>場景 A</h3>
+      <p>你把公司合同 PDF 上傳給 Claude 摘要</p>
+      <p style="margin-top:16px;font-size:22px;font-weight:700;color:var(--slate);">&rarr; <span style="background:var(--slate);color:#fff;padding:2px 10px;border-radius:4px;font-size:18px;">輸入端</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3>場景 B</h3>
+      <p>黑客在網路傳輸中攔截了 AI 的 API 請求</p>
+      <p style="margin-top:16px;font-size:22px;font-weight:700;color:var(--accent);">&rarr; <span style="background:var(--accent);color:#fff;padding:2px 10px;border-radius:4px;font-size:18px;">傳輸端</span></p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--ok);">
+      <h3>場景 C</h3>
+      <p>你用文字指令讓 AI 生成一封釣魚郵件</p>
+      <p style="margin-top:16px;font-size:22px;font-weight:700;color:var(--ok);">&rarr; <span style="background:var(--ok);color:#fff;padding:2px 10px;border-radius:4px;font-size:18px;">輸出端</span></p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>三端情境練習</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 15 · Q11 題目 ═══════════════ -->
+<section class="slide" data-label="15 Q11 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 3/3</span><span class="caption">數據安全法律</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q11. 不屬於數據安全<span class="focal">法律保障層面</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 網絡安全法</span>
+    <span class="opt">B. 個人信息保護法</span>
+    <span class="opt">C. 市場準入法</span>
+    <span class="opt">D. 數據安全法</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R1 · Q11</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 16 · Q11 解答 ═══════════════ -->
+<section class="slide" data-label="16 Q11 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r1">R1</span> 重點題 3/3</span><span class="caption">數據安全法律</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q11 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 網絡安全法</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 個人信息保護法</div>
+    <div class="quiz-opt" data-quiz-option="c" data-correct>C. 市場準入法 &larr; 不在三法之內</div>
+    <div class="quiz-opt" data-quiz-option="d">D. 數據安全法</div>
+  </div>
+  <div class="grid-2" style="margin-top:24px;gap:32px;">
+    <div class="card" style="border-top:3px solid var(--warn);">
+      <h3 style="color:var(--warn);">篩選技巧</h3>
+      <p>名字裡<span class="warn-c">沒有</span>「安全」「個人信息」「數據」「網絡」之一的，<span class="focal">都是干擾項</span>。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--ok);">
+      <h3 style="color:var(--ok);">三法口訣</h3>
+      <p style="font-size:24px;text-align:center;margin-top:12px;font-weight:700;color:var(--ok);">三法保安全</p>
+      <p style="text-align:center;margin-top:8px;">＝ 網絡安全法<br>＋ 個人信息保護法<br>＋ 數據安全法</p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>R1 · Q11 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 17 · R2 封面 ═══════════════ -->
+<section class="slide dark title-slide" data-label="17 R2 Cover" data-pause-timer="1200" data-manual>
+  <div style="position:absolute;inset:0;padding:80px 120px;display:flex;flex-direction:column;justify-content:space-between;">
+    <span class="round-pill" data-round="r2" style="align-self:flex-start;">Round 2 · 第二輪</span>
+    <div>
+      <p style="font-size:24px;color:rgba(248,244,234,0.6);margin-bottom:20px;letter-spacing:0.12em;">核心算法模型</p>
+      <div class="cover-title" style="color:#F8F4EA;"><span style="color:var(--accent-soft);">34 題</span> ｜ 22 分鐘</div>
+      <p class="cover-sub" style="color:rgba(248,244,234,0.6);">難度 &#x25CF;&#x25CF;&#x25CF;&#x25CF;</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <span class="num-label" style="color:rgba(248,244,234,0.5);">自刷 → 輪末回顧</span>
+      <span class="timer-chip" style="color:rgba(248,244,234,0.5);">00:23 – 00:45</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 18 · R2 主題全貌 ═══════════════ -->
+<section class="slide" data-label="18 R2 Themes">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span></span><span class="caption">本輪會考什麼？</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">本輪會考<span class="focal">什麼</span>？</h2>
+  <table class="data">
+    <thead><tr><th>主題</th><th style="text-align:center;">大約題數</th><th>易錯點</th></tr></thead>
+    <tbody>
+      <tr><th><span class="focal">擴散模型 Diffusion</span></th><td style="text-align:center;">8–10</td><td>前向 vs 反向、局限性</td></tr>
+      <tr><th><span class="focal">Transformer</span></th><td style="text-align:center;">5–6</td><td>「原生」輸出 vs 多模態改造</td></tr>
+      <tr><th>VAE / VQ-VAE</th><td style="text-align:center;">4–5</td><td>VideoGPT 中的角色</td></tr>
+      <tr><th>GAN</th><td style="text-align:center;">3–4</td><td>對抗訓練、模式崩潰</td></tr>
+      <tr><th>VideoGPT</th><td style="text-align:center;">3–4</td><td>VQ-VAE + Transformer 組合</td></tr>
+      <tr><th>DALL&middot;E / 應用模型</th><td style="text-align:center;">4–5</td><td>公司 + 年份配對</td></tr>
+    </tbody>
+  </table>
+  <div class="focal-block" style="margin-top:16px;">本輪重點題：<span class="focal">Q37</span>（原生 Transformer）、<span class="focal">Q8</span>（VideoGPT）、<span class="focal">Q58</span>（反向擴散）、<span class="focal">Q25</span>（擴散局限）、<span class="focal">Q24/Q43</span>（DALL&middot;E 配對）</div>
+  <div class="slide-meta"><span>R2 · 主題全貌</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 19 · R2 引導 ═══════════════ -->
+<section class="slide" data-label="19 R2 Anchor">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span></span><span class="caption">17 分鐘自刷</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">先連結你的<span class="focal">經驗</span></h2>
+  <div class="keypoint accent-border" data-label="核心觀念">
+    有沒有人用過 <span class="slate-c">Stable Diffusion 或 Midjourney</span>？<br>
+    有沒有調整過 <span class="warn-c">steps</span> 數字？<br>
+    調高了圖更精緻但更慢？
+    <br><br>
+    那個 steps，就是這輪要考的<span class="focal">反向擴散步數</span>。
+    <br><br>
+    步數越多 &rarr; 去噪越細 &rarr; 計算資源越大——<br>
+    這就是「<span class="focal">擴散模型局限性</span>」考題的答案由來。
+    <br><br>
+    <span class="ok-c">現在自己刷 34 題，做完一起回顧。</span>
+  </div>
+  <div class="slide-meta"><span>R2 · 開始</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 20 · Q37 題目 ═══════════════ -->
+<section class="slide" data-label="20 Q37 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 1/5</span><span class="caption">原生 Transformer</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q37. 原生 Transformer 模型的<span class="focal">輸出</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 圖像</span>
+    <span class="opt">B. 影片</span>
+    <span class="opt">C. 音頻</span>
+    <span class="opt">D. 文本</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R2 · Q37</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 21 · Q37 解答 ═══════════════ -->
+<section class="slide" data-label="21 Q37 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 1/5</span><span class="caption">原生 Transformer</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q37 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 圖像</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 影片</div>
+    <div class="quiz-opt" data-quiz-option="c">C. 音頻</div>
+    <div class="quiz-opt" data-quiz-option="d" data-correct>D. 文本</div>
+  </div>
+  <div class="grid-2" style="margin-top:24px;gap:32px;">
+    <div class="keypoint warn-border" data-label="解題技巧" style="margin-top:0;text-align:center;font-size:22px;">
+      「<span class="warn-c">原生</span>」二字 = <span class="focal">2017 年原版設計</span> = 文本（詞元序列）<br>
+      <span class="bad-c">不是</span>後來的多模態改造版
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">你可能會問</h3>
+      <p>「ChatGPT 不是會看圖會說話嗎？」</p>
+      <p style="margin-top:10px;color:var(--ok);">&rarr; ChatGPT 現在是 GPT-4o <span class="slate-c">多模態版</span>，是「改造版」。考題問的是 <span class="focal">2017 年原版</span>——原版只做文本。</p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>R2 · Q37 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 22 · Q8 題目 ═══════════════ -->
+<section class="slide" data-label="22 Q8 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 2/5</span><span class="caption">VideoGPT</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q8. VideoGPT 中學習<span class="focal">離散潛在表示</span>的技術？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. RNN</span>
+    <span class="opt">B. CNN</span>
+    <span class="opt">C. VQVAE</span>
+    <span class="opt">D. GAN</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R2 · Q8</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 23 · Q8 解答 ═══════════════ -->
+<section class="slide" data-label="23 Q8 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 2/5</span><span class="caption">VideoGPT</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q8 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. RNN</div>
+    <div class="quiz-opt" data-quiz-option="b">B. CNN</div>
+    <div class="quiz-opt" data-quiz-option="c" data-correct>C. VQVAE</div>
+    <div class="quiz-opt" data-quiz-option="d">D. GAN</div>
+  </div>
+  <div class="keypoint ok-border" data-label="考試金句" style="text-align:center;font-size:24px;">
+    <strong>VideoGPT ＝ <span class="slate-c">VQ-VAE 下採樣</span> ＋ <span class="focal">Transformer 自回歸</span></strong>
+  </div>
+  <table class="data" style="margin-top:16px;">
+    <thead><tr><th>組件</th><th>角色</th></tr></thead>
+    <tbody>
+      <tr><th><span class="slate-c">VQ-VAE</span></th><td>下採樣，學習<span class="focal">離散</span>潛在表示</td></tr>
+      <tr><th><span class="focal">Transformer</span></th><td>自回歸生成，預測<span class="focal">下一時間步</span></td></tr>
+      <tr><th>位置編碼</th><td>編碼器 / 解碼器<span class="warn-c">所有層共享</span></td></tr>
+    </tbody>
+  </table>
+  <div class="slide-meta"><span>R2 · Q8 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 24 · Q58 題目 ═══════════════ -->
+<section class="slide" data-label="24 Q58 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 3/5</span><span class="caption">反向擴散過程</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q58. 擴散模型的「反向擴散過程」是<span class="focal">？</span></h2>
+  <div class="quiz-box">
+    <span class="opt">A. 從噪聲恢復原始數據</span>
+    <span class="opt">B. 從數據生成噪聲圖像</span>
+    <span class="opt">C. 訓練模型最小化噪聲</span>
+    <span class="opt">D. 將數據映射到潛在空間</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R2 · Q58</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 25 · Q58 解答 ═══════════════ -->
+<section class="slide" data-label="25 Q58 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 3/5</span><span class="caption">反向擴散過程</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q58 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a" data-correct>A. 從噪聲恢復原始數據</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 從數據生成噪聲圖像 <span class="dim">&larr; 那是前向</span></div>
+    <div class="quiz-opt" data-quiz-option="c">C. 訓練模型最小化噪聲</div>
+    <div class="quiz-opt" data-quiz-option="d">D. 將數據映射到潛在空間</div>
+  </div>
+  <div class="formula-box" style="margin-top:24px;">
+    <div class="line" style="font-size:28px;line-height:2;">
+      <span style="color:rgba(242,238,229,0.5);">前向 = <span class="warn-c">加噪</span>（訓練階段）</span><br>
+      <span style="color:#F8F4EA;font-size:40px;font-weight:900;">反向 = <span style="color:var(--accent-soft);">去噪</span></span><span style="color:rgba(242,238,229,0.5);"> （生成階段）</span> <span style="color:var(--accent-soft);font-weight:700;">&#x25C0; 考這個</span>
+    </div>
+  </div>
+  <div class="slide-meta"><span>R2 · Q58 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 26 · Q25 題目 ═══════════════ -->
+<section class="slide" data-label="26 Q25 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 4/5</span><span class="caption">擴散模型局限性</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q25. 擴散模型的局限性｜哪一項<span class="focal">最為突出</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 高質量生成圖像所需計算資源非常大</span>
+    <span class="opt">B. 生成過程的噪聲不可控</span>
+    <span class="opt">C. 訓練過程的時間過長</span>
+    <span class="opt">D. 不適用於大規模數據集</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R2 · Q25</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 27 · Q25 解答 ═══════════════ -->
+<section class="slide" data-label="27 Q25 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 4/5</span><span class="caption">擴散模型局限性</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q25 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a" data-correct>A. 高質量生成圖像所需計算資源非常大</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 生成過程的噪聲不可控</div>
+    <div class="quiz-opt" data-quiz-option="c">C. 訓練過程的時間過長</div>
+    <div class="quiz-opt" data-quiz-option="d">D. 不適用於大規模數據集</div>
+  </div>
+  <div class="keypoint warn-border" data-label="解題技巧" style="text-align:center;font-size:28px;">
+    <span class="warn-c">「貴 且 慢」</span>——steps 越多 = 資源越大 = 速度越慢
+  </div>
+  <div class="card" style="margin-top:20px;border-top:3px solid var(--bad);">
+    <h3 style="color:var(--bad);">干擾項解析</h3>
+    <ul style="font-size:18px;line-height:1.85;margin-left:20px;margin-top:8px;">
+      <li><span class="bad-c">B</span>「噪聲不可控」是錯誤描述（噪聲是可控的高斯噪聲）</li>
+      <li><span class="warn-c">C</span>「訓練時間長」雖也是缺點但不是「最突出」</li>
+      <li><span class="bad-c">D</span>「不適用大規模」是反話（擴散模型很適合大規模）</li>
+    </ul>
+  </div>
+  <div class="slide-meta"><span>R2 · Q25 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 28 · Q24+Q43 題目 ═══════════════ -->
+<section class="slide" data-label="28 Q24+Q43 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 5/5</span><span class="caption">DALL&middot;E 雙題</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q24 + Q43 ｜ DALL&middot;E <span class="focal">雙題</span></h2>
+  <div class="grid-2" style="margin-top:36px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">Q24. DALL&middot;E 首次發布時間？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt">A. 2019 年</span>
+        <span class="opt">B. 2020 年</span>
+        <span class="opt">C. 2021 年</span>
+        <span class="opt">D. 2022 年</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">Q43. DALL&middot;E 由哪家開發？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt">A. Google</span>
+        <span class="opt">B. Facebook</span>
+        <span class="opt">C. OpenAI</span>
+        <span class="opt">D. Microsoft</span>
+      </div>
+    </div>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">兩題一起想 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R2 · Q24 + Q43</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 29 · Q24+Q43 解答 ═══════════════ -->
+<section class="slide" data-label="29 Q24+Q43 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r2">R2</span> 重點題 5/5</span><span class="caption">DALL&middot;E 雙題</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">DALL&middot;E 配對<span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">Q24 答案</h3>
+      <div class="quiz-box" data-quiz style="margin-top:12px;">
+        <div class="quiz-opt" data-quiz-option="a">A. 2019 年</div>
+        <div class="quiz-opt" data-quiz-option="b">B. 2020 年</div>
+        <div class="quiz-opt" data-quiz-option="c" data-correct>C. 2021 年</div>
+        <div class="quiz-opt" data-quiz-option="d">D. 2022 年</div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">Q43 答案</h3>
+      <div class="quiz-box" data-quiz style="margin-top:12px;">
+        <div class="quiz-opt" data-quiz-option="a">A. Google</div>
+        <div class="quiz-opt" data-quiz-option="b">B. Facebook</div>
+        <div class="quiz-opt" data-quiz-option="c" data-correct>C. OpenAI</div>
+        <div class="quiz-opt" data-quiz-option="d">D. Microsoft</div>
+      </div>
+    </div>
+  </div>
+  <div class="keypoint ok-border" data-label="考試金句" style="text-align:center;font-size:28px;">
+    <strong>DALL&middot;E ＝ <span class="slate-c">2021 年</span> + <span class="focal">OpenAI</span></strong>
+  </div>
+  <div class="tip-box" style="margin-top:16px;">「DDPM、SGMs、SDEs」初級只記 <span style="color:var(--ink);">DDPM = 高質量圖像</span>，其他知道是擴散變體即可。</div>
+  <div class="slide-meta"><span>R2 · Q24 + Q43 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 30 · VideoGPT 三問接龍 ═══════════════ -->
+<section class="slide" data-label="30 VideoGPT Relay">
+  <div class="slide-header"><span class="eyebrow">VideoGPT 三問接龍</span><span class="caption">2 分鐘 · 舉手回答</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">你能回答<span class="focal">幾個</span>？</h2>
+  <table class="data" style="margin-top:36px;">
+    <thead><tr><th>問題</th><th>答案</th></tr></thead>
+    <tbody>
+      <tr><th>VQ-VAE 在 VideoGPT 做什麼？</th><td><span class="slate-c">下採樣，學習離散潛在表示</span></td></tr>
+      <tr><th>Transformer 在 VideoGPT 做什麼？</th><td><span class="focal">自回歸生成，預測下一時間步</span></td></tr>
+      <tr><th>位置編碼有什麼特點？</th><td><span class="ok-c">編碼器解碼器所有層之間共享</span></td></tr>
+    </tbody>
+  </table>
+  <div class="slide-meta"><span>VideoGPT 三問接龍</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 31 · R3 封面 ═══════════════ -->
+<section class="slide dark title-slide" data-label="31 R3 Cover" data-pause-timer="900" data-manual>
+  <div style="position:absolute;inset:0;padding:80px 120px;display:flex;flex-direction:column;justify-content:space-between;">
+    <span class="round-pill" data-round="r3" style="align-self:flex-start;">Round 3 · 第三輪</span>
+    <div>
+      <p style="font-size:24px;color:rgba(248,244,234,0.6);margin-bottom:20px;letter-spacing:0.12em;">提示詞工程 + 文案生成</p>
+      <div class="cover-title" style="color:#F8F4EA;"><span style="color:var(--accent-soft);">35 題</span> ｜ 14 分鐘</div>
+      <p class="cover-sub" style="color:rgba(248,244,234,0.6);">難度 &#x25CF;&#x25CF;&#x25CF;</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <span class="num-label" style="color:rgba(248,244,234,0.5);">自刷 → 輪末回顧</span>
+      <span class="timer-chip" style="color:rgba(248,244,234,0.5);">00:45 – 00:59</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 32 · R3 主題全貌 ═══════════════ -->
+<section class="slide" data-label="32 R3 Themes">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span></span><span class="caption">本輪會考什麼？</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">本輪會考<span class="focal">什麼</span>？</h2>
+  <table class="data">
+    <thead><tr><th>主題</th><th style="text-align:center;">大約題數</th><th>易錯點</th></tr></thead>
+    <tbody>
+      <tr><th><span class="focal">Prompt 萬能公式</span></th><td style="text-align:center;">4–5</td><td>「不包括」反向題</td></tr>
+      <tr><th>CRISPE / CO-STAR 框架</th><td style="text-align:center;">3–4</td><td>框架要素混淆</td></tr>
+      <tr><th><span class="focal">AIDA / PAS 文案模型</span></th><td style="text-align:center;">4–5</td><td>步驟順序記反</td></tr>
+      <tr><th>Few-Shot / Zero-Shot</th><td style="text-align:center;">3–4</td><td>示例的角色</td></tr>
+      <tr><th>人類在文案中的角色</th><td style="text-align:center;">2–3</td><td>方向設定 vs 生成初稿</td></tr>
+      <tr><th>思維鏈 / 角色扮演</th><td style="text-align:center;">4–5</td><td>應用場景</td></tr>
+      <tr><th>業務場景應用</th><td style="text-align:center;">6–8</td><td>業績報告 / 客服 / 行銷</td></tr>
+    </tbody>
+  </table>
+  <div class="focal-block" style="margin-top:16px;">本輪重點題：<span class="focal">Q47</span>（萬能公式）、<span class="focal">Q6 + Q41</span>（AIDA / PAS）、<span class="focal">Q9</span>（人類角色）</div>
+  <div class="slide-meta"><span>R3 · 主題全貌</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 33 · R3 引導 ═══════════════ -->
+<section class="slide" data-label="33 R3 Anchor">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span></span><span class="caption">10 分鐘自刷</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">你寫過爛 <span class="focal">Prompt</span> 嗎？</h2>
+  <div class="keypoint accent-border" data-label="核心觀念">
+    打開 ChatGPT、輸入「<span class="warn-c">幫我寫個東西</span>」、<br>
+    結果出來一坨<span class="focal">廢話</span>的——舉手？
+    <br><br>
+    那是因為你只給了<span class="slate-c">任務</span>，<br>
+    沒給<span class="ok-c">角色 / 背景 / 結構</span>。
+    <br><br>
+    這四個東西有個正式名字叫<br>
+    <span class="focal">「萬能公式四要素」</span>。
+  </div>
+  <div class="tip-box" style="margin-top:16px;">這一輪 35 題，做完你會發現：你平常憑直覺做的事，原來都有名字。</div>
+  <div class="warning-box">這輪有一道陷阱題，不要劇透給隔壁同學，自己做完再說。</div>
+  <div class="slide-meta"><span>R3 · 開始</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 34 · Q47 題目 ═══════════════ -->
+<section class="slide" data-label="34 Q47 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 1/3</span><span class="caption">Prompt 萬能公式</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q47. Prompt 萬能公式｜<span class="focal">不包括</span>以下哪一項？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 定義角色</span>
+    <span class="opt">B. 交代背景</span>
+    <span class="opt">C. 提供示例</span>
+    <span class="opt">D. 任務目標</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">這題很多人會選錯 → 認真想一下再翻頁</div>
+  <div class="slide-meta"><span>R3 · Q47</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 35 · Q47 解答 ═══════════════ -->
+<section class="slide" data-label="35 Q47 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 1/3</span><span class="caption">Prompt 萬能公式</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q47 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 定義角色</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 交代背景</div>
+    <div class="quiz-opt" data-quiz-option="c" data-correct>C. 提供示例 &larr; 不在四要素中</div>
+    <div class="quiz-opt" data-quiz-option="d">D. 任務目標</div>
+  </div>
+  <div class="keypoint accent-border" data-label="核心觀念">
+    <strong>很多人會選 C，因為網路文章常說「要提供示例」</strong>。<br>
+    但考試的「<span class="focal">萬能公式四要素</span>」裡<span class="bad-c">沒有</span>示例——<br>
+    示例是另一個技巧叫 <span class="slate-c">Few-Shot</span>，跟「四要素」是兩件事。
+  </div>
+  <div class="slide-meta"><span>R3 · Q47 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 36 · 萬能公式 ═══════════════ -->
+<section class="slide" data-label="36 Formula">
+  <div class="slide-header"><span class="eyebrow">必記公式</span><span class="caption">萬能公式四要素</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">萬能公式<span class="focal">四要素</span></h2>
+  <div class="formula-box" style="margin-top:36px;">
+    <div class="line" style="margin-bottom:24px;">角色 + 背景 + 目標 + 結構</div>
+    <div style="display:flex;justify-content:center;gap:56px;margin:16px 0;">
+      <div style="text-align:center;"><div style="background:var(--slate-dark);border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;margin:0 auto;"><span style="font-family:var(--ui-font);font-size:32px;font-weight:700;color:var(--accent-soft);">角</span></div><div style="font-size:16px;color:rgba(242,238,229,0.6);margin-top:6px;font-family:var(--ui-font);letter-spacing:0.08em;">角色</div></div>
+      <div style="text-align:center;"><div style="background:var(--slate-dark);border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;margin:0 auto;"><span style="font-family:var(--ui-font);font-size:32px;font-weight:700;color:var(--accent-soft);">背</span></div><div style="font-size:16px;color:rgba(242,238,229,0.6);margin-top:6px;font-family:var(--ui-font);letter-spacing:0.08em;">背景</div></div>
+      <div style="text-align:center;"><div style="background:var(--slate-dark);border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;margin:0 auto;"><span style="font-family:var(--ui-font);font-size:32px;font-weight:700;color:var(--accent-soft);">目</span></div><div style="font-size:16px;color:rgba(242,238,229,0.6);margin-top:6px;font-family:var(--ui-font);letter-spacing:0.08em;">目標</div></div>
+      <div style="text-align:center;"><div style="background:var(--slate-dark);border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;margin:0 auto;"><span style="font-family:var(--ui-font);font-size:32px;font-weight:700;color:var(--accent-soft);">結</span></div><div style="font-size:16px;color:rgba(242,238,229,0.6);margin-top:6px;font-family:var(--ui-font);letter-spacing:0.08em;">結構</div></div>
+    </div>
+    <div class="line" style="color:var(--accent-soft);font-size:40px;">沒 有 示 例 ！</div>
+  </div>
+  <div class="card" style="margin-top:24px;border-top:3px solid var(--accent);">
+    <h3 style="color:var(--accent);">可能會問</h3>
+    <p>「為什麼網路文章都說要『提供示例』？」</p>
+    <p style="margin-top:10px;color:var(--ok);">&rarr; 「示例」是<span class="slate-c">Few-Shot 進階技巧</span>，不在「萬能公式四要素」的<span class="warn-c">考試定義</span>裡。考單選時記基礎四要素；做實操題時可以加示例。<span class="ok-c">兩者不矛盾</span>。</p>
+  </div>
+  <div class="slide-meta"><span>必記公式 · 四要素</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 37 · Q6+Q41 題目 ═══════════════ -->
+<section class="slide" data-label="37 Q6+Q41 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 2/3</span><span class="caption">AIDA &times; PAS 文案順序</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q6 + Q41 ｜ AIDA &times; PAS <span class="focal">文案順序</span></h2>
+  <div class="grid-2" style="margin-top:36px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">Q6. AIDA 模型第一步是？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt">A. Interest 興趣</span>
+        <span class="opt">B. Desire 慾望</span>
+        <span class="opt">C. Action 行動</span>
+        <span class="opt">D. Attention 注意</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">Q41. PAS 模型第二步是？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt">A. Problem 問題</span>
+        <span class="opt">B. Agitate 激發</span>
+        <span class="opt">C. Solution 方案</span>
+        <span class="opt">D. Action 行動</span>
+      </div>
+    </div>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">兩題一起想 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R3 · Q6 + Q41</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 38 · Q6+Q41 解答 ═══════════════ -->
+<section class="slide" data-label="38 Q6+Q41 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 2/3</span><span class="caption">AIDA &times; PAS</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">AIDA &times; PAS <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">AIDA 模型</h3>
+      <div class="code-block" style="margin-top:12px;">
+<span class="hl">A  Attention   注意 ← Q6 ✓</span>
+I  Interest    興趣
+D  Desire      慾望
+A  Action      行動</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">PAS 模型</h3>
+      <div class="code-block" style="margin-top:12px;">
+P  Problem    問題
+<span class="hl">A  Agitate    激發 ← Q41 ✓</span>
+S  Solution   方案</div>
+    </div>
+  </div>
+  <div class="keypoint ok-border" data-label="考試金句" style="text-align:center;font-size:24px;">
+    跟我念一次：「<span class="slate-c">A-I-D-A</span>」｜「<span class="focal">P-A-S</span>」<br>
+    <span class="dim" style="font-size:18px;">念出聲，考試當場想得起來</span>
+  </div>
+  <div class="slide-meta"><span>R3 · Q6 + Q41 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 39 · Q9 題目 ═══════════════ -->
+<section class="slide" data-label="39 Q9 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 3/3</span><span class="caption">人類在文案中的角色</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q9. 文案生成中，人類的<span class="focal">主要職責</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 生成初稿</span>
+    <span class="opt">B. 內容擴展</span>
+    <span class="opt">C. 方向設定和資料收集</span>
+    <span class="opt">D. 增加創意性</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">先在心裡選一個 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R3 · Q9</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 40 · Q9 解答 ═══════════════ -->
+<section class="slide" data-label="40 Q9 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r3">R3</span> 重點題 3/3</span><span class="caption">人類在文案中的角色</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q9 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 生成初稿</div>
+    <div class="quiz-opt" data-quiz-option="b">B. 內容擴展</div>
+    <div class="quiz-opt" data-quiz-option="c" data-correct>C. 方向設定和資料收集</div>
+    <div class="quiz-opt" data-quiz-option="d">D. 增加創意性</div>
+  </div>
+  <div class="keypoint accent-border" data-label="核心觀念">
+    <strong>類比：寫業績報告</strong>
+    <br><br>
+    AI 寫初稿，但決定<br>
+     &middot; 報哪些<span class="warn-c">數字</span><br>
+     &middot; 強調哪個<span class="warn-c">產品</span><br>
+     &middot; 給<span class="warn-c">誰</span>看
+    <br><br>
+    <span class="focal">是你決定的。</span>
+  </div>
+  <div class="slide-meta"><span>R3 · Q9 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 41 · R4 封面 ═══════════════ -->
+<section class="slide dark title-slide" data-label="41 R4 Cover" data-pause-timer="480" data-manual>
+  <div style="position:absolute;inset:0;padding:80px 120px;display:flex;flex-direction:column;justify-content:space-between;">
+    <span class="round-pill" data-round="r4" style="align-self:flex-start;">Round 4 · 第四輪</span>
+    <div>
+      <p style="font-size:24px;color:rgba(248,244,234,0.6);margin-bottom:20px;letter-spacing:0.12em;">倫理 + 鞏固</p>
+      <div class="cover-title" style="color:#F8F4EA;"><span style="color:var(--accent-soft);">5 題</span> ｜ 8 分鐘</div>
+      <p class="cover-sub" style="color:rgba(248,244,234,0.6);">難度 &#x25CF;</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <span class="num-label" style="color:rgba(248,244,234,0.5);">自刷 → 輪末回顧</span>
+      <span class="timer-chip" style="color:rgba(248,244,234,0.5);">00:59 – 01:07</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 42 · R4 主題全貌 ═══════════════ -->
+<section class="slide" data-label="42 R4 Themes">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r4">R4</span></span><span class="caption">5 分鐘自刷</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">最後一輪，輕鬆但<span class="focal">別鬆懈</span></h2>
+  <table class="data">
+    <thead><tr><th>主題</th><th style="text-align:center;">大約題數</th><th>易錯點</th></tr></thead>
+    <tbody>
+      <tr><th>生成式 AI 倫理問題</th><td style="text-align:center;">1–2</td><td>反向題「不包括」</td></tr>
+      <tr><th>隱私保護應對措施</th><td style="text-align:center;">1</td><td>法規 vs 技術</td></tr>
+      <tr><th><span class="warn-c">危害類型辨識</span></th><td style="text-align:center;">1–2</td><td>&#x25B6; Q48「<span class="warn-c">好事 → 排除</span>」</td></tr>
+      <tr><th>綜合鞏固</th><td style="text-align:center;">1</td><td>跨主題</td></tr>
+    </tbody>
+  </table>
+  <div class="keypoint warn-border" data-label="解題技巧">
+    只有 5 題倫理，是<span class="ok-c">最輕鬆的一輪</span>——<br>
+    自己做完衝個高分，<span class="warn-c">不要鬆懈秒答錯</span>。
+  </div>
+  <div class="slide-meta"><span>R4 · 主題全貌</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 43 · Q48 題目 ═══════════════ -->
+<section class="slide" data-label="43 Q48 Question">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r4">R4</span> 重點題</span><span class="caption">AI 危害辨識</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q48. 生成式 AI 帶來的危害｜<span class="focal">不包括</span>？</h2>
+  <div class="quiz-box">
+    <span class="opt">A. 影響資訊可信度</span>
+    <span class="opt">B. 增加就業機會</span>
+    <span class="opt">C. 引發個人隱私擔憂</span>
+    <span class="opt">D. 帶來倫理問題</span>
+  </div>
+  <div class="vote-prompt" style="margin-top:28px;">看清楚是「不包括」 → 老師按下一頁揭曉</div>
+  <div class="slide-meta"><span>R4 · Q48</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 44 · Q48 解答 ═══════════════ -->
+<section class="slide" data-label="44 Q48 Reveal">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r4">R4</span> 重點題</span><span class="caption">AI 危害辨識</span></div>
+  <h2 class="assertion" style="margin-bottom:20px;">Q48 <span class="focal">解答</span></h2>
+  <div class="reveal-banner">答案揭曉</div>
+  <div class="quiz-box" data-quiz>
+    <div class="quiz-opt" data-quiz-option="a">A. 影響資訊可信度 <span class="dim">&larr; 危害（深偽、假資訊）</span></div>
+    <div class="quiz-opt" data-quiz-option="b" data-correct>B. 增加就業機會 &larr; 正面影響，不是危害</div>
+    <div class="quiz-opt" data-quiz-option="c">C. 引發個人隱私擔憂 <span class="dim">&larr; 危害（資料外洩）</span></div>
+    <div class="quiz-opt" data-quiz-option="d">D. 帶來倫理問題 <span class="dim">&larr; 危害（歧視、偏見）</span></div>
+  </div>
+  <div class="formula-box" style="margin-top:20px;">
+    <div class="line" style="color:#F4C7BB;">好事 → 排除！</div>
+  </div>
+  <div class="keypoint warn-border" data-label="解題技巧" style="text-align:center;">
+    <strong>10 秒秒答口訣</strong>：「<span class="warn-c">不包括 / 除了</span>」類題目，<br>
+    找選項中<span class="focal">唯一一個「好事」</span>排除掉。
+  </div>
+  <div class="slide-meta"><span>R4 · Q48 解答</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 45 · Q13+Q15 快速帶過 ═══════════════ -->
+<section class="slide" data-label="45 Q13+Q15 Quick">
+  <div class="slide-header"><span class="eyebrow"><span class="round-pill" data-round="r4">R4</span> 快速帶過</span><span class="caption">Q13 + Q15 關鍵句重申</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">Q13 + Q15 <span class="focal">關鍵句重申</span></h2>
+  <div class="grid-2" style="margin-top:36px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">Q13. 倫理問題？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt correct">&check; A. 使用者傳播虛假或不實數據</span>
+      </div>
+      <div class="focal-block slate" style="margin-top:16px;font-size:18px;">「倫理問題 = <span class="slate-c">假資訊 / 偏見 / 隱私 / 著作權</span>」</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">Q15. 隱私保護措施？</h3>
+      <div class="quiz-box" style="margin-top:12px;">
+        <span class="opt correct">&check; B. 制定法規和機制</span>
+      </div>
+      <div class="focal-block" style="margin-top:16px;font-size:18px;">「個資保護 = <span class="focal">法規優先</span>，不是減少使用」</div>
+    </div>
+  </div>
+  <div class="slide-meta"><span>R4 · Q13 + Q15</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 46 · 官網刷題 ═══════════════ -->
+<section class="slide" data-label="46 Why Official">
+  <div class="slide-header"><span class="eyebrow">課後實戰</span><span class="caption">為什麼要去官網刷？</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">為什麼要去<span class="focal">官網</span>刷？</h2>
+  <div class="warning-box" style="font-size:20px;margin-top:28px;">課堂 100 題只是「預熱版」 &middot; 真正計分的考試在<span style="color:var(--ink);font-weight:700;">官網</span></div>
+  <div class="grid-4" style="margin-top:20px;">
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);font-size:20px;">1. 介面熟悉度</h3>
+      <p>考試當天用官網，提前操作避免「<span class="warn-c">會做但點錯</span>」</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);font-size:20px;">2. 題目完整度</h3>
+      <p>官網包含官方<span class="focal">詳細解析</span>，比課堂版更權威</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--ok);">
+      <h3 style="color:var(--ok);font-size:20px;">3. 實操題練手</h3>
+      <p>實操題只能在官網做（課堂版主要是<span class="ok-c">理論題</span>）</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--warn);">
+      <h3 style="color:var(--warn);font-size:20px;">4. 真實計時感</h3>
+      <p>官網有完整計時系統，模擬<span class="warn-c">考試壓力</span></p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>課後實戰 · 官網</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 47 · 課後任務 ═══════════════ -->
+<section class="slide" data-label="47 Homework">
+  <div class="slide-header"><span class="eyebrow">課後實戰</span><span class="caption">你的課後任務清單</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">你的課後<span class="focal">任務清單</span></h2>
+  <div class="grid-2" style="margin-top:36px;">
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);">今晚必做（趁手感熱）</h3>
+      <p style="line-height:2.2;font-size:18px;">
+        □ 登入官網考試系統<br>
+        □ 完成全部理論題一次（單選 + 多選）<br>
+        □ 完成全部實操題一次（Prompt 設計類）<br>
+        □ 把官網做錯的題目記下來
+      </p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);">三天內必做</h3>
+      <p style="line-height:2.2;font-size:18px;">
+        □ 用刷題工具「錯題回看」重做課堂錯題<br>
+        □ 對照精讀本看官方解析<br>
+        □ 第二小時上課前，整理 3 個你最不確定的題目發問
+      </p>
+    </div>
+  </div>
+  <div class="keypoint accent-border" data-label="核心觀念" style="text-align:center;font-size:22px;">
+    今天上完，<span class="warn-c">趁手感最熱，今晚就上官網開做。</span><br>
+    <span class="dim" style="font-size:18px;">課堂版是熱身，<span class="focal" style="font-size:18px;">官網版才是真考場</span>。</span>
+  </div>
+  <div class="slide-meta"><span>課後任務清單</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 48 · 第二小時銜接 ═══════════════ -->
+<section class="slide" data-label="48 Bridge to Hour 2">
+  <div class="slide-header"><span class="eyebrow">第二小時銜接</span><span class="caption">10 分鐘休息後</span></div>
+  <h2 class="assertion" style="margin-bottom:36px;">10 分鐘休息 → 第二小時要做的<span class="focal">三件事</span></h2>
+  <div class="grid-3" style="margin-top:40px;">
+    <div class="card" style="border-top:3px solid var(--accent);">
+      <h3 style="color:var(--accent);font-size:26px;">算法精講</h3>
+      <p style="margin-top:12px;">針對 <span class="focal">R2 薄弱算法</span>深講<br>擴散 / Transformer / VideoGPT</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--slate);">
+      <h3 style="color:var(--slate);font-size:26px;">多選擊破</h3>
+      <p style="margin-top:12px;">把錯最多的<span class="slate-c">多選題</span>拆透<br>三大陷阱對照</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--ok);">
+      <h3 style="color:var(--ok);font-size:26px;">實操指引</h3>
+      <p style="margin-top:12px;">Prompt 萬能公式 &times;<br><span class="ok-c">業務場景</span>實戰</p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>第二小時銜接</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 49 · 收尾 ═══════════════ -->
+<section class="slide" data-label="49 Closing" style="justify-content:center;align-items:center;text-align:center;">
+  <h2 class="assertion" style="font-size:56px;max-width:100%;text-align:center;margin-bottom:40px;">
+    第一小時做完——<br>
+    帶走<span class="slate-c">三個口訣</span> + <span class="focal">一條公式</span>
+  </h2>
+  <div class="countdown-grid" style="max-width:1000px;margin:0 auto;">
+    <div class="countdown-card">
+      <div class="count-number" style="color:var(--slate);">3</div>
+      <div class="count-label">三端風險口訣<br>輸入怕偷怕毒…</div>
+    </div>
+    <div class="countdown-card">
+      <div class="count-number" style="color:var(--warn);">3</div>
+      <div class="count-label">三法保安全<br>網安 + 個資 + 數據</div>
+    </div>
+    <div class="countdown-card">
+      <div class="count-number accent">4</div>
+      <div class="count-label">萬能公式四要素<br>角色+背景+目標+結構</div>
+    </div>
+    <div class="countdown-card">
+      <div class="count-number" style="color:var(--ok);">官網</div>
+      <div class="count-label">今晚 → 開做<br>趁手感最熱</div>
+    </div>
+  </div>
+  <p style="font-size:22px;color:var(--ink-muted);margin-top:40px;">
+    10 分鐘休息 → 第二小時 ｜ 算法精講 + 多選擊破 + 實操指引
+  </p>
+  <div class="slide-meta"><span>收尾</span><span class="num"></span></div>
+</section>
+
+<!-- ═══════════════ 50 · 結尾 ═══════════════ -->
+<section class="slide dark" data-label="50 End" style="justify-content:center;align-items:center;text-align:center;">
+  <h2 class="assertion" style="font-size:56px;max-width:100%;text-align:center;color:#F8F4EA;">
+    第一小時結束<br>
+    <span style="font-size:28px;color:rgba(248,244,234,0.6);">休息 10 分鐘 → 第二小時開始</span>
+  </h2>
+  <div class="slide-meta"><span>結束</span><span class="num"></span></div>
+</section>
+
+</deck-stage>
+
+<script src="../../editor/deck-stage.js"></script>
+<script src="../../editor/deck-script.js"></script>
+</body>
+</html>

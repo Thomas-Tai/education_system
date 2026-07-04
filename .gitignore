@@ -1,0 +1,22 @@
+.DS_Store
+
+node_modules/
+package-lock.json
+
+.env
+.env.*
+!.env.example
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.cache/
+.tmp/
+tmp/
+.claude/
+.qoder/
+
+# Build artifacts (auto-generated, can be regenerated)
+lectures/*/assets/og-image.jpg

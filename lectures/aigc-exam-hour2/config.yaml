@@ -1,0 +1,13 @@
+page:
+  title: "AIGC 考試輔助：算法精講 + 實操"
+  subtitle: "工信部 AIGC 應用工程師（初級）第二小時 — 核心算法精講與實操訓練"
+  badge: "考試輔助 · 初級"
+  category: "考試輔助"
+  tags:
+    - AIGC
+    - 工信部
+    - 算法模型
+    - 實操訓練
+
+seo:
+  description: "工信部 AIGC 應用工程師（初級）證書考試輔助課程第二小時：核心算法精講（擴散模型、GAN、DALL-E、VideoGPT）與實操訓練。"

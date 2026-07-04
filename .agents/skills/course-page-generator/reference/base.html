@@ -1,0 +1,472 @@
+<!--
+  Base HTML Template for Course Page Generator
+  - CSS 和 JS 是完整的，直接複製使用
+  - HTML body 區塊用 {{PLACEHOLDER}} 標記，需由 Skill 根據 config + content 填入
+  - 產出時移除所有註解和 placeholder 說明
+-->
+<!DOCTYPE html>
+<html lang="{{PAGE_LANG}}" {{PAGE_MODE}}>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>{{PAGE_TITLE}}</title>
+  <link rel="icon" type="image/png" href="{{FAVICON}}">
+  <meta property="og:type" content="{{OG_TYPE}}">
+  <meta property="og:title" content="{{OG_TITLE}}">
+  <meta property="og:description" content="{{OG_DESCRIPTION}}">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta property="og:url" content="{{OG_URL}}">
+  <meta property="og:site_name" content="{{OG_SITE_NAME}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <script>
+    if (window.location.protocol === 'file:') {
+      document.documentElement.setAttribute('data-local-preview', 'true');
+    }
+  </script>
+  <link rel="stylesheet" href="../../assets/course.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+  <!-- Hamburger -->
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="overlay"></div>
+
+  <!-- Sidebar TOC -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-title">{{SIDEBAR_BRAND}}</div>
+    </div>
+    <ul class="toc">
+      {{TOC_ITEMS}}
+      <!--
+      每個主章節：
+      <li class="toc-group" data-section="SECTION_ID">
+        <a href="#SECTION_ID" class="toc-group-title">
+          <span class="toc-num">NUM</span> TITLE
+        </a>
+        <ul class="toc-sub">
+          <li><a href="#SUB_ID">SUB_TITLE</a></li>
+        </ul>
+      </li>
+    -->
+    </ul>
+    <div class="sidebar-progress">
+      <div class="sidebar-progress-label"><span>閱讀進度</span><span id="progress-pct">0%</span></div>
+      <div class="sidebar-progress-track">
+        <div class="sidebar-progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="sidebar-progress-actions">
+        <button class="settings-toggle" id="settings-toggle" aria-label="設定"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+  </nav>
+  <button class="sidebar-collapse-btn" id="sidebar-collapse" aria-label="收合側邊欄">
+    <svg width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1L2 7l6 6" />
+    </svg>
+  </button>
+
+  <div class="collapsed-progress">
+    <div class="collapsed-progress-fill" id="collapsed-progress-fill"></div>
+  </div>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge"><span class="dot"></span>{{HERO_BADGE}}</div>
+    <h1>{{HERO_TITLE}}</h1>
+    <p class="hero-sub">{{HERO_SUBTITLE}}</p>
+    <p class="hero-author">{{HERO_AUTHOR}}</p>
+    <nav class="hero-nav">
+      {{HERO_NAV_ITEMS}}
+      <!-- <a href="#id">First</a> <a href="#id">Others</a> -->
+    </nav>
+  </header>
+
+  {{OPENING_QUOTE}}
+  <!--
+<section class="quote-page"><div class="reveal">
+  <div class="quote-mark">"</div>
+  <blockquote>QUOTE_TEXT</blockquote>
+  <div class="quote-line"></div>
+</div></section>
+-->
+
+  {{INSTRUCTOR_SECTION}}
+  <!--
+<section class="section" id="instructor">...</section>
+-->
+
+  {{CONTENT_SECTIONS}}
+  <!--
+<hr class="divider">
+<section class="section" id="...">
+  <div class="reveal">
+    <span class="section-label"><span class="num">N</span> LABEL</span>
+    <h2>TITLE</h2>
+    <p class="lead">LEAD</p>
+  </div>
+  ... components ...
+</section>
+-->
+
+  {{CLOSING_QUOTE}}
+
+  <!-- Footer -->
+  <footer class="footer">
+    {{FOOTER_SOCIAL_LINKS}}
+    <p>{{FOOTER_COPYRIGHT}}</p>
+  </footer>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settings-panel">
+    <div class="settings-section">
+      <div class="settings-controls-row">
+        <button class="fontsize-toggle" id="fontsize-toggle" aria-label="字體大小">A2</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        <button class="share-toggle" id="share-toggle" aria-label="分享課程"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h9v9H2V2zm2 2v5h5V4H4zm1 1h3v3H5V5zM13 2h9v9h-9V2zm2 2v5h5V4h-5zm1 1h3v3h-3V5zM2 13h9v9H2v-9zm2 2v5h5v-5H4zm1 1h3v3H5v-3zM13 13h3v3h-3v-3zm4 0h2v2h-2v-2zm2 2h2v2h-2v-2zm-4 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm-2 0h2v2h-2v-2z"/></svg></button>
+        <button class="break-toggle" id="break-timer-btn" aria-label="休息計時器"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><polyline points="12 9 12 13 16 15"/><path d="M9 3h6"/><path d="M12 3v2"/></svg></button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="color-swatches" id="color-swatches">
+        <button class="color-swatch" data-theme-id="red" title="正紅" data-accent="#e03040"
+          data-accent-light="#b01828" data-accent2="#e87858" data-accent2-light="#c05030" data-accent3="#d06080"
+          data-accent3-light="#a03060"
+          style="background:linear-gradient(135deg,#e03040 40%,#e87858 70%,#d06080)"></button>
+        <button class="color-swatch" data-theme-id="coral" title="暖陽珊瑚" data-accent="#e8845a"
+          data-accent-light="#c45c28" data-accent2="#e8b878" data-accent2-light="#9a7028" data-accent3="#e08898"
+          data-accent3-light="#b04860"
+          style="background:linear-gradient(135deg,#e8845a 40%,#e8b878 70%,#e08898)"></button>
+        <button class="color-swatch" data-theme-id="ocean" title="深海藍" data-accent="#60a5fa" data-accent-light="#2563eb"
+          data-accent2="#5eead4" data-accent2-light="#0d9488" data-accent3="#a5b4fc" data-accent3-light="#6366f1"
+          style="background:linear-gradient(135deg,#60a5fa 40%,#5eead4 70%,#a5b4fc)"></button>
+        <button class="color-swatch" data-theme-id="forest" title="翡翠森林" data-accent="#50d890"
+          data-accent-light="#15803d" data-accent2="#c8d858" data-accent2-light="#6a7a18" data-accent3="#50c0a8"
+          data-accent3-light="#0d7060"
+          style="background:linear-gradient(135deg,#50d890 40%,#c8d858 70%,#50c0a8)"></button>
+        <button class="color-swatch" data-theme-id="galaxy" title="星河紫" data-accent="#a78bfa"
+          data-accent-light="#7c3aed" data-accent2="#e8a8e0" data-accent2-light="#a21caf" data-accent3="#7db8f8"
+          data-accent3-light="#2563eb"
+          style="background:linear-gradient(135deg,#a78bfa 40%,#e8a8e0 70%,#7db8f8)"></button>
+        <button class="color-swatch" data-theme-id="sakura" title="花見櫻" data-accent="#f472b6"
+          data-accent-light="#db2777" data-accent2="#b0a8f0" data-accent2-light="#6d28d9" data-accent3="#f0a8a0"
+          data-accent3-light="#c05050"
+          style="background:linear-gradient(135deg,#f472b6 40%,#b0a8f0 70%,#f0a8a0)"></button>
+        <button class="color-swatch" data-theme-id="amber" title="琥珀" data-accent="#f0b840" data-accent-light="#a87808"
+          data-accent2="#e09870" data-accent2-light="#a86040" data-accent3="#c8b080" data-accent3-light="#887048"
+          style="background:linear-gradient(135deg,#f0b840 40%,#e09870 70%,#c8b080)"></button>
+        <button class="color-swatch" data-theme-id="white" title="銀白" data-accent="#c8cdd8"
+          data-accent-light="#607090" data-accent2="#b0c0c8" data-accent2-light="#506870" data-accent3="#c0bcd8"
+          data-accent3-light="#706888"
+          style="background:linear-gradient(135deg,#e0e2ec 40%,#c8d0dc 70%,#d4cce8)"></button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">匯出</div>
+      <button class="settings-export-btn" id="export-pdf-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 匯出 PDF（投影片版）</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <button class="settings-shortcut-btn" id="shortcut-modal-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="6" y2="14"/><line x1="18" y1="14" x2="18" y2="14"/><line x1="10" y1="14" x2="14" y2="14"/></svg> 快捷鍵說明</button>
+    </div>
+  </div>
+
+  <!-- Timer Widget (floating, draggable) -->
+  <div class="timer-widget" id="timer-widget">
+    <div class="timer-header" id="timer-drag-handle">
+      <span class="timer-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><polyline points="12 9 12 13 16 15"/><path d="M9 3h6"/><path d="M12 3v2"/></svg>計時器</span>
+      <button class="timer-close" id="timer-widget-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="timer-body">
+      <div class="timer-display" id="timer-display">10:00</div>
+      <div class="timer-progress-track"><div class="timer-progress-fill" id="timer-progress-fill"></div></div>
+      <div class="timer-input-row">
+        <button class="timer-adj" id="timer-dec">−</button>
+        <input type="number" class="timer-input" id="timer-minutes" value="10" min="1" max="120">
+        <span class="timer-unit">分鐘</span>
+        <button class="timer-adj" id="timer-inc">+</button>
+      </div>
+      <div class="timer-actions">
+        <button class="timer-start-btn" id="timer-start-btn">開始</button>
+        <button class="timer-reset-btn" id="timer-reset-btn">重設</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lottery Widget (floating, draggable) -->
+  <div class="lottery-widget" id="lottery-widget">
+    <div class="lottery-header" id="lottery-drag-handle">
+      <span class="lottery-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/></svg>抽籤器</span>
+      <button class="lottery-close" id="lottery-widget-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="lottery-body">
+      <!-- Main tabs: 抽籤 / 分組 / 計分 -->
+      <div class="lottery-main-tabs">
+        <button class="lottery-main-tab active" data-panel="draw">抽籤</button>
+        <button class="lottery-main-tab" data-panel="group">分組</button>
+        <button class="lottery-main-tab" data-panel="score">計分</button>
+      </div>
+
+      <!-- 抽籤 Panel -->
+      <div class="lottery-panel" id="lottery-panel-draw">
+        <div class="lottery-tabs">
+          <button class="lottery-tab active" data-mode="number">學號</button>
+          <button class="lottery-tab" data-mode="name">人名</button>
+        </div>
+        <div id="lottery-mode-number">
+          <div class="lottery-range-row">
+            <span>學號範圍</span>
+            <input type="number" class="lottery-range-input" id="lottery-num-start" value="1" min="1" max="9999">
+            <span>至</span>
+            <input type="number" class="lottery-range-input" id="lottery-num-end" value="50" min="1" max="9999">
+          </div>
+        </div>
+        <div id="lottery-mode-name" style="display:none">
+          <textarea class="lottery-names-area" id="lottery-names-input" placeholder="貼上人名，每行一個" rows="4"></textarea>
+          <button class="lottery-apply-btn" id="lottery-apply-names">套用名單</button>
+        </div>
+        <div class="lottery-result" id="lottery-result">---</div>
+        <div class="lottery-pool-info" id="lottery-pool-info">剩餘 50 / 50</div>
+        <div class="lottery-actions">
+          <button class="lottery-draw-btn" id="lottery-draw-btn">抽籤</button>
+          <button class="lottery-reset-btn" id="lottery-reset-draw-btn">重置抽籤</button>
+        </div>
+        <div class="lottery-bottom-row">
+          <label class="lottery-repeat-label"><input type="checkbox" id="lottery-allow-repeat"> 允許重複</label>
+          <button class="lottery-reset-list-btn" id="lottery-reset-list-btn">重置名單</button>
+        </div>
+        <div class="lottery-drawn-wrap" id="lottery-drawn-wrap" style="display:none">
+          <span class="lottery-drawn-label">已抽：</span>
+          <div class="lottery-drawn-list" id="lottery-drawn-list"></div>
+        </div>
+      </div>
+
+      <!-- 分組 Panel -->
+      <div class="lottery-panel" id="lottery-panel-group" style="display:none">
+        <div class="lottery-group-config">
+          <span>分成</span>
+          <input type="number" class="lottery-range-input" id="lottery-group-count" value="4" min="2" max="10">
+          <span>組</span>
+          <button class="lottery-group-draw-btn" id="lottery-group-draw-btn">開始分組</button>
+        </div>
+        <div class="lottery-group-source-info" id="lottery-group-source-info"></div>
+        <div class="lottery-group-results" id="lottery-group-results"></div>
+        <button class="lottery-group-to-score-btn" id="lottery-group-to-score-btn" style="display:none">匯入計分板</button>
+      </div>
+
+      <!-- 計分 Panel -->
+      <div class="lottery-panel" id="lottery-panel-score" style="display:none">
+        <div class="lottery-score-teams" id="lottery-score-teams"></div>
+        <div class="lottery-score-actions">
+          <button class="lottery-reset-btn" id="lottery-score-reset-btn">重置分數</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bonus Modal -->
+  <div class="bonus-overlay" id="bonus-overlay">
+    <div class="bonus-modal">
+      <div class="bonus-modal-header">
+        <h3 id="bonus-modal-title"></h3>
+        <button class="bonus-modal-close" id="bonus-modal-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="bonus-modal-body" id="bonus-modal-body"></div>
+    </div>
+  </div>
+
+  <div class="share-widget" id="share-widget">
+    <div class="share-header" id="share-drag-handle">
+      <span class="share-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h9v9H2V2zm2 2v5h5V4H4zm1 1h3v3H5V5zM13 2h9v9h-9V2zm2 2v5h5V4h-5zm1 1h3v3h-3V5zM2 13h9v9H2v-9zm2 2v5h5v-5H4zm1 1h3v3H5v-3zM13 13h3v3h-3v-3zm4 0h2v2h-2v-2zm2 2h2v2h-2v-2zm-4 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm-2 0h2v2h-2v-2z"/></svg>分享此課程</span>
+      <button class="share-close" id="share-widget-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="share-body">
+      <div class="share-qr-wrap">
+        <div class="share-qr-frame">
+          <div class="share-qr-img" id="share-qr-container"></div>
+        </div>
+        <span class="share-qr-label">掃描開啟</span>
+      </div>
+      <div class="share-right">
+        <div class="share-og-wrap">
+          <img class="share-og-img" id="share-og-img" src="" alt="">
+        </div>
+        <div class="share-url-row">
+          <a class="share-url-link" id="share-url-link" href="" target="_blank"></a>
+          <button class="share-copy-btn" id="share-copy-btn">複製</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="shortcut-overlay" id="shortcut-overlay">
+    <div class="shortcut-modal">
+      <div class="shortcut-modal-header">
+        <h3>快捷鍵說明</h3>
+        <button class="shortcut-modal-close" id="shortcut-modal-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="shortcut-modal-body">
+        <div class="shortcut-col">
+          <div class="shortcut-section-title">頁面操作</div>
+          <table class="shortcut-table">
+            <tr><td><span class="shortcut-key"><kbd>A</kbd></span></td><td class="shortcut-desc">收合 / 展開側邊欄</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>F</kbd></span></td><td class="shortcut-desc">全螢幕</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Shift</kbd><span class="shortcut-sep">+</span><kbd>C</kbd></span></td><td class="shortcut-desc">切換深 / 淺色模式</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>c</kbd></span></td><td class="shortcut-desc">切換顏色主題</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>=</kbd><span class="shortcut-sep">/</span><kbd>+</kbd></span></td><td class="shortcut-desc">放大字型</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>-</kbd><span class="shortcut-sep">/</span><kbd>_</kbd></span></td><td class="shortcut-desc">縮小字型</td></tr>
+          </table>
+        </div>
+        <div class="shortcut-col">
+          <div class="shortcut-section-title">工具面板</div>
+          <table class="shortcut-table">
+            <tr><td><span class="shortcut-key"><kbd>P</kbd></span></td><td class="shortcut-desc">投影片模式</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Q</kbd></span></td><td class="shortcut-desc">分享 QR Code</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>T</kbd></span></td><td class="shortcut-desc">計時器</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>R</kbd></span></td><td class="shortcut-desc">抽籤器</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>V</kbd></span></td><td class="shortcut-desc">投票</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>S</kbd></span></td><td class="shortcut-desc">聚光燈模式</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>B</kbd></span></td><td class="shortcut-desc">塗鴉筆</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>[</kbd><span class="shortcut-sep">/</span><kbd>]</kbd></span></td><td class="shortcut-desc">筆刷 / 聚光燈圓形縮小 / 放大</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>{</kbd><span class="shortcut-sep">/</span><kbd>}</kbd></span></td><td class="shortcut-desc">放大鏡倍率縮小 / 放大</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>X</kbd></span></td><td class="shortcut-desc">關閉所有浮動工具</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Esc</kbd></span></td><td class="shortcut-desc">關閉 modal / 設定面板</td></tr>
+          </table>
+        </div>
+        <div class="shortcut-col">
+          <div class="shortcut-section-title">塗鴉筆模式</div>
+          <table class="shortcut-table">
+            <tr><td><span class="shortcut-key"><kbd>Shift</kbd><span class="shortcut-sep">+</span><kbd>B</kbd></span></td><td class="shortcut-desc">切換橡皮擦</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>c</kbd></span></td><td class="shortcut-desc">循環筆刷顏色</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Shift</kbd><span class="shortcut-sep">+</span><kbd>C</kbd></span></td><td class="shortcut-desc">清空畫布</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Ctrl</kbd><span class="shortcut-sep">+</span><kbd>Z</kbd></span></td><td class="shortcut-desc">復原上一筆</td></tr>
+          </table>
+        </div>
+        <div class="shortcut-col">
+          <div class="shortcut-section-title">投影片模式</div>
+          <table class="shortcut-table">
+            <tr><td><span class="shortcut-key"><kbd>→</kbd><span class="shortcut-sep">/</span><kbd>↓</kbd><span class="shortcut-sep">/</span><kbd>Space</kbd></span></td><td class="shortcut-desc">下一張</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>←</kbd><span class="shortcut-sep">/</span><kbd>↑</kbd><span class="shortcut-sep">/</span><kbd>⌫</kbd></span></td><td class="shortcut-desc">上一張</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Home</kbd></span></td><td class="shortcut-desc">第一張</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>End</kbd></span></td><td class="shortcut-desc">最後一張</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>F</kbd></span></td><td class="shortcut-desc">全螢幕</td></tr>
+            <tr><td><span class="shortcut-key"><kbd>Esc</kbd></span></td><td class="shortcut-desc">退出全螢幕 / 投影片模式</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vote Widget (floating, draggable) -->
+  <div class="vote-widget" id="vote-widget">
+    <div class="vote-header" id="vote-drag-handle">
+      <span class="vote-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>投票<span class="vote-ep-dot" id="vote-ep-status" title="尚未設定後端 URL"></span></span>
+      <button class="vote-close" id="vote-widget-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="vote-body">
+      <!-- 頁面投票選擇面板（列出頁面上的 [vote] 題目） -->
+      <div class="vote-panel" id="vote-panel-picker" style="display:none">
+        <div class="vote-picker-header">頁面上的投票</div>
+        <div class="vote-picker-list" id="vote-picker-list"></div>
+        <div class="vote-picker-footer">
+          <button class="vote-picker-manual" id="vote-picker-manual" type="button">＋ 手動建立新投票</button>
+        </div>
+      </div>
+
+      <!-- 設定面板 -->
+      <div class="vote-panel" id="vote-panel-setup" style="display:none">
+        <div class="vote-setup-back-row">
+          <button class="vote-setup-back-btn" id="vote-setup-back-btn" type="button">&larr; 返回</button>
+        </div>
+        <div class="vote-ep-row" id="vote-ep-row">
+          <input type="text" class="vote-ep-input" id="vote-ep-input" placeholder="GAS Web App URL（設定一次即可）">
+          <button class="vote-ep-save-btn" id="vote-ep-save-btn">儲存</button>
+        </div>
+        <textarea class="vote-question-input" id="vote-question-input" placeholder="輸入問題..." rows="2"></textarea>
+        <div class="vote-options-config">
+          <div class="vote-option-row"><span class="vote-option-label">A</span><input type="text" class="vote-option-input" data-idx="0" placeholder="選項 A"></div>
+          <div class="vote-option-row"><span class="vote-option-label">B</span><input type="text" class="vote-option-input" data-idx="1" placeholder="選項 B"></div>
+          <div class="vote-option-row"><span class="vote-option-label">C</span><input type="text" class="vote-option-input" data-idx="2" placeholder="選項 C（選填）"></div>
+          <div class="vote-option-row"><span class="vote-option-label">D</span><input type="text" class="vote-option-input" data-idx="3" placeholder="選項 D（選填）"></div>
+        </div>
+        <label class="vote-answer-label"><input type="checkbox" id="vote-has-answer"> 標記正確答案 <select id="vote-answer-choice" style="display:none"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label>
+        <button class="vote-start-btn" id="vote-start-btn">開始投票</button>
+      </div>
+
+      <!-- 進行中面板 -->
+      <div class="vote-panel" id="vote-panel-active" style="display:none">
+        <div class="vote-qr-wrap">
+          <div class="vote-qr-container" id="vote-qr-container"></div>
+        </div>
+        <div class="vote-current-q" id="vote-current-q"></div>
+        <div class="vote-count-label" id="vote-count-label">等待投票中...</div>
+        <div class="vote-bars" id="vote-bars"></div>
+        <div class="vote-active-actions">
+          <button class="vote-switch-btn" id="vote-switch-btn" type="button">切換題目</button>
+          <button class="vote-stop-btn" id="vote-stop-btn" type="button">暫停投票</button>
+          <button class="vote-reset-btn" id="vote-reset-btn" type="button">重置投票</button>
+        </div>
+      </div>
+
+      <!-- 結果面板 -->
+      <div class="vote-panel" id="vote-panel-results" style="display:none">
+        <div class="vote-results-header">最終結果</div>
+        <div class="vote-bars" id="vote-results-bars"></div>
+        <div class="vote-results-total" id="vote-results-total"></div>
+        <button class="vote-restart-btn" id="vote-restart-btn">重新出題</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme & OG mode: early init (prevents flash) -->
+  <script>
+    (function () {
+      // OG mode: ?og=1 → hide sidebar/sections, hero-only layout for thumbnails
+      try {
+        var search = window.location.search || '';
+        if (search.indexOf('og=1') !== -1) {
+          document.documentElement.classList.add('og-mode');
+        }
+      } catch (e) { }
+
+      var s = localStorage.getItem('theme');
+      var d = window.matchMedia('(prefers-color-scheme:dark)').matches;
+      var t = s || (d ? 'dark' : 'light');
+      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      var b = document.getElementById('theme-toggle');
+      if (b) b.innerHTML = t === 'light' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      // Restore accent color
+      var accentData = localStorage.getItem('accentTheme');
+      if (accentData) {
+        try {
+          var ac = JSON.parse(accentData);
+          var isLight = t === 'light';
+          document.documentElement.style.setProperty('--accent', isLight ? ac.light : ac.dark);
+        } catch (e) { }
+      }
+    })();
+  </script>
+
+  <script>
+    window.__sectionIds__ = {{ SECTION_IDS }};
+    window.__allAnchorIds__ = {{ ALL_ANCHOR_IDS }};
+    window.__voteGasUrl__ = "{{VOTE_GAS_URL}}";
+  </script>
+  <script src="../../assets/course.js"></script>
+
+</html>

@@ -1,0 +1,13 @@
+page:
+  title: "AI 創想實驗室：從零打造你的動漫角色！"
+  subtitle: "適合小學 P4-P6 學生的 AIGC 親子創意課程，透過 Leonardo.ai 學習 Prompt Engineering，親子合作設計原創動漫角色。"
+  badge: "小學課程 · P4-P6"
+  category: "小學課程"
+  tags:
+    - AIGC
+    - Prompt Engineering
+    - Leonardo.ai
+    - 親子共學
+
+seo:
+  description: "適合小學 P4-P6 學生的 AIGC 創意課程，透過 Leonardo.ai 學習 Prompt Engineering，親子合作設計原創動漫角色。"

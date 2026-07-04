@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0e1117">
+  <title>課堂投票</title>
+  <style>
+    :root {
+      --bg: #0e1117;
+      --bg-card: #1a1d2e;
+      --bg-card2: #242840;
+      --accent: #e03040;
+      --text: #e8eaf0;
+      --text-dim: #8890a8;
+      --border: rgba(255,255,255,.1);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      font-size: .8rem;
+      color: var(--text-dim);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    /* Loading / waiting */
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 1rem auto;
+    }
+    .spinner.warn { border-top-color: #f59e0b; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: .9rem;
+    }
+
+    .waiting-hint {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: .78rem;
+      opacity: .7;
+      margin-top: .3rem;
+    }
+
+    /* Question */
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+
+    .option-btn {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      background: var(--bg-card2);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 1rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      transition: border-color .15s, background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .option-btn:hover, .option-btn:active { border-color: var(--accent); background: rgba(var(--accent-rgb, 224,48,64), .08); }
+    .option-btn:disabled { cursor: default; opacity: .6; }
+    .option-btn.selected { border-color: var(--accent); background: rgba(var(--accent-rgb, 224,48,64), .12); }
+
+    .option-key {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--accent);
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .option-text { flex: 1; line-height: 1.4; }
+
+    /* Success */
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(80,200,120,.15);
+      border: 2px solid #50c878;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .success-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .success-sub {
+      font-size: .85rem;
+      text-align: center;
+      color: var(--text-dim);
+    }
+
+    /* Result bars */
+    .result-bars { display: flex; flex-direction: column; gap: .6rem; }
+
+    .result-bar-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .result-bar-row.result-correct .result-bar-key { color: #50c878; border-color: #50c878; }
+    .result-bar-row.result-correct .result-bar-fill { background: #50c878; }
+
+    .result-bar-key {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--accent);
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: .75rem;
+    }
+
+    .result-bar-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
+
+    .result-bar-label {
+      font-size: .8rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .result-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .result-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width .5s ease;
+    }
+
+    .result-bar-stat {
+      font-size: .78rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      width: 3.8rem;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Error */
+    .error-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(224,48,64,.12);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .error-title {
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .error-sub {
+      font-size: .85rem;
+      text-align: center;
+      color: var(--text-dim);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    .result-total {
+      font-size: .82rem;
+      text-align: center;
+      color: var(--text-dim);
+    }
+
+    /* Hidden */
+    .hidden { display: none !important; }
+
+    /* Persistent refresh button */
+    .refresh-btn {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem .9rem;
+      background: var(--bg-card);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+      transition: color .15s, border-color .15s, transform .15s;
+      font-family: inherit;
+      z-index: 10;
+    }
+    .refresh-btn:hover,
+    .refresh-btn:active {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .refresh-btn.spinning svg {
+      animation: spin .8s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="brand">課堂互動</div>
+
+  <div class="card">
+    <!-- Loading (初始) -->
+    <div id="state-loading">
+      <div class="spinner"></div>
+      <p class="loading-text">載入中...</p>
+    </div>
+
+    <!-- Waiting: 老師尚未啟動題目 -->
+    <div id="state-waiting" class="hidden">
+      <div class="spinner"></div>
+      <p class="loading-text">等待老師啟動題目...</p>
+      <p class="waiting-hint">請保持此頁面開啟，題目會自動出現</p>
+    </div>
+
+    <!-- Ready: 顯示題目與選項（可投票） -->
+    <div id="state-ready" class="hidden">
+      <p class="question-text" id="question-text"></p>
+      <div class="options-list" id="options-list"></div>
+    </div>
+
+    <!-- Submitted: 剛剛投完票 -->
+    <div id="state-submitted" class="hidden">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#50c878" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <p class="success-title">投票成功，感謝參與！</p>
+      <p class="success-sub" id="voted-option"></p>
+      <div class="divider"></div>
+      <p class="result-total" id="result-total"></p>
+      <div class="result-bars" id="result-bars"></div>
+    </div>
+
+    <!-- Already voted: polling 發現已投過這題（包含重新進入頁面、老師切回已投票的題） -->
+    <div id="state-duplicate" class="hidden">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#50c878" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <p class="success-title">你已投過此題</p>
+      <p class="success-sub" id="duplicate-hint">每個裝置同一題只能投票一次</p>
+      <div class="divider"></div>
+      <p class="result-total" id="dup-result-total"></p>
+      <div class="result-bars" id="dup-result-bars"></div>
+    </div>
+
+    <!-- Error -->
+    <div id="state-error" class="hidden">
+      <div class="error-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <p class="error-title" id="error-title">無法載入投票</p>
+      <p class="error-sub" id="error-sub">此投票不存在或已結束</p>
+    </div>
+  </div>
+
+  <button type="button" class="refresh-btn" id="refresh-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    重新整理
+  </button>
+
+  <script>
+    // 教師可將 GAS URL 直接寫在此常數以產生較短 QR Code；留空時改用 URL 參數 ep=。
+    var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz3mPP9ErnZioQSZb2W4E0NBDBIbQcR_aTdkRwT_AFk_Pa33Zet7qyaAjX0cETrXzwuTA/exec';
+    
+    
+    
+    
+    
+
+    var VOTED_KEY = 'votedSessionsV2';
+
+    function getParam(name) {
+      var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+      return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+    }
+
+    var sessionId = getParam('s');
+    var ep = GAS_ENDPOINT || getParam('ep');
+
+    // softHash：以 sessionId + UA 產生 device fingerprint，作單題單裝置去重。
+    function softHash(str) {
+      var h = 0;
+      for (var i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) & 0xffffffff; }
+      return Math.abs(h).toString(36);
+    }
+    var voteHash = softHash(sessionId + (navigator.userAgent || '').slice(0, 40));
+
+    // localStorage 紀錄已投過的 qid（避免重複 POST，作為 server 端去重的快取）。
+    function getVotedQids() {
+      try { return JSON.parse(localStorage.getItem(VOTED_KEY + ':' + sessionId) || '{}'); }
+      catch (e) { return {}; }
+    }
+    function markVotedQid(qid) {
+      var v = getVotedQids();
+      v[qid] = true;
+      localStorage.setItem(VOTED_KEY + ':' + sessionId, JSON.stringify(v));
+    }
+    function clearVotedQid(qid) {
+      var v = getVotedQids();
+      if (!v[qid]) return;
+      delete v[qid];
+      localStorage.setItem(VOTED_KEY + ':' + sessionId, JSON.stringify(v));
+    }
+
+    var STATES = ['loading', 'waiting', 'ready', 'submitted', 'duplicate', 'error'];
+    function setState(id) {
+      STATES.forEach(function (s) {
+        var el = document.getElementById('state-' + s);
+        if (el) el.classList.toggle('hidden', s !== id);
+      });
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderResultBars(options, counts, total, answerId, container) {
+      if (!container) return;
+      var html = '';
+      options.forEach(function (opt, i) {
+        var count = counts[i] || 0;
+        var pct = total > 0 ? Math.round(count / total * 100) : 0;
+        var correct = (answerId !== '' && answerId !== null && parseInt(answerId) === i);
+        html += '<div class="result-bar-row' + (correct ? ' result-correct' : '') + '">';
+        html += '<div class="result-bar-key">' + String.fromCharCode(65 + i) + '</div>';
+        html += '<div class="result-bar-wrap">';
+        html += '<span class="result-bar-label">' + escHtml(opt) + '</span>';
+        html += '<div class="result-bar-track"><div class="result-bar-fill" style="width:' + pct + '%"></div></div>';
+        html += '</div>';
+        html += '<span class="result-bar-stat">' + count + ' (' + pct + '%)</span>';
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    // --- Follow-teacher 模式 -------------------------------------------------
+    // polling GET ?action=current 每 3 秒；老師切換題目（qid 改變）時自動換題。
+
+    var lastQid = null;        // 目前顯示中的 qid（null = waiting）
+    var currentQuestion = null;
+    var currentOptions = null;
+    var currentAnswerId = null;
+    var pollingTimer = null;
+    var inFlight = false;
+
+    function init() {
+      if (!sessionId || !ep) {
+        setState('error');
+        document.getElementById('error-title').textContent = '連結無效';
+        document.getElementById('error-sub').textContent = '請重新掃描 QR Code';
+        return;
+      }
+      setState('loading');
+      tick();
+      pollingTimer = setInterval(tick, 3000);
+
+      var refreshBtn = document.getElementById('refresh-btn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', function () {
+          refreshBtn.classList.add('spinning');
+          lastQid = null;
+          resetWaitingText();
+          setState('loading');
+          tick();
+          setTimeout(function () { refreshBtn.classList.remove('spinning'); }, 700);
+        });
+      }
+    }
+
+    function tick() {
+      if (inFlight) return;
+      inFlight = true;
+      var url = ep + '?action=current&s=' + encodeURIComponent(sessionId)
+              + '&hash=' + encodeURIComponent(voteHash);
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(handleCurrent)
+        .catch(function () { /* 靜默失敗，下次 polling 再試 */ })
+        .then(function () { inFlight = false; });
+    }
+
+    function handleCurrent(data) {
+      if (!data || !data.ok) return;
+
+      // 老師尚未啟動題目 / 已暫停 → waiting，並禁用所有選項按鈕防止遲到投票
+      if (!data.qid) {
+        var optBtns = document.querySelectorAll('#options-list .option-btn');
+        optBtns.forEach(function (b) { b.disabled = true; });
+        if (lastQid !== null) setState('waiting');
+        lastQid = null;
+        return;
+      }
+
+      // server 說未投但本地快取還記著 → 老師已重置，清掉快取讓學生重投
+      if (!data.votedByMe && getVotedQids()[data.qid]) {
+        clearVotedQid(data.qid);
+      }
+
+      // 題目改變（包含從 waiting → 第一題、從 A 題 → B 題） → 重置狀態
+      if (data.qid !== lastQid) {
+        resetWaitingText();
+        lastQid = data.qid;
+        currentQuestion = data.question;
+        currentOptions = data.options || [];
+        currentAnswerId = data.answerId;
+
+        if (data.votedByMe) {
+          showAlreadyVoted(data.qid);
+        } else {
+          showQuestion();
+        }
+        return;
+      }
+
+      // 同一題，但 server 端回報已投（可能來自其他分頁 / 裝置） → 切到已投票
+      if (data.votedByMe && !getVotedQids()[data.qid]) {
+        markVotedQid(data.qid);
+        showAlreadyVoted(data.qid);
+      }
+      // 同一題、server 說未投（老師重置）、目前停留在「已投票」畫面 → 切回投票畫面
+      else if (!data.votedByMe) {
+        var curState = document.querySelector('[id^="state-"]:not(.hidden)');
+        var curId = curState ? curState.id.replace('state-', '') : '';
+        if (curId === 'duplicate' || curId === 'submitted') {
+          showQuestion();
+        }
+      }
+    }
+
+    function showQuestion() {
+      document.getElementById('question-text').textContent = currentQuestion || '';
+      var list = document.getElementById('options-list');
+      list.innerHTML = '';
+      currentOptions.forEach(function (opt, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.innerHTML = '<span class="option-key">' + String.fromCharCode(65 + i) + '</span>'
+                      + '<span class="option-text">' + escHtml(opt) + '</span>';
+        btn.addEventListener('click', function () {
+          list.querySelectorAll('.option-btn').forEach(function (b) { b.disabled = true; });
+          btn.classList.add('selected');
+          submitVote(i);
+        });
+        list.appendChild(btn);
+      });
+      setState('ready');
+    }
+
+    function showAlreadyVoted(qid) {
+      setState('duplicate');
+      // 拉一次該題的結果以顯示長條圖
+      fetch(ep + '?action=results&s=' + encodeURIComponent(sessionId) + '&qid=' + encodeURIComponent(qid))
+        .then(function (r) { return r.json(); })
+        .then(function (r) {
+          var counts = (r && r.counts) ? r.counts : [];
+          var total = counts.reduce(function (a, b) { return a + b; }, 0);
+          var tEl = document.getElementById('dup-result-total');
+          if (tEl) tEl.textContent = '目前共 ' + total + ' 人投票';
+          renderResultBars(currentOptions || [], counts, total, currentAnswerId || '',
+            document.getElementById('dup-result-bars'));
+        })
+        .catch(function () {});
+    }
+
+    // 投票被 server 拒絕（老師已暫停 / 已切到別題）：顯示橙色 spinner + 暫停訊息
+    function showPaused() {
+      var spinner = document.querySelector('#state-waiting .spinner');
+      if (spinner) spinner.classList.add('warn');
+      var title = document.querySelector('#state-waiting .loading-text');
+      if (title) title.textContent = '老師已暫停投票';
+      var hint = document.querySelector('#state-waiting .waiting-hint');
+      if (hint) hint.textContent = '等待老師重新啟動題目...';
+      setState('waiting');
+      lastQid = null;
+    }
+
+    // 下一次正常 polling 時把 waiting 文案回復為預設
+    function resetWaitingText() {
+      var spinner = document.querySelector('#state-waiting .spinner');
+      if (spinner) spinner.classList.remove('warn');
+      var title = document.querySelector('#state-waiting .loading-text');
+      if (title) title.textContent = '等待老師啟動題目...';
+      var hint = document.querySelector('#state-waiting .waiting-hint');
+      if (hint) hint.textContent = '請保持此頁面開啟，題目會自動出現';
+    }
+
+    function submitVote(choiceIdx) {
+      var qid = lastQid;
+      fetch(ep, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'vote',
+          sessionId: sessionId,
+          qid: qid,
+          choice: choiceIdx,
+          hash: voteHash
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          // 老師已暫停或切到別題 → 不記為已投，顯示 paused 提示並回到 waiting
+          if (res && res.paused) {
+            showPaused();
+            return;
+          }
+          markVotedQid(qid);
+          if (res && res.duplicate) {
+            showAlreadyVoted(qid);
+            return;
+          }
+          document.getElementById('voted-option').textContent =
+            '你選擇了：' + String.fromCharCode(65 + choiceIdx) + '. ' + (currentOptions[choiceIdx] || '');
+          setState('submitted');
+          // 拉一次該題結果顯示長條圖
+          fetch(ep + '?action=results&s=' + encodeURIComponent(sessionId) + '&qid=' + encodeURIComponent(qid))
+            .then(function (r) { return r.json(); })
+            .then(function (r) {
+              var counts = (r && r.counts) ? r.counts : [];
+              var total = counts.reduce(function (a, b) { return a + b; }, 0);
+              var tEl = document.getElementById('result-total');
+              if (tEl) tEl.textContent = '目前共 ' + total + ' 人投票';
+              renderResultBars(currentOptions || [], counts, total, currentAnswerId || '',
+                document.getElementById('result-bars'));
+            })
+            .catch(function () {});
+        })
+        .catch(function () {
+          markVotedQid(qid);
+          document.getElementById('voted-option').textContent =
+            '你選擇了：' + String.fromCharCode(65 + choiceIdx) + '. ' + (currentOptions[choiceIdx] || '');
+          setState('submitted');
+        });
+    }
+
+    init();
+  </script>
+</body>
+</html>

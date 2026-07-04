@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 創想實驗室：從零打造你的動漫角色！</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@300;400;500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #F2EEE5; --cream-soft: #EAE4D5; --cream-line: #DCD4BF;
+  --ink: #1B1F24; --ink-muted: #5A5E66; --ink-faint: #6D7079;
+  --slate: #3F5B7E; --slate-dark: #2A3B53; --slate-tint: #DDE3EB;
+  --accent: #A4452F; --accent-soft: #EFD5CC;
+  --ok: #2F6B4A; --warn: #B5781E; --bad: #A33524;
+  --phase-u1: #3F5B7E; --phase-u2: #6A4F7C; --phase-u3: #2F6B4A; --phase-end: #9A6B14;
+  --body-font: "Noto Sans HK","Noto Sans TC","Atkinson Hyperlegible","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+  --ui-font: "Lexend","Noto Sans HK","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+  --mono: "JetBrains Mono","Fira Code","SF Mono",Menlo,Consolas,monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--body-font); background:#0a0a0a; color:var(--ink); overflow:hidden; height:100vh; -webkit-font-smoothing:antialiased; font-feature-settings:"palt"; }
+
+.slide {
+  display:none; position:relative; overflow:hidden;
+  height:100vh; width:100vw;
+  background:var(--cream); color:var(--ink);
+  padding:clamp(24px,4vw,80px) clamp(32px,6vw,120px);
+  flex-direction:column; justify-content:center;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display:flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.progress-rail {
+  position:fixed; top:0; left:0; right:0; height:5px;
+  display:flex; gap:2px; padding:0 8px; z-index:100; pointer-events:none;
+}
+.progress-rail .tick {
+  flex:1; height:3px; background:rgba(0,0,0,0.07);
+  transition:background 0.2s; align-self:flex-start; margin-top:1px;
+}
+.progress-rail .tick.past { background:rgba(0,0,0,0.18); }
+.progress-rail .tick.active { background:var(--accent); height:5px; margin-top:0; }
+.slide.dark .progress-rail .tick { background:rgba(255,255,255,0.10); }
+.slide.dark .progress-rail .tick.past { background:rgba(255,255,255,0.25); }
+.slide.dark .progress-rail .tick.active { background:var(--accent); }
+
+.nav-controls {
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:10px; z-index:100;
+}
+.nav-controls button {
+  background:rgba(27,31,36,0.06); border:1px solid var(--cream-line);
+  color:var(--ink); padding:6px 18px; border-radius:999px; cursor:pointer;
+  font-family:var(--ui-font); font-size:13px; letter-spacing:0.08em; transition:all 0.15s;
+}
+.nav-controls button:hover { background:var(--accent); color:var(--cream); border-color:var(--accent); }
+.nav-controls button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.slide-num {
+  position:fixed; bottom:18px; right:24px;
+  font-family:var(--ui-font); font-size:13px; letter-spacing:0.12em;
+  color:var(--ink-faint); z-index:100;
+}
+
+h1,h2,h3,h4 { margin:0; font-weight:700; letter-spacing:-0.01em; line-height:1.15; }
+p,li,td,th { margin:0; line-height:1.55; }
+.eyebrow { font-family:var(--ui-font); font-weight:500; font-size:clamp(11px,1vw,18px); letter-spacing:0.22em; text-transform:uppercase; color:var(--slate); }
+.assertion { font-size:clamp(24px,3vw,56px); line-height:1.15; font-weight:700; color:var(--ink); max-width:90%; letter-spacing:-0.015em; }
+.assertion .focal { color:var(--accent); }
+.lead { font-size:clamp(14px,1.5vw,28px); line-height:1.5; color:var(--ink-muted); max-width:85%; }
+.caption { font-family:var(--ui-font); font-size:clamp(10px,0.9vw,16px); color:var(--ink-faint); letter-spacing:0.03em; }
+.focal { color:var(--accent); }
+
+.slide-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(20px,3vw,56px); }
+
+.slide-meta {
+  position:absolute; bottom:clamp(16px,2.5vw,48px); left:clamp(32px,6vw,120px); right:clamp(32px,6vw,120px);
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-family:var(--ui-font); font-size:clamp(9px,0.7vw,14px); color:var(--ink-faint); letter-spacing:0.18em; text-transform:uppercase;
+}
+.slide-meta .num { color:var(--slate); font-weight:500; }
+
+.section-tag {
+  font-family:var(--ui-font); font-size:clamp(9px,0.7vw,14px); letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--slate); display:inline-flex; align-items:center; gap:10px;
+}
+.section-tag::before { content:""; width:24px; height:1px; background:var(--slate); }
+
+.stack { display:flex; flex-direction:column; gap:clamp(12px,2vw,36px); }
+.row { display:flex; gap:clamp(16px,2.5vw,48px); }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,64px); }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,2vw,40px); }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(10px,1.5vw,32px); }
+
+.card { background:#FAF7EF; border:1px solid var(--cream-line); border-radius:4px; padding:clamp(14px,2vw,32px) clamp(16px,2vw,36px); }
+.card.tinted { background:var(--cream-soft); border-color:transparent; }
+.card.slate { background:var(--slate); color:#FAF7EF; border-color:transparent; }
+.card.slate .caption, .card.slate .eyebrow { color:rgba(255,255,255,0.7); }
+.card.slate p { color:rgba(255,255,255,0.8); }
+.card.outlined { background:transparent; }
+.card h3 { font-size:clamp(14px,1.3vw,24px); margin-bottom:8px; }
+.card p { font-size:clamp(12px,1vw,20px); color:var(--ink-muted); }
+.card.slate h3 { color:#FAF7EF; }
+
+.kpi { font-family:var(--ui-font); font-size:clamp(36px,5vw,96px); font-weight:600; line-height:1; letter-spacing:-0.03em; color:var(--slate); }
+.kpi.accent { color:var(--accent); }
+
+table.data { width:100%; border-collapse:collapse; font-size:clamp(11px,0.9vw,20px); }
+table.data caption { text-align:left; font-family:var(--ui-font); font-size:clamp(9px,0.7vw,14px); letter-spacing:0.18em; text-transform:uppercase; color:var(--slate); padding-bottom:10px; }
+table.data th, table.data td { padding:clamp(6px,0.8vw,16px) clamp(8px,1vw,20px); text-align:left; vertical-align:top; border-bottom:1px solid var(--cream-line); }
+table.data thead th { font-family:var(--ui-font); font-weight:600; font-size:clamp(9px,0.7vw,15px); letter-spacing:0.14em; text-transform:uppercase; color:var(--slate); border-bottom:2px solid var(--slate); padding-bottom:10px; }
+table.data tbody th { font-weight:700; color:var(--ink); }
+
+.slide.dark { background:var(--slate-dark); color:#F2EEE5; }
+.slide.dark .assertion, .slide.dark h1, .slide.dark h2 { color:#F8F4EA; }
+.slide.dark .lead, .slide.dark p { color:rgba(248,244,234,0.78); }
+.slide.dark .eyebrow { color:rgba(248,244,234,0.6); }
+.slide.dark .slide-meta { color:rgba(248,244,234,0.5); }
+.slide.dark .slide-meta .num { color:var(--accent-soft); }
+.slide.dark .section-tag { color:rgba(248,244,234,0.7); }
+.slide.dark .section-tag::before { background:rgba(248,244,234,0.5); }
+.slide.dark .card { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); }
+.slide.dark .card h3 { color:#F8F4EA; }
+.slide.dark .card p { color:rgba(248,244,234,0.7); }
+
+.title-slide .cover-title { font-size:clamp(40px,6vw,120px); line-height:1; letter-spacing:-0.025em; font-weight:700; max-width:90%; color:var(--ink); }
+.title-slide .cover-title .accent { color:var(--accent); }
+.title-slide .cover-sub { font-size:clamp(14px,1.8vw,32px); color:var(--ink-muted); line-height:1.45; max-width:70%; margin-top:clamp(12px,2vw,36px); }
+
+.pill {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ui-font); font-size:clamp(10px,0.8vw,16px); letter-spacing:0.04em;
+  padding:5px 14px; border-radius:999px;
+  background:var(--cream-soft); color:var(--ink); border:1px solid var(--cream-line);
+}
+.pill.slate { background:var(--slate-tint); color:var(--slate-dark); border-color:transparent; }
+.pill.accent { background:var(--accent-soft); color:var(--accent); border-color:transparent; }
+.pill.ok { background:#DCE9DF; color:var(--ok); border-color:transparent; }
+.pill.bad { background:#F1D9D4; color:var(--bad); border-color:transparent; }
+.pill.warn { background:#F5E8CE; color:var(--warn); border-color:transparent; }
+
+.phase-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ui-font); font-size:clamp(9px,0.7vw,14px); font-weight:600; letter-spacing:0.16em;
+  padding:4px 12px; border-radius:999px;
+  background:var(--cream-soft); color:var(--ink); border:1px solid var(--cream-line);
+}
+.phase-pill[data-phase="u1"] { background:rgba(63,91,126,0.10); color:var(--phase-u1); border-color:rgba(63,91,126,0.25); }
+.phase-pill[data-phase="u2"] { background:rgba(106,79,124,0.10); color:var(--phase-u2); border-color:rgba(106,79,124,0.25); }
+.phase-pill[data-phase="u3"] { background:rgba(47,107,74,0.10); color:var(--phase-u3); border-color:rgba(47,107,74,0.25); }
+.phase-pill[data-phase="end"] { background:rgba(154,107,20,0.10); color:var(--phase-end); border-color:rgba(154,107,20,0.25); }
+
+.timer-chip { font-family:var(--ui-font); font-size:clamp(9px,0.7vw,13px); letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+
+.focal-block {
+  background:var(--cream-soft); border-left:4px solid var(--accent);
+  padding:clamp(14px,2vw,28px) clamp(16px,2.5vw,36px); border-radius:2px;
+  font-size:clamp(14px,1.5vw,26px); line-height:1.55; color:var(--ink);
+}
+.focal-block strong { color:var(--accent); }
+
+.tip-box {
+  background:rgba(63,91,126,0.07); border:1px solid var(--cream-line); border-left:4px solid var(--slate);
+  padding:clamp(12px,1.5vw,22px) clamp(14px,2vw,26px); border-radius:2px;
+  line-height:1.7; color:var(--ink-muted);
+}
+.tip-box strong { color:var(--slate); }
+
+.formula-box { background:var(--slate); color:#F2EEE5; padding:clamp(16px,2.5vw,32px) clamp(20px,3vw,40px); text-align:center; border-radius:2px; }
+.formula-box .line { font-size:clamp(18px,2.5vw,40px); font-weight:700; letter-spacing:0.02em; line-height:1.3; }
+.formula-box .line .focal { color:#F4C7BB; }
+.formula-box .sub { font-family:var(--ui-font); font-size:clamp(9px,0.8vw,16px); letter-spacing:0.16em; text-transform:uppercase; color:rgba(242,238,229,0.65); margin-top:10px; }
+
+.task-frame {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-left:4px solid var(--slate);
+  padding:clamp(12px,1.5vw,22px) clamp(14px,2vw,28px);
+  font-family:var(--mono); font-size:clamp(11px,0.9vw,18px); line-height:1.7; color:var(--ink);
+  white-space:pre-wrap; border-radius:2px;
+}
+.task-frame.accent { border-left-color:var(--accent); }
+
+.vote-prompt {
+  background:rgba(154,107,20,0.06); border:2px dashed var(--phase-end);
+  padding:clamp(12px,2vw,24px) clamp(16px,2.5vw,32px); text-align:center;
+  font-size:clamp(14px,1.3vw,22px); font-weight:600; color:var(--phase-end); border-radius:2px;
+}
+.vote-prompt small { display:block; font-size:clamp(10px,0.9vw,16px); font-weight:400; color:var(--ink-muted); margin-top:6px; }
+
+.reveal-banner {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--ui-font); font-size:clamp(9px,0.7vw,14px); font-weight:600;
+  letter-spacing:0.28em; text-transform:uppercase; color:var(--accent);
+  padding:6px 16px; background:var(--accent-soft); border-radius:999px;
+}
+.reveal-banner::before, .reveal-banner::after { content:""; width:28px; height:1px; background:var(--accent); }
+
+ul.check { list-style:none; padding:0; }
+ul.check li {
+  display:grid; grid-template-columns:24px 1fr; gap:12px;
+  padding:8px 0; border-bottom:1px solid var(--cream-line);
+  font-size:clamp(12px,1vw,20px); line-height:1.45; align-items:baseline;
+}
+ul.check li::before { content:""; width:16px; height:16px; border:1.5px solid var(--slate); border-radius:3px; display:inline-block; transform:translateY(2px); }
+
+ol.editorial { list-style:none; padding:0; counter-reset:ed; }
+ol.editorial > li {
+  counter-increment:ed; display:flex; gap:16px;
+  padding:10px 0; border-bottom:1px solid var(--cream-line);
+  align-items:baseline; font-size:clamp(12px,1.1vw,22px); line-height:1.45;
+}
+ol.editorial > li::before {
+  content:counter(ed,decimal-leading-zero); flex:0 0 40px;
+  font-family:var(--ui-font); font-weight:500; color:var(--accent);
+  font-size:clamp(10px,0.9vw,18px); letter-spacing:0.08em;
+}
+
+.num-label { font-family:var(--ui-font); font-weight:600; font-size:clamp(9px,0.7vw,14px); letter-spacing:0.18em; text-transform:uppercase; color:var(--slate); }
+
+.compare-tag {
+  position:absolute; top:12px; left:12px;
+  font-family:var(--ui-font); font-size:clamp(8px,0.6vw,12px);
+  letter-spacing:0.2em; text-transform:uppercase; padding:3px 8px; border-radius:2px;
+}
+.compare-tag.bad { background:var(--bad); color:white; }
+.compare-tag.ok { background:var(--ok); color:white; }
+
+.divider { height:1px; background:var(--cream-line); margin:12px 0; border:none; }
+.slide.dark .divider { background:rgba(248,244,234,0.18); }
+
+.slide-img {
+  width:100%; max-height:clamp(260px,44vh,600px); object-fit:contain; border-radius:4px;
+  border:1px solid var(--cream-line); background:#1a1a2e;
+}
+.slide-img-sm {
+  width:100%; max-height:clamp(180px,32vh,440px); object-fit:contain; border-radius:4px;
+  border:1px solid var(--cream-line); background:#1a1a2e;
+}
+.slide-img-hero {
+  width:100%; max-height:clamp(320px,52vh,680px); object-fit:contain; border-radius:4px;
+  border:1px solid var(--cream-line); background:#1a1a2e;
+}
+
+.prompt-tag {
+  display:inline-block; background:var(--slate-tint); color:var(--slate-dark);
+  font-family:var(--mono); font-size:clamp(10px,0.8vw,15px); padding:3px 10px;
+  border-radius:3px; margin:2px; letter-spacing:0.02em;
+}
+.prompt-tag.accent { background:var(--accent-soft); color:var(--accent); }
+.prompt-tag.ok { background:#DCE9DF; color:var(--ok); }
+.prompt-tag.warn { background:#F5E8CE; color:var(--warn); }
+
+.lv-box {
+  background:#FAF7EF; border:1px solid var(--cream-line); padding:clamp(10px,1.5vw,20px) clamp(12px,2vw,24px);
+  border-radius:4px; display:flex; align-items:center; gap:clamp(8px,1.2vw,20px);
+}
+.lv-box .lv-num {
+  font-family:var(--ui-font); font-weight:700; font-size:clamp(16px,2vw,36px);
+  color:var(--slate); flex:0 0 auto; min-width:clamp(36px,4vw,64px);
+}
+.lv-box.accent { border-left:4px solid var(--accent); }
+.lv-box.accent .lv-num { color:var(--accent); }
+.lv-box.ok { border-left:4px solid var(--ok); }
+.lv-box.ok .lv-num { color:var(--ok); }
+.lv-box.warn { border-left:4px solid var(--warn); }
+.lv-box.warn .lv-num { color:var(--warn); }
+
+.style-card {
+  background:#FAF7EF; border:1px solid var(--cream-line); border-radius:4px;
+  padding:clamp(8px,1vw,14px); text-align:center; cursor:default;
+  transition:border-color 0.15s;
+}
+.style-card:hover { border-color:var(--accent); }
+.style-card h4 { font-size:clamp(11px,0.9vw,17px); color:var(--slate); margin-bottom:4px; }
+.style-card p { font-size:clamp(9px,0.7vw,14px); color:var(--ink-muted); }
+
+@media (max-width:768px) {
+  .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; }
+  .row { flex-direction:column; }
+  body, .slide { height:auto; overflow:auto; }
+}
+@media print {
+  .slide { display:block!important; page-break-after:always; height:auto; min-height:100vh; }
+  .nav-controls,.progress-rail,.slide-num { display:none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide { animation: none; }
+  * { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-rail" id="progressRail"></div>
+
+<!-- 01 - 封面 -->
+<section class="slide title-slide active" data-label="01 封面">
+  <div style="position:absolute;inset:0;padding:clamp(40px,6vw,120px);display:flex;flex-direction:column;justify-content:space-between;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <span class="section-tag">AIGC 漫畫制作</span>
+      <span class="timer-chip">P4-P6 學生版</span>
+    </div>
+    <div style="display:flex;gap:clamp(20px,4vw,64px);align-items:center;">
+      <div style="flex:1;">
+        <div class="cover-title">AI 創想實驗室<br><span class="accent">從零打造你的動漫角色</span></div>
+        <p class="cover-sub">設計你的專屬角色，用 AI 把想像變成畫面</p>
+        <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+          <span class="pill slate">創意發想</span>
+          <span class="pill accent">指令工程</span>
+          <span class="pill ok">團隊合作</span>
+        </div>
+      </div>
+      <div style="flex:0 0 clamp(160px,22vw,380px);">
+        <img src="P4-P6/Gemini_Generated_Image_j7bi92j7bi92j7bi.png" alt="AI 創想實驗室封面" style="width:100%;border-radius:8px;border:1px solid var(--cream-line);">
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div><div class="num-label" style="color:var(--ink-faint);margin-bottom:4px;">工具</div><div style="font-family:var(--ui-font);font-size:clamp(12px,1.2vw,22px);color:var(--slate);letter-spacing:0.04em;">Leonardo.ai</div></div>
+      <div style="text-align:right;"><div class="num-label" style="color:var(--ink-faint);margin-bottom:4px;">適用年級</div><div style="font-family:var(--ui-font);font-size:clamp(12px,1.2vw,22px);color:var(--slate);letter-spacing:0.04em;">P4 - P6</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 - 學習地圖 -->
+<section class="slide" data-label="02 學習地圖">
+  <div class="slide-header"><span class="eyebrow">今日任務路徑</span><span class="timer-chip">5 分鐘</span><span class="caption">設計工作室集訓</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(16px,3vw,48px);">今日你會經歷<span class="focal">四個階段</span></h2>
+  <table class="data">
+    <caption>設計工作室訓練流程</caption>
+    <thead><tr><th scope="col">階段</th><th scope="col">內容</th><th scope="col">你會學到</th></tr></thead>
+    <tbody>
+      <tr><th scope="row"><span class="phase-pill" data-phase="u1">裝備篇</span></th><td>認識你的團隊與工具</td><td>創意總監 + 技術總監的分工</td></tr>
+      <tr><th scope="row"><span class="phase-pill" data-phase="u2">咒語篇</span></th><td>學習指令工程</td><td>用四要素寫出最強 Prompt</td></tr>
+      <tr><th scope="row"><span class="phase-pill" data-phase="u3">實戰篇</span></th><td>接受緊急委託</td><td>設計你的原創動漫角色</td></tr>
+      <tr><th scope="row"><span class="phase-pill" data-phase="end">交付篇</span></th><td>作品發表與認證</td><td>展示作品、獲得認證</td></tr>
+    </tbody>
+  </table>
+  <div class="focal-block" style="margin-top:clamp(12px,2vw,24px);">今日你和家長將組成<strong>設計工作室</strong>，一起接受來自未來世界的創意委託！</div>
+  <div class="slide-meta"><span>學習地圖</span><span class="num"></span></div>
+</section>
+
+<!-- 03 - 團隊分工 -->
+<section class="slide" data-label="03 團隊分工">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u1">裝備篇</span></span><span class="timer-chip">5 分鐘</span><span class="caption">設計工作室成立</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(16px,3vw,48px);">你的工作室有<span class="focal">兩位總監</span></h2>
+  <div class="grid-2">
+    <div class="card" style="text-align:center;border-top:4px solid var(--phase-u2);">
+      <h3 style="font-size:clamp(18px,2vw,36px);color:var(--phase-u2);">創意總監</h3>
+      <p style="font-size:clamp(12px,1vw,18px);color:var(--ink-faint);margin-bottom:12px;">CREATIVE DIRECTOR</p>
+      <p style="font-size:clamp(14px,1.2vw,22px);">負責發想最酷的故事、最帥的角色！<br><strong style="color:var(--accent);">腦力風暴就是你的超能力！</strong></p>
+      <div style="margin-top:16px;"><span class="pill slate">孩子</span></div>
+    </div>
+    <div class="card" style="text-align:center;border-top:4px solid var(--slate);">
+      <h3 style="font-size:clamp(18px,2vw,36px);color:var(--slate);">技術總監</h3>
+      <p style="font-size:clamp(12px,1vw,18px);color:var(--ink-faint);margin-bottom:12px;">TECHNICAL DIRECTOR</p>
+      <p style="font-size:clamp(14px,1.2vw,22px);">負責將創意轉化為 AI 能懂的指令！<br><strong style="color:var(--accent);">魔法詠唱就是你的專長！</strong></p>
+      <div style="margin-top:16px;"><span class="pill slate">家長</span></div>
+    </div>
+  </div>
+  <div style="margin-top:clamp(8px,1.5vw,16px);text-align:center;">
+    <img src="P4-P6/c157f11d-f52c-46f3-a78f-691ab18a9d0a.png" alt="Creative Director vs Technical Director" class="slide-img" style="max-width:900px;max-height:clamp(180px,28vh,380px);margin:0 auto;">
+  </div>
+  <div class="focal-block" style="margin-top:clamp(12px,2vw,24px);text-align:center;">兩位總監，請握手！<strong>超級設計工作室</strong>正式成立！</div>
+  <div class="slide-meta"><span>團隊分工</span><span class="num"></span></div>
+</section>
+
+<!-- 04 - AI 是甚麼 -->
+<section class="slide" data-label="04 AI 創意夥伴">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u1">裝備篇</span></span><span class="timer-chip">3 分鐘</span><span class="caption">認識你的工具</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(16px,3vw,40px);">AI 不只是工具，更是你的<span class="focal">創意夥伴</span></h2>
+  <div class="grid-3">
+    <div class="card tinted" style="text-align:center;">
+      <h3>懂畫畫的超級大腦</h3>
+      <p>你出點子，它幫你畫出來</p>
+    </div>
+    <div class="card tinted" style="text-align:center;">
+      <h3 style="color:var(--ok);">速度超快</h3>
+      <p>幾秒鐘就能生成一張圖</p>
+    </div>
+    <div class="card tinted" style="text-align:center;">
+      <h3 style="color:var(--accent);">聽你的指令</h3>
+      <p>指令越精準，成果越驚人</p>
+    </div>
+  </div>
+  <div class="focal-block" style="margin-top:clamp(8px,1.5vw,16px);font-size:clamp(12px,1.2vw,22px);text-align:center;">
+    想像你有一個<strong>很會畫畫的朋友</strong>——你用文字告訴他你想要甚麼，他就幫你畫出來。<br>
+    AI 就是這個朋友！你負責出點子，它負責畫圖。<strong>你寫的越多、越清楚，它畫得越像你想要的。</strong>
+  </div>
+  <div style="margin-top:clamp(12px,2vw,24px);text-align:center;">
+    <img src="P4-P6/Gemini_Generated_Image_xa10yxa10yxa10yx.png" alt="AI 創意夥伴" class="slide-img-sm" style="max-width:800px;max-height:clamp(200px,34vh,460px);margin:0 auto;">
+  </div>
+  <div class="slide-meta"><span>AI 創意夥伴</span><span class="num"></span></div>
+</section>
+
+<!-- 05 - AI 的驚人創作力 -->
+<section class="slide" data-label="05 AI 創作力">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u1">裝備篇</span></span><span class="caption">看看 AI 能做到甚麼</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,28px);">AI 的<span class="focal">驚人創作力</span>——三種風格挑戰</h2>
+  <div class="tip-box" style="margin-bottom:clamp(8px,1.5vw,16px);font-size:clamp(11px,0.9vw,16px);text-align:center;">
+    <strong>不用擔心英文！</strong> 下面的英文關鍵字只是讓你了解 AI 的「語言」——等一下你用<strong style="color:var(--accent);">中文</strong>寫指令就好，Leonardo.ai 會自動幫你翻譯成英文。
+  </div>
+  <div class="grid-3" style="margin-bottom:clamp(8px,1.5vw,16px);">
+    <div class="card tinted" style="padding:clamp(8px,1vw,14px);">
+      <img src="P4-P6/Gemini_Generated_Image_s45eyss45eyss45e.png" alt="賽博龐克風格角色" class="slide-img-sm" style="margin-bottom:8px;">
+      <h3 style="font-size:clamp(11px,0.9vw,17px);">賽博龐克角色</h3>
+      <p style="font-size:clamp(9px,0.7vw,14px);"><span class="prompt-tag">cyberpunk</span> <span class="prompt-tag">neon</span> <span class="prompt-tag">futuristic</span></p>
+    </div>
+    <div class="card tinted" style="padding:clamp(8px,1vw,14px);">
+      <img src="P4-P6/Gemini_Generated_Image_djvq6zdjvq6zdjvq.png" alt="吉卜力風格場景" class="slide-img-sm" style="margin-bottom:8px;">
+      <h3 style="font-size:clamp(11px,0.9vw,17px);">吉卜力奇幻場景</h3>
+      <p style="font-size:clamp(9px,0.7vw,14px);"><span class="prompt-tag">ghibli</span> <span class="prompt-tag">forest</span> <span class="prompt-tag">peaceful</span></p>
+    </div>
+    <div class="card tinted" style="padding:clamp(8px,1vw,14px);">
+      <img src="P4-P6/Gemini_Generated_Image_ma0m1xma0m1xma0m.png" alt="美式漫畫風格" class="slide-img-sm" style="margin-bottom:8px;">
+      <h3 style="font-size:clamp(11px,0.9vw,17px);">美式漫畫英雄</h3>
+      <p style="font-size:clamp(9px,0.7vw,14px);"><span class="prompt-tag">comic</span> <span class="prompt-tag">marvel</span> <span class="prompt-tag">dynamic</span></p>
+    </div>
+  </div>
+  <div class="focal-block" style="font-size:clamp(12px,1.2vw,20px);">像偵探一樣分析：要生成這些圖，指令裡<strong>不能少</strong>的關鍵字是甚麼？</div>
+  <div class="slide-meta"><span>AI 創作力</span><span class="num"></span></div>
+</section>
+
+<!-- 06 - 指令的藝術 -->
+<section class="slide" data-label="06 指令公式">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u2">咒語篇</span></span><span class="caption">Prompt Engineering</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,36px);">指令的藝術：<span class="focal">四要素公式</span></h2>
+  <div style="margin-bottom:clamp(8px,1.5vw,20px);text-align:center;">
+    <img src="P4-P6/2f1d3baa-8e90-4f22-be04-fd38df852618.png" alt="指令的藝術公式" class="slide-img" style="max-width:1100px;max-height:clamp(180px,28vh,380px);margin:0 auto;">
+  </div>
+  <div class="formula-box" style="margin-bottom:clamp(12px,2vw,28px);">
+    <div class="line" style="font-size:clamp(16px,2vw,36px);">
+      <span class="prompt-tag" style="font-size:clamp(12px,1.2vw,22px);background:rgba(255,255,255,0.15);color:#F2EEE5;">核心主體</span>
+      + <span class="prompt-tag accent" style="font-size:clamp(12px,1.2vw,22px);">細節特徵</span>
+      + <span class="prompt-tag ok" style="font-size:clamp(12px,1.2vw,22px);">環境背景</span>
+      + <span class="prompt-tag warn" style="font-size:clamp(12px,1.2vw,22px);">藝術風格</span>
+      = <span class="focal">Masterpiece</span>
+    </div>
+  </div>
+  <div class="grid-4" style="margin-bottom:clamp(8px,1.5vw,16px);">
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--slate);">核心主體</h3>
+      <p>主角是誰？</p>
+      <p class="caption">一位年輕的魔法師</p>
+    </div>
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--accent);">細節特徵</h3>
+      <p>長甚麼樣子？</p>
+      <p class="caption">星星帽子、藍色眼睛</p>
+    </div>
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--ok);">環境背景</h3>
+      <p>在哪裡？</p>
+      <p class="caption">古老的圖書館</p>
+    </div>
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--warn);">藝術風格</h3>
+      <p>甚麼畫風？</p>
+      <p class="caption">日本動漫風格</p>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:clamp(8px,1.5vw,16px);">
+    <div class="card" style="border-left:4px solid var(--bad);padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--bad);font-size:clamp(12px,1vw,18px);">模糊的指令</h3>
+      <p style="font-family:var(--mono);font-size:clamp(11px,0.9vw,16px);">"畫一個人"</p>
+      <p class="caption" style="margin-top:4px;">AI 不知道你要甚麼樣的人 → 結果很隨機</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--ok);padding:clamp(10px,1.2vw,18px);">
+      <h3 style="color:var(--ok);font-size:clamp(12px,1vw,18px);">精準的指令</h3>
+      <p style="font-family:var(--mono);font-size:clamp(11px,0.9vw,16px);">"一位年輕的女戰士，紅色馬尾，<br>穿著銀色盔甲，站在戰場上，動漫風格"</p>
+      <p class="caption" style="margin-top:4px;">四要素都有 → 結果精準又酷！</p>
+    </div>
+  </div>
+  <div class="slide-meta"><span>指令公式</span><span class="num"></span></div>
+</section>
+
+<!-- 07 - LV 升級系統 -->
+<section class="slide" data-label="07 LV 升級">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u2">咒語篇</span></span><span class="caption">Prompt 升級挑戰</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">咒語升級：<span class="focal">從 LV.1 到 LV.99</span></h2>
+  <div class="stack" style="max-width:800px;">
+    <div class="lv-box">
+      <div class="lv-num">LV.1</div>
+      <div>
+        <div style="font-family:var(--mono);font-size:clamp(12px,1vw,18px);color:var(--ink);">"一個男孩"</div>
+        <div class="caption">很普通... 誰都能畫出來</div>
+      </div>
+    </div>
+    <div class="lv-box warn">
+      <div class="lv-num">LV.2</div>
+      <div>
+        <div style="font-family:var(--mono);font-size:clamp(12px,1vw,18px);color:var(--ink);">"一個男孩，<span class="prompt-tag accent">銀色頭髮，發光的眼睛</span>"</div>
+        <div class="caption">+ 細節特徵 → 角色升級！</div>
+      </div>
+    </div>
+    <div class="lv-box ok">
+      <div class="lv-num">LV.3</div>
+      <div>
+        <div style="font-family:var(--mono);font-size:clamp(12px,1vw,18px);color:var(--ink);">"一個男孩，銀色頭髮，發光的眼睛，<span class="prompt-tag ok">穿著未來盔甲，站在摩天大樓頂端</span>"</div>
+        <div class="caption">+ 環境背景 → 戰鬥力 UP！</div>
+      </div>
+    </div>
+    <div class="lv-box accent">
+      <div class="lv-num">LV.99</div>
+      <div>
+        <div style="font-family:var(--mono);font-size:clamp(12px,1vw,18px);color:var(--ink);">"一個男孩，銀色頭髮，發光的眼睛，穿著未來盔甲，站在摩天大樓頂端，<span class="prompt-tag warn">賽博龐克風格，霓虹燈，電影感</span>"</div>
+        <div class="caption" style="color:var(--accent);font-weight:600;">+ 藝術風格 → 傳說級進化！</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:clamp(8px,1.5vw,16px);text-align:center;">
+    <img src="P4-P6/9f5577af-338d-4588-9e46-e4b749e7da52.png" alt="LV.1 到 LV.99 升級對比" class="slide-img" style="max-width:1000px;max-height:clamp(180px,28vh,380px);margin:0 auto;">
+  </div>
+  <div class="slide-meta"><span>LV 升級</span><span class="num"></span></div>
+</section>
+
+<!-- 08 - 風格庫 -->
+<section class="slide" data-label="08 風格庫">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u2">咒語篇</span></span><span class="caption">選擇你的風格裝備</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">風格庫：為你的角色<span class="focal">換上 SKIN</span></h2>
+  <div class="grid-3" style="margin-bottom:clamp(8px,1.5vw,16px);">
+    <div class="style-card">
+      <h4 style="color:var(--phase-u2);">Anime</h4>
+      <p>動漫風</p>
+      <p class="caption">適合：熱血冒險、校園故事</p>
+    </div>
+    <div class="style-card">
+      <h4 style="color:var(--accent);">Cyberpunk</h4>
+      <p>賽博龐克</p>
+      <p class="caption">適合：科幻戰士、未來世界</p>
+    </div>
+    <div class="style-card">
+      <h4 style="color:var(--slate);">Concept Art</h4>
+      <p>遊戲概念藝術</p>
+      <p class="caption">適合：史詩級角色、遊戲主角</p>
+    </div>
+    <div class="style-card">
+      <h4 style="color:var(--ok);">Watercolor</h4>
+      <p>水彩風</p>
+      <p class="caption">適合：溫柔精靈、夢幻故事</p>
+    </div>
+    <div class="style-card">
+      <h4 style="color:var(--bad);">Comic Book</h4>
+      <p>美式漫畫</p>
+      <p class="caption">適合：超級英雄、動作場面</p>
+    </div>
+    <div class="style-card">
+      <h4 style="color:var(--warn);">Studio Ghibli</h4>
+      <p>吉卜力風格</p>
+      <p class="caption">適合：奇幻冒險、自然主題</p>
+    </div>
+  </div>
+  <div style="margin:clamp(8px,1.5vw,16px) auto;text-align:center;">
+    <img src="P4-P6/Gemini_Generated_Image_mxh20vmxh20vmxh2.png" alt="六種藝術風格選擇" class="slide-img" style="max-width:1000px;max-height:clamp(180px,28vh,380px);margin:0 auto;">
+  </div>
+  <div class="focal-block" style="font-size:clamp(12px,1.2vw,20px);">同樣的角色，不同的風格 → 完全不同的感覺！<strong>在咒語最後加上風格關鍵字</strong>，看看會發生甚麼！</div>
+  <div class="slide-meta"><span>風格庫</span><span class="num"></span></div>
+</section>
+
+<!-- 09 - Leonardo.ai 介紹 -->
+<section class="slide" data-label="09 Leonardo">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u2">咒語篇</span></span><span class="timer-chip">5 分鐘</span><span class="caption">我們的創作工具</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">認識 <span class="focal">Leonardo.ai</span></h2>
+  <div class="grid-2">
+    <div class="stack">
+      <div class="card"><h3>它是甚麼？</h3><p>Leonardo.ai 是一個強大的 AI 圖像生成工具。你只需要<strong style="color:var(--accent);">用中文寫描述</strong>，它就能幫你畫出精美的圖像。不用擔心英文！</p></div>
+      <div class="card tinted"><h3>操作只要 3 步</h3>
+        <ol class="editorial" style="font-size:clamp(12px,1vw,18px);">
+          <li><strong>❶ 寫咒語</strong> — 在下方輸入框用中文寫下你想要的角色描述</li>
+          <li><strong>❷ 翻譯</strong> — 點 <span class="pill accent" style="font-size:clamp(9px,0.7vw,13px);padding:2px 8px;">Improve Prompt</span> 自動轉英文</li>
+          <li><strong>❸ 生成</strong> — 點 <span class="pill ok" style="font-size:clamp(9px,0.7vw,13px);padding:2px 8px;">Generate</span> 等幾秒就出圖！</li>
+        </ol>
+      </div>
+      <div class="tip-box" style="font-size:clamp(10px,0.8vw,15px);">
+        <strong>帳號問題：</strong>帳號已由老師預先準備好。如果遇到登入問題，請舉手，助教會協助你。
+      </div>
+    </div>
+    <div class="stack">
+      <img src="P4-P6/Screenshot_2025-10-24_193216.png" alt="Leonardo.ai 介面截圖" class="slide-img" style="max-height:clamp(260px,42vh,560px);">
+      <div class="grid-3" style="gap:8px;">
+        <div style="text-align:center;font-size:clamp(10px,0.8vw,15px);color:var(--accent);font-weight:600;">❶ 輸入框在畫面底部</div>
+        <div style="text-align:center;font-size:clamp(10px,0.8vw,15px);color:var(--slate);font-weight:600;">❷ Improve Prompt 在輸入框旁</div>
+        <div style="text-align:center;font-size:clamp(10px,0.8vw,15px);color:var(--ok);font-weight:600;">❸ Generate 按鈕點下去</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-meta"><span>Leonardo.ai</span><span class="num"></span></div>
+</section>
+
+<!-- 10 - 暖身挑戰 -->
+<section class="slide" data-label="10 暖身挑戰">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u2">咒語篇</span></span><span class="timer-chip">1 分鐘</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">1 分鐘暖身挑戰！<span class="focal">試一下你的咒語</span></h2>
+  <div class="vote-prompt" style="margin-bottom:clamp(12px,2vw,24px);font-size:clamp(16px,1.8vw,32px);">
+    詠唱咒語：「一隻在月球上吃著彩虹漢堡的太空貓熊」
+  </div>
+  <div class="grid-2">
+    <div style="text-align:center;">
+      <img src="P4-P6/Gemini_Generated_Image_omc8r0omc8r0omc8.png" alt="太空貓熊範例" class="slide-img" style="max-height:clamp(240px,38vh,500px);">
+      <p class="caption" style="margin-top:8px;">範例輸出</p>
+    </div>
+    <div class="stack" style="justify-content:center;">
+      <div class="task-frame accent">A cute panda wearing an astronaut helmet,
+floating on the moon, happily eating
+a hamburger with rainbow layers.
+Style: digital art, vibrant, whimsical.</div>
+      <div class="focal-block" style="font-size:clamp(12px,1vw,18px);">看看你們工作室召喚出來的貓熊，是不是每隻都不一樣？<br><strong>同樣的咒語，不同的 AI，每次結果都不同——這就是 AI 創作的魅力！</strong></div>
+      <div class="tip-box" style="font-size:clamp(10px,0.8vw,15px);">
+        <strong>記得保存！</strong> 把你的貓熊圖按右鍵存檔，或截圖保存。等一下可以跟朋友炫耀你的第一張 AI 作品！
+      </div>
+      <div class="tip-box" style="font-size:clamp(10px,0.8vw,15px);">
+        <strong>講師過渡話術：</strong>「大家的貓熊都太有才了！看來你們已經掌握基本功了。接下來——真正的委託來了！準備好迎接你們的第一個正式專案了嗎？」
+      </div>
+    </div>
+  </div>
+  <div class="slide-meta"><span>暖身挑戰</span><span class="num"></span></div>
+</section>
+
+<!-- 11 - 緊急委託 -->
+<section class="slide dark" data-label="11 緊急委託">
+  <div style="text-align:center;display:flex;flex-direction:column;justify-content:center;height:100%;gap:clamp(12px,2vw,32px);">
+    <img src="P4-P6/Gemini_Generated_Image_37q28a37q28a37q2.png" alt="MISSION: PROJECT STAR CHASER" style="max-width:800px;max-height:clamp(160px,24vh,340px);object-fit:contain;border-radius:4px;margin:0 auto;">
+    <div style="font-size:clamp(14px,1.3vw,24px);color:rgba(248,244,234,0.7);">恭喜通過暖身測試！你們已經證明了自己有召喚 AI 的能力。</div>
+    <div class="reveal-banner" style="margin:0 auto;">緊急委託</div>
+    <div style="font-size:clamp(28px,4vw,72px);font-weight:800;line-height:1.2;color:#F8F4EA;">EMERGENCY <span style="color:var(--accent);">MISSION</span></div>
+    <div style="display:flex;justify-content:center;gap:clamp(20px,4vw,80px);">
+      <div>
+        <div class="num-label" style="color:rgba(248,244,234,0.5);margin-bottom:4px;">委託方</div>
+        <div style="font-size:clamp(16px,1.8vw,32px);color:#F8F4EA;">幻想引擎 遊戲公司</div>
+      </div>
+      <div>
+        <div class="num-label" style="color:rgba(248,244,234,0.5);margin-bottom:4px;">專案名稱</div>
+        <div style="font-size:clamp(16px,1.8vw,32px);color:#F4C7BB;">《星塵遠征》</div>
+      </div>
+    </div>
+    <div style="font-size:clamp(14px,1.5vw,28px);color:rgba(248,244,234,0.78);max-width:700px;margin:0 auto;">
+      「我們的主角設計卡關了！急需一位<strong style="color:#F4C7BB;">既勇敢又帶點神秘感</strong>的星際探險家。<br>種族、裝備、技能——全權交由你們設計！」
+    </div>
+    <div style="font-size:clamp(20px,3vw,56px);font-weight:800;color:var(--accent);letter-spacing:0.12em;">
+      截止時間：NOW!
+    </div>
+  </div>
+</section>
+
+<!-- 12 - 創作任務 -->
+<section class="slide" data-label="12 創作任務">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u3">實戰篇</span></span><span class="timer-chip">25 - 35 分鐘</span><span class="caption">設計你的原創角色</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,28px);">你的<span class="focal">創作任務</span></h2>
+  <div style="margin-bottom:clamp(8px,1.5vw,16px);text-align:center;">
+    <img src="P4-P6/Gemini_Generated_Image_wxqbj8wxqbj8wxqb.png" alt="任務卷軸" style="max-width:800px;max-height:clamp(140px,22vh,300px);object-fit:contain;border-radius:4px;margin:0 auto;">
+  </div>
+  <div class="grid-2">
+    <div class="stack">
+      <div class="task-frame accent" style="font-size:clamp(12px,1.1vw,20px);">你的任務：設計一位原創角色
+
+先想一想：
+1. 他 / 她的名字和背景故事？
+2. 有甚麼超能力或特殊技能？
+3. 個性是開朗還是沉穩？
+4. 裝備和外表長甚麼樣？</div>
+      <div class="focal-block" style="font-size:clamp(12px,1vw,18px);">先和夥伴討論，再寫出最精準的 Prompt！</div>
+      <div style="margin-top:8px;">
+        <div class="caption" style="margin-bottom:6px;font-weight:600;">不知道從哪裡開始？選一個模板，填入你的創意：</div>
+        <div class="stack" style="gap:6px;">
+          <div class="task-frame" style="font-size:clamp(10px,0.8vw,14px);padding:8px 12px;border-left-color:var(--phase-u2);">模板 A（科幻）：「一位______的星際探險家，______（特徵），穿著______（裝備），站在______（場景），科幻動漫風格」</div>
+          <div class="task-frame" style="font-size:clamp(10px,0.8vw,14px);padding:8px 12px;border-left-color:var(--ok);">模板 B（奇幻）：「一位______的精靈戰士，______（特徵），手持______（武器），在______（場景）戰鬥，吉卜力風格」</div>
+          <div class="task-frame" style="font-size:clamp(10px,0.8vw,14px);padding:8px 12px;border-left-color:var(--accent);">模板 C（自由）：從零開始！用四要素公式自己寫出最強咒語</div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>創作流程</h3>
+        <ol class="editorial">
+          <li>創意總監發想角色概念</li>
+          <li>技術總監將概念轉化為 Prompt</li>
+          <li>用 Leonardo.ai 生成圖像</li>
+          <li>不斷 Debug，越改越好！</li>
+          <li>選出最滿意的最終版本</li>
+        </ol>
+      </div>
+      <div class="vote-prompt" style="font-size:clamp(12px,1vw,18px);">創作時間！<br><small>助教會巡場協助，遇到問題隨時舉手</small></div>
+      <div style="background:var(--slate-dark);color:#F2EEE5;padding:16px 24px;border-radius:4px;text-align:center;">
+        <div style="font-family:var(--ui-font);font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(242,238,229,0.7);margin-bottom:4px;">倒數計時</div>
+        <div style="font-size:clamp(32px,4vw,64px);font-weight:300;letter-spacing:-0.04em;color:#F2EEE5;font-variant-numeric:tabular-nums;" id="creationTimer">25<span style="color:rgba(242,238,229,0.4);">:</span>00</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+          <button onclick="startCreationTimer()" style="background:var(--accent);border:none;color:white;font-family:var(--ui-font);font-size:12px;padding:6px 14px;border-radius:2px;cursor:pointer;">開始</button>
+          <button onclick="pauseCreationTimer()" style="background:rgba(242,238,229,0.12);border:1px solid rgba(242,238,229,0.28);color:#F2EEE5;font-family:var(--ui-font);font-size:12px;padding:6px 14px;border-radius:2px;cursor:pointer;">暫停</button>
+          <button onclick="resetCreationTimer()" style="background:rgba(242,238,229,0.12);border:1px solid rgba(242,238,229,0.28);color:#F2EEE5;font-family:var(--ui-font);font-size:12px;padding:6px 14px;border-radius:2px;cursor:pointer;">重置</button>
+        </div>
+      </div>
+      <div class="tip-box" style="font-size:clamp(10px,0.8vw,14px);">
+        <strong>時間分配建議：</strong>
+        前 5 分鐘 → 和夥伴討論角色概念，選模板填 Prompt<br>
+        中間 15 分鐘 → 生成、Debug、不斷修改優化<br>
+        最後 5 分鐘 → 選出最滿意的最終版本
+      </div>
+      <div class="tip-box" style="font-size:clamp(10px,0.8vw,15px);margin-top:8px;">
+        <strong>加分挑戰（完成基本任務後）：</strong><br>
+        嘗試生成角色的多角度（正面/側面/背面），或為角色設計一個夥伴/寵物！
+      </div>
+    </div>
+  </div>
+  <div class="slide-meta"><span>創作任務</span><span class="num"></span></div>
+</section>
+
+<!-- 13 - DEBUG 時間 -->
+<section class="slide" data-label="13 DEBUG">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="u3">實戰篇</span></span><span class="timer-chip">5 分鐘</span><span class="caption">迭代與優化</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,28px);">DEBUG 時間：<span class="focal">版本更新</span></h2>
+  <div class="grid-2" style="margin-bottom:clamp(12px,2vw,20px);">
+    <div class="card" style="position:relative;border-left:4px solid var(--bad);">
+      <div class="compare-tag bad">V1.0 有 Bug?</div>
+      <div class="task-frame" style="margin-top:28px;border-left-color:var(--bad);font-size:clamp(11px,0.9vw,16px);">Prompt: "a boy"</div>
+      <p style="margin-top:12px;text-align:center;font-size:clamp(12px,1vw,18px);">結果：<strong style="color:var(--bad);">很普通，沒特色</strong></p>
+    </div>
+    <div class="card" style="position:relative;border-left:4px solid var(--ok);">
+      <div class="compare-tag ok">V2.0 Bug 修復!</div>
+      <div class="task-frame" style="margin-top:28px;border-left-color:var(--ok);font-size:clamp(11px,0.9vw,16px);">Prompt: "...silver hair, glowing eyes,
+futuristic armor, cyberpunk city..."</div>
+      <p style="margin-top:12px;text-align:center;font-size:clamp(12px,1vw,18px);">結果：<strong style="color:var(--ok);">超酷！有靈魂的角色</strong></p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-bottom:clamp(8px,1.5vw,16px);">
+    <img src="P4-P6/e31750f5-d776-47b9-b6d5-ad16961a5625.png" alt="V1 vs V2 對比" class="slide-img-sm" style="max-width:800px;max-height:clamp(200px,34vh,460px);margin:0 auto;">
+  </div>
+  <div class="focal-block" style="font-size:clamp(12px,1.2vw,20px);">不要怕失敗！每一次的修改都是<strong>版本更新</strong>。有時候 AI 的「Bug」反而給你更有趣的靈感！</div>
+  <div class="tip-box" style="margin-top:8px;font-size:clamp(10px,0.8vw,14px);text-align:center;">
+    <strong>創作時隨時參考這四步！</strong> 回到 Leonardo.ai，每次修改 Prompt 的一個要素，重新 Generate，看看效果差多少。
+  </div>
+  <div class="grid-4" style="margin-top:clamp(8px,1.5vw,16px);">
+    <div class="card" style="text-align:center;padding:clamp(8px,1vw,14px);"><h3 style="font-size:clamp(11px,0.9vw,16px);color:var(--slate);">主體夠具體嗎？</h3><p class="caption">「男孩」→「銀髮魔法少年」</p></div>
+    <div class="card" style="text-align:center;padding:clamp(8px,1vw,14px);"><h3 style="font-size:clamp(11px,0.9vw,16px);color:var(--accent);">有細節特徵嗎？</h3><p class="caption">加眼睛、髮型、服裝描述</p></div>
+    <div class="card" style="text-align:center;padding:clamp(8px,1vw,14px);"><h3 style="font-size:clamp(11px,0.9vw,16px);color:var(--ok);">有環境背景嗎？</h3><p class="caption">角色在哪裡？做甚麼？</p></div>
+    <div class="card" style="text-align:center;padding:clamp(8px,1vw,14px);"><h3 style="font-size:clamp(11px,0.9vw,16px);color:var(--warn);">有藝術風格嗎？</h3><p class="caption">加上風格關鍵字</p></div>
+  </div>
+  <div class="slide-meta"><span>DEBUG 時間</span><span class="num"></span></div>
+</section>
+
+<!-- 14 - 作品交付 -->
+<section class="slide" data-label="14 作品交付">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="end">交付篇</span></span><span class="timer-chip">5 分鐘</span><span class="caption">Project Delivered</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">作品交付：<span class="focal">三步完成</span></h2>
+  <div class="grid-3" style="margin-bottom:clamp(12px,2vw,24px);">
+    <div class="card" style="text-align:center;border-top:3px solid var(--slate);">
+      <div style="font-family:var(--ui-font);font-size:clamp(24px,3vw,56px);font-weight:700;color:var(--slate);margin-bottom:8px;">01</div>
+      <h3>選出最棒的作品</h3>
+      <p>從多次生成中，選出你們最滿意的最終版本</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid var(--accent);">
+      <div style="font-family:var(--ui-font);font-size:clamp(24px,3vw,56px);font-weight:700;color:var(--accent);margin-bottom:8px;">02</div>
+      <h3>上載到連結</h3>
+      <p>把作品上傳到指定的 Google Drive 資料夾</p>
+      <p class="caption" style="margin-top:6px;">右鍵圖片 → 另存新檔 → 開啟 Drive 連結 → 拖入上傳</p>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid var(--ok);">
+      <div style="font-family:var(--ui-font);font-size:clamp(24px,3vw,56px);font-weight:700;color:var(--ok);margin-bottom:8px;">03</div>
+      <h3>簽名 + 裝框</h3>
+      <p>兩位總監一起簽上工作室大名，裝入相框！</p>
+    </div>
+  </div>
+  <div style="text-align:center;">
+    <img src="P4-P6/Gemini_Generated_Image_a5dicea5dicea5di.png" alt="作品簽署" class="slide-img-sm" style="max-width:700px;max-height:clamp(200px,34vh,460px);margin:0 auto;">
+  </div>
+  <div class="slide-meta"><span>作品交付</span><span class="num"></span></div>
+</section>
+
+<!-- 15 - 創作者聚光燈 -->
+<section class="slide" data-label="15 聚光燈">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="end">交付篇</span></span><span class="timer-chip">5 分鐘</span><span class="caption">Creator's Spotlight</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">創作者<span class="focal">聚光燈</span></h2>
+  <div class="grid-2">
+    <div class="stack">
+      <div class="card"><h3>分享你的角色</h3>
+        <ul class="check">
+          <li>角色的名字和背景故事</li>
+          <li>你如何優化你的 Prompt？</li>
+          <li>你和夥伴如何分工合作？</li>
+          <li>最驚喜的「Bug」是甚麼？</li>
+        </ul>
+      </div>
+      <div class="focal-block" style="font-size:clamp(12px,1vw,18px);">不只分享角色有多酷，更要分享<strong>背後的故事</strong>！</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <img src="P4-P6/Gemini_Generated_Image_ckq899ckq899ckq8.png" alt="創作者聚光燈" class="slide-img" style="max-height:clamp(260px,42vh,560px);">
+    </div>
+  </div>
+  <div class="slide-meta"><span>創作者聚光燈</span><span class="num"></span></div>
+</section>
+
+<!-- 16 - 設計師畫廊 -->
+<section class="slide" data-label="16 設計師畫廊">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="end">交付篇</span></span><span class="timer-chip">10 分鐘</span><span class="caption">Designer's Gallery</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">設計師<span class="focal">畫廊</span>——自由逛展</h2>
+  <div class="grid-3" style="margin-bottom:clamp(12px,2vw,24px);">
+    <div class="card tinted" style="text-align:center;">
+      <div style="font-size:clamp(20px,2.5vw,48px);color:var(--slate);font-weight:800;margin-bottom:8px;">1</div>
+      <h3>展出簽名大作</h3>
+      <p>把你們的作品展示在桌上</p>
+    </div>
+    <div class="card tinted" style="text-align:center;">
+      <div style="font-size:clamp(20px,2.5vw,48px);color:var(--accent);font-weight:800;margin-bottom:8px;">2</div>
+      <h3>貼上人設便利貼</h3>
+      <p>用一句話介紹你的角色</p>
+    </div>
+    <div class="card tinted" style="text-align:center;">
+      <div style="font-size:clamp(20px,2.5vw,48px);color:var(--ok);font-weight:800;margin-bottom:8px;">3</div>
+      <h3>自由逛展</h3>
+      <p>欣賞其他工作室的作品，選出你最愛的設計！</p>
+    </div>
+  </div>
+  <div style="text-align:center;">
+    <img src="P4-P6/Gemini_Generated_Image_g2mdvlg2mdvlg2md.png" alt="設計師畫廊" class="slide-img-sm" style="max-width:800px;max-height:clamp(200px,34vh,460px);margin:0 auto;">
+  </div>
+  <div class="slide-meta"><span>設計師畫廊</span><span class="num"></span></div>
+</section>
+
+<!-- 17 - 金句頁 -->
+<section class="slide dark" data-label="17 金句">
+  <div style="text-align:center;display:flex;flex-direction:column;justify-content:center;height:100%;gap:clamp(16px,3vw,40px);">
+    <div style="font-size:clamp(24px,4vw,72px);font-weight:800;line-height:1.2;color:#F8F4EA;">
+      <span style="color:var(--accent-soft);">AI 只是畫筆</span>
+    </div>
+    <div style="font-size:clamp(24px,4vw,72px);font-weight:800;line-height:1.2;color:#F8F4EA;">
+      <span style="color:#F4C7BB;">真正的藝術家</span>
+    </div>
+    <div style="font-size:clamp(24px,4vw,72px);font-weight:800;line-height:1.2;color:#F8F4EA;">
+      是手握畫筆的<span style="color:var(--accent);">「你」</span>
+    </div>
+    <div class="formula-box" style="max-width:600px;margin:0 auto;">
+      <div class="line">你的創意 + AI 的技術 = <span class="focal">無限可能</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 18 - 任務完成 -->
+<section class="slide" data-label="18 任務完成">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="end">交付篇</span></span><span class="timer-chip">3 分鐘</span><span class="caption">Mission Complete</span></div>
+  <div style="text-align:center;display:flex;flex-direction:column;justify-content:center;height:80%;gap:clamp(16px,3vw,40px);">
+    <div class="reveal-banner" style="margin:0 auto;">任務完成</div>
+    <h2 class="assertion" style="font-size:clamp(28px,4vw,72px);text-align:center;max-width:100%;">
+      全員通過<br><span class="focal">「AI 協同創作者」認證！</span>
+    </h2>
+    <div style="display:flex;justify-content:center;">
+      <img src="P4-P6/Gemini_Generated_Image_snmqc0snmqc0snmq.png" alt="認證徽章" style="max-height:clamp(180px,30vh,400px);border-radius:8px;border:1px solid var(--cream-line);">
+    </div>
+    <p class="lead" style="margin:0 auto;text-align:center;">AI 是強大的工具，但真正賦予作品靈魂的，是<strong style="color:var(--accent);">創意總監的奇思妙想</strong>，以及<strong style="color:var(--slate);">技術總監的精準執行</strong>。</p>
+  </div>
+  <div class="slide-meta"><span>任務完成</span><span class="num"></span></div>
+</section>
+
+<!-- 19 - 繼續冒險 -->
+<section class="slide" data-label="19 繼續冒險">
+  <div class="slide-header"><span class="eyebrow"><span class="phase-pill" data-phase="end">交付篇</span></span><span class="timer-chip">2 分鐘</span><span class="caption">Your Adventure Continues</span></div>
+  <h2 class="assertion" style="margin-bottom:clamp(12px,2vw,32px);">你的冒險<span class="focal">才剛開始</span></h2>
+  <div class="grid-2">
+    <div class="stack">
+      <div class="card"><h3>回家繼續探索</h3>
+        <ul class="check">
+          <li>用 AI 設計更多角色</li>
+          <li>嘗試不同的藝術風格</li>
+          <li>為你的角色寫一個故事</li>
+          <li>和朋友分享你的創作</li>
+        </ul>
+      </div>
+      <div class="focal-block" style="font-size:clamp(12px,1vw,18px);">記住：AI 只是畫筆，<strong>你才是真正的創作者</strong>！</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <img src="P4-P6/Gemini_Generated_Image_xz97fgxz97fgxz97.png" alt="繼續冒險" class="slide-img" style="max-height:clamp(260px,42vh,560px);">
+    </div>
+  </div>
+  <div class="slide-meta"><span>繼續冒險</span><span class="num"></span></div>
+</section>
+
+<!-- 20 - 結尾 -->
+<section class="slide title-slide" data-label="20 結尾">
+  <div style="position:absolute;inset:0;padding:clamp(40px,6vw,120px);display:flex;flex-direction:column;justify-content:space-between;">
+    <span class="section-tag">感謝你的參與</span>
+    <div style="text-align:center;">
+      <div class="cover-title">你是最棒的<br><span class="accent">AI 創作者</span></div>
+      <p class="cover-sub" style="margin:16px auto 0;">創意發想 · 指令工程 · 團隊合作</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+        <span class="pill slate">四要素公式</span>
+        <span class="pill accent">風格裝備庫</span>
+        <span class="pill ok">Debug 精神</span>
+        <span class="pill warn">AI 協同創作者認證</span>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <p style="font-size:clamp(12px,1vw,18px);color:var(--ink-muted);">繼續探索，繼續創造！Keep Exploring, Keep Creating!</p>
+    </div>
+  </div>
+</section>
+
+<!-- Navigation -->
+<div class="nav-controls">
+  <button onclick="prevSlide()">← 上一頁</button>
+  <button onclick="nextSlide()">下一頁 →</button>
+</div>
+<div class="slide-num" id="slideNum"></div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const totalSlides = slides.length;
+let currentSlide = 1;
+
+const pad = n => String(n).padStart(2, '0');
+slides.forEach((s, i) => {
+  s.id = 'slide' + (i + 1);
+  const num = s.querySelector('.slide-meta .num');
+  if (num) num.textContent = pad(i + 1) + ' / ' + totalSlides;
+});
+
+function showSlide(n) {
+  if (n < 1) n = 1;
+  if (n > totalSlides) n = totalSlides;
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n - 1].classList.add('active');
+  currentSlide = n;
+
+  const rail = document.getElementById('progressRail');
+  rail.innerHTML = '';
+  for (let i = 1; i <= totalSlides; i++) {
+    const tick = document.createElement('div');
+    tick.className = 'tick' + (i < n ? ' past' : '') + (i === n ? ' active' : '');
+    rail.appendChild(tick);
+  }
+
+  document.getElementById('slideNum').textContent = n + ' / ' + totalSlides;
+  if (('#' + n) !== location.hash) {
+    history.replaceState(null, '', '#' + n);
+  }
+  if (typeof updateNotes === 'function' && notesVisible) updateNotes();
+}
+
+function nextSlide() { showSlide(currentSlide + 1); }
+function prevSlide() { showSlide(currentSlide - 1); }
+
+document.addEventListener('keydown', function(e) {
+  if (e.target.matches('input,textarea,[contenteditable]')) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+  else if (e.key === 'Home') { showSlide(1); }
+  else if (e.key === 'End') { showSlide(totalSlides); }
+  else if (/^[1-9]$/.test(e.key)) { showSlide(parseInt(e.key, 10)); }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', function(e) {
+  const diff = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(diff) > 50) { diff < 0 ? nextSlide() : prevSlide(); }
+});
+
+const fromHash = parseInt((location.hash || '').slice(1), 10);
+showSlide(Number.isInteger(fromHash) ? fromHash : 1);
+
+// ── Countdown Timer (Slide 12) ──
+let ctInterval = null;
+let ctSeconds = 25 * 60;
+const ctTotal = 25 * 60;
+function fmtCT(s) { const m = Math.floor(s/60); const sec = s%60; return String(m).padStart(2,'0') + '<span style="color:rgba(242,238,229,0.4);">:</span>' + String(sec).padStart(2,'0'); }
+function updateCT() { document.getElementById('creationTimer').innerHTML = fmtCT(ctSeconds); }
+function startCreationTimer() {
+  if (ctInterval) return;
+  ctInterval = setInterval(function() {
+    if (ctSeconds <= 0) { clearInterval(ctInterval); ctInterval = null; return; }
+    ctSeconds--;
+    updateCT();
+  }, 1000);
+}
+function pauseCreationTimer() { if (ctInterval) { clearInterval(ctInterval); ctInterval = null; } }
+function resetCreationTimer() { pauseCreationTimer(); ctSeconds = ctTotal; updateCT(); }
+
+// ── Speaker Notes System ──
+const speakerNotes = {
+  "1": "開場白：「各位未來的創作者、設計師，大家好！歡迎來到 AI 創想實驗室！今天不只是玩遊戲，而是像真正的專業人士一樣學習用 AI 設計動漫角色！」請親子用 5 秒為工作室取名。",
+  "2": "快速過一遍四個階段，讓學生知道今日流程。強調「親子合作」而非單獨行動。約 5 分鐘。",
+  "3": "請孩子和家長握手，建立「工作室」概念。孩子 = 創意總監（發想），家長 = 技術總監（執行指令）。可以請大家起立握手。",
+  "4": "簡短介紹 AI 三個特點。重點強調「指令越精準，成果越驚人」。不需要深入技術原理。約 3 分鐘。",
+  "5": "像偵探遊戲：指向每張圖，問學生「你覺得要生成這張圖，指令裡不能少的關鍵字是什麼？」引導學生回答。約 5 分鐘。",
+  "6": "這是核心知識點！用公式圖解釋四要素。舉例：「一位年輕的魔法師」+「星星帽子、藍色眼睛」+「古老圖書館」+「日本動漫風格」。確認學生理解。",
+  "7": "遊戲化展示 LV 升級概念。從最簡單的「一個男孩」開始，逐步加入元素，讓學生看到差異。問：「你覺得哪一級最酷？」",
+  "8": "展示六種風格。告訴學生「風格決定了角色的靈魂」。請學生和夥伴討論等一下要用哪種風格。可以展示 mxh20v 那張風格選擇圖。",
+  "9": "介紹 Leonardo.ai 操作。重點：1) 在輸入框寫中文 2) 點 Improve Prompt 自動轉英文 3) 點 Generate。如果網路有問題，用備用方案。",
+  "10": "1 分鐘暖身！讓所有人同時嘗試。結束後收束：「大家的貓熊都不一樣——這就是 AI 創作的魅力！」然後過渡到正式任務。",
+  "11": "這是情境導入頁（dark slide）。播放緊張感的音效（如有）。讀出委託內容，營造「接受任務」的儀式感。",
+  "12": "這是主要創作時間（25-35 分鐘）。開始前確認所有人已打開 Leonardo.ai。啟動倒數計時器。助教巡場協助。提醒：先討論再寫 Prompt，不要急著生成。完成基本任務的學生可以挑戰加分題。",
+  "13": "展示 V1 vs V2 對比。教學生 Debug 四步檢查：主體、細節、背景、風格。鼓勵「不要怕失敗」。約 5 分鐘。",
+  "14": "引導學生選出最終版本 → 上傳到 Google Drive → 列印裝框。兩位總監一起簽名。約 5 分鐘。",
+  "15": "邀請 2-3 組上台分享。重點不只是角色多酷，更要分享背後的故事和优化過程。",
+  "16": "畫廊漫步時間。發便利貼，請學生為角色寫「一句話人設」。自由走動欣賞，可以投票選最喜歡的作品。約 10 分鐘。",
+  "18": "宣布全員通過認證！請學生和夥伴互相擊掌。這是儀式感的重要時刻。",
+  "19": "鼓勵回家繼續探索。提醒 AI 只是工具，人才是創作者。",
+  "20": "結尾。感謝參與。提醒填寫回饋表。"
+};
+
+// Toggle speaker notes with N key
+let notesVisible = false;
+document.addEventListener('keydown', function(e) {
+  if (e.target.matches('input,textarea,[contenteditable]')) return;
+  if (e.key === 'n' || e.key === 'N') { toggleNotes(); }
+});
+function toggleNotes() {
+  notesVisible = !notesVisible;
+  document.getElementById('notesPanel').style.display = notesVisible ? 'block' : 'none';
+  document.getElementById('notesToggle').textContent = notesVisible ? 'N: 隱藏備忘' : 'N: 講師備忘';
+  if (notesVisible) updateNotes();
+}
+function updateNotes() {
+  const note = speakerNotes[String(currentSlide)] || '';
+  document.getElementById('notesContent').textContent = note || '（此頁無講師備忘錄）';
+  document.getElementById('notesSlide').textContent = 'Slide ' + currentSlide + ' / ' + totalSlides;
+}
+
+// Backup plan note
+speakerNotes["backup"] = "備用方案：如果 Leonardo.ai 無法使用，可以改用 (1) 預先準備的離線範例讓學生分析 Prompt (2) Bing Image Creator（免費替代）(3) 紙筆繪製角色草稿，再由講師示範 AI 生成。";
+</script>
+
+<!-- Speaker Notes Toggle -->
+<button id="notesToggle" onclick="toggleNotes()" style="position:fixed;top:12px;right:12px;z-index:200;background:var(--ink);color:var(--cream);border:none;font-family:var(--ui-font);font-size:12px;letter-spacing:0.08em;padding:6px 14px;border-radius:999px;cursor:pointer;opacity:0.7;">N: 講師備忘</button>
+
+<!-- Speaker Notes Panel -->
+<div id="notesPanel" style="display:none;position:fixed;top:48px;right:12px;z-index:200;width:clamp(280px,30vw,420px);background:var(--ink);color:var(--cream);padding:20px 24px;border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,0.3);max-height:60vh;overflow-y:auto;">
+  <div id="notesSlide" style="font-family:var(--ui-font);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(242,238,229,0.5);margin-bottom:8px;"></div>
+  <div id="notesContent" style="font-size:14px;line-height:1.7;color:rgba(242,238,229,0.85);"></div>
+  <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(242,238,229,0.15);font-size:12px;color:rgba(242,238,229,0.5);">
+    <strong style="color:var(--accent);">備用方案：</strong>Leonardo.ai 無法使用時，改用 Bing Image Creator 或紙筆草稿 + 講師示範。
+  </div>
+</div>
+
+</body>
+</html>

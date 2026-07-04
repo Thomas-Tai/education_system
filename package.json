@@ -1,0 +1,30 @@
+{
+  "name": "course",
+  "version": "1.0.0",
+  "description": "Markdown 講稿 → 單一 HTML 課程頁面。零依賴 Node.js 建置。",
+  "main": "index.js",
+  "scripts": {
+    "build": "node .agents/skills/course-page-generator/scripts/build.mjs",
+    "build:example": "node .agents/skills/course-page-generator/scripts/build.mjs example",
+    "dev": "node .agents/skills/course-page-generator/scripts/dev.mjs",
+    "dev:example": "node .agents/skills/course-page-generator/scripts/dev.mjs example",
+    "og": "node .agents/skills/course-page-generator/scripts/generate-og.mjs",
+    "og:example": "node .agents/skills/course-page-generator/scripts/generate-og.mjs example",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:deancourse/agent-skill-lecture-builder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/deancourse/agent-skill-lecture-builder/issues"
+  },
+  "homepage": "https://github.com/deancourse/agent-skill-lecture-builder#readme",
+  "devDependencies": {
+    "puppeteer": "^24.43.1"
+  }
+}

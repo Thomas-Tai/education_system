@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>澳門科學館 · 課程目錄</title>
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/a/ACg8ocKqgHiVygLR36jXlNIMBwJ3L13eCHNm0KEMCwKtcjNAj6BEzgQx=s576-c-no">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="澳門科學館 · 課程目錄">
+  <meta property="og:description" content="澳門科學館 AI 課程系列，探索生成式 AI 的實務應用與資安防護。">
+  <meta property="og:site_name" content="澳門科學館">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0f1117;
+      --bg-card: #181b25;
+      --bg-card-alt: #1e2130;
+      --text: #e4e4e7;
+      --text-dim: #8b8d9a;
+      --accent: #e8845a;
+      --accent-rgb: 232 132 90;
+      --accent2: #e8b878;
+      --accent2-rgb: 232 184 120;
+      --border: #2a2d3a;
+      --radius: 12px;
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-card: #ffffff;
+      --bg-card-alt: #f0f0f3;
+      --text: #1a1a2e;
+      --text-dim: #5a5b6a;
+      --accent: #c45c28;
+      --accent-rgb: 196 92 40;
+      --accent2: #9a7028;
+      --accent2-rgb: 154 112 40;
+      --border: #d4d4d8;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Header ── */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      background: rgb(15 17 23 / .92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    [data-theme="light"] .site-header { background: rgb(245 245 247 / .92); }
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .site-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .site-logo-name {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 8px;
+      padding: .4rem .75rem;
+      cursor: pointer;
+      font-size: .85rem;
+      transition: border-color .2s, color .2s;
+    }
+    .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 2.5rem;
+      position: relative;
+      overflow: clip;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%; left: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgb(var(--accent-rgb) / .1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -20%; right: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgb(var(--accent2-rgb) / .07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: .78rem;
+      color: var(--text-dim);
+      letter-spacing: .06em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+    .hero h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.08em 0.2em 0.16em;
+    }
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.1rem);
+      color: var(--text-dim);
+      max-width: 720px;
+      margin: 0 auto 1rem;
+      font-weight: 300;
+    }
+    .hero-count {
+      font-size: .85rem;
+      color: var(--accent);
+      font-weight: 500;
+      min-height: 1.4em;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      max-width: min(1080px, 92%);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: .9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .9rem;
+      padding: .6rem .9rem .6rem 2.5rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-wrap input::placeholder { color: var(--text-dim); }
+    .search-wrap input:focus { border-color: rgb(var(--accent-rgb) / .6); }
+    .search-wrap input::-webkit-search-cancel-button { cursor: pointer; }
+
+    .layout-btns {
+      display: flex;
+      gap: .35rem;
+    }
+    .layout-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: .55rem .65rem;
+      display: flex;
+      align-items: center;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .layout-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .layout-btn.active {
+      border-color: rgb(var(--accent-rgb) / .6);
+      color: var(--accent);
+      background: rgb(var(--accent-rgb) / .08);
+    }
+
+    /* ── Category Filter ── */
+    .category-bar {
+      max-width: min(1080px, 92%);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-items: center;
+    }
+    .cat-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: .35rem .85rem;
+      font-family: inherit;
+      font-size: .82rem;
+      transition: border-color .2s, color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .cat-btn.active {
+      border-color: rgb(var(--accent-rgb) / .6);
+      color: var(--accent);
+      background: rgb(var(--accent-rgb) / .08);
+    }
+    .cat-count {
+      font-size: .75rem;
+      color: var(--text-dim);
+      margin-left: .25rem;
+      opacity: .7;
+    }
+
+    /* ── Grid ── */
+    .grid-wrap {
+      max-width: min(1080px, 92%);
+      margin: 0 auto;
+      padding: 0 0 6rem;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .course-grid--list {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .empty, .no-result {
+      color: var(--text-dim);
+      text-align: center;
+      padding: 4rem 0;
+      font-size: .95rem;
+    }
+
+    /* ── Course Card (grid) ── */
+    .course-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+    }
+    .course-card:hover {
+      border-color: rgb(var(--accent-rgb) / .45);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgb(0 0 0 / .25);
+    }
+    .course-card--no-link { opacity: .6; cursor: default; }
+    .course-img {
+      width: 100%;
+      aspect-ratio: 1200 / 630;
+      overflow: hidden;
+      background: var(--bg-card-alt);
+      flex-shrink: 0;
+    }
+    .course-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease;
+    }
+    .course-card:hover .course-img img { transform: scale(1.03); }
+    .course-img--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .course-img--placeholder span {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgb(var(--accent-rgb) / .3);
+    }
+    .course-body {
+      padding: 1.4rem 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .course-badge {
+      font-size: .72rem;
+      color: var(--accent);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+      font-weight: 500;
+    }
+    .course-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: .65rem;
+    }
+    .course-desc {
+      font-size: .88rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .course-cta {
+      font-size: .82rem;
+      color: var(--accent2);
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .course-card:hover .course-cta { color: var(--accent); }
+
+    /* ── List layout overrides ── */
+    .course-grid--list .course-img { display: none; }
+    .course-grid--list .course-badge,
+    .course-grid--list .course-cta { display: none; }
+    .course-grid--list .course-body {
+      padding: .85rem 1.25rem;
+      justify-content: center;
+      flex: unset;
+    }
+    .course-grid--list .course-title {
+      font-size: 1rem;
+      margin-bottom: 0;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 500;
+    }
+    .course-grid--list .course-desc {
+      display: block;
+      -webkit-line-clamp: unset;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      margin-bottom: 0;
+      margin-top: 0;
+      transition: max-height .25s ease, opacity .2s ease, margin-top .2s ease;
+    }
+    .course-grid--list .course-card:hover .course-desc {
+      max-height: 8rem;
+      opacity: 1;
+      margin-top: .5rem;
+    }
+    .course-grid--list .course-card:hover { transform: none; }
+    @media (max-width: 540px) {
+      .toolbar { flex-wrap: wrap; }
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 2rem;
+      font-size: .82rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="./" class="site-logo">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocKqgHiVygLR36jXlNIMBwJ3L13eCHNm0KEMCwKtcjNAj6BEzgQx=s576-c-no" alt="澳門科學館">
+    <span class="site-logo-name">澳門科學館</span>
+  </a>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="切換主題">&#9728; / &#9790;</button>
+</header>
+
+<section class="hero">
+  <h1>課程目錄</h1>
+  <p class="hero-count" id="hero-count"></p>
+</section>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="search" id="search" placeholder="搜尋課程名稱、類別或說明…" autocomplete="off">
+  </div>
+  <div class="layout-btns" role="group" aria-label="版面切換">
+    <button id="btn-grid" class="layout-btn" onclick="setLayout('grid')" aria-label="格狀排列" title="格狀排列">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/>
+        <rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>
+      </svg>
+    </button>
+    <button id="btn-list" class="layout-btn" onclick="setLayout('list')" aria-label="列表排列" title="列表排列">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="11" width="18" height="5" rx="1"/><rect x="3" y="18" width="18" height="3" rx="1"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="category-bar" id="category-bar"></div>
+
+<div class="grid-wrap">
+  <p class="empty" id="empty-msg" hidden>尚無課程，請將課程資料夾放入 <code>lectures/</code> 目錄並執行 <code>node build-index.mjs</code>。</p>
+  <p class="no-result" id="no-result-msg" hidden>找不到符合的課程，請嘗試其他關鍵字。</p>
+  <div class="course-grid" id="course-grid"></div>
+</div>
+
+<footer class="site-footer">
+  <p>&#169; 澳門科學館</p>
+</footer>
+
+<script>window.__courses__ = null;</script>
+<script src="lectures/manifest.js" onerror="window.__courses__ = [];"></script>
+<script>
+  (function () {
+    var saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+
+  function toggleTheme() {
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    localStorage.setItem('theme', isLight ? 'dark' : 'light');
+  }
+
+  var currentLayout = localStorage.getItem('layout') || 'grid';
+  var currentCategory = localStorage.getItem('category') || '';
+
+  function setLayout(layout) {
+    currentLayout = layout;
+    localStorage.setItem('layout', layout);
+    var gridEl = document.getElementById('course-grid');
+    gridEl.className = layout === 'list' ? 'course-grid course-grid--list' : 'course-grid';
+    document.getElementById('btn-grid').classList.toggle('active', layout === 'grid');
+    document.getElementById('btn-list').classList.toggle('active', layout === 'list');
+  }
+
+  function buildCategoryBar() {
+    var all = window.__courses__ || [];
+    var catMap = {};
+    for (var i = 0; i < all.length; i++) {
+      var cat = all[i].category || '未分類';
+      catMap[cat] = (catMap[cat] || 0) + 1;
+    }
+    var cats = Object.keys(catMap).sort();
+    var barEl = document.getElementById('category-bar');
+    var html = '<button class="cat-btn' + (currentCategory === '' ? ' active' : '') + '" data-cat="" onclick="setCategory(this)">全部<span class="cat-count">(' + all.length + ')</span></button>';
+    for (var j = 0; j < cats.length; j++) {
+      var c = cats[j];
+      var active = currentCategory === c ? ' active' : '';
+      html += '<button class="cat-btn' + active + '" data-cat="' + esc(c) + '" onclick="setCategory(this)">' + esc(c) + '<span class="cat-count">(' + catMap[c] + ')</span></button>';
+    }
+    barEl.innerHTML = html;
+  }
+
+  function setCategory(btn) {
+    var cat = btn.getAttribute('data-cat');
+    currentCategory = cat;
+    localStorage.setItem('category', cat);
+    var btns = document.querySelectorAll('.cat-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', btns[i].getAttribute('data-cat') === cat);
+    }
+    filterAndRender();
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function buildCard(l) {
+    var firstChar = esc((l.title || '?').charAt(0));
+    var placeholder = '<div class="course-img course-img--placeholder"><span>' + firstChar + '</span></div>';
+    var imgTag = l.ogImage
+      ? '<div class="course-img"><img src="' + esc(l.ogImage) + '" alt="' + esc(l.title) + '" loading="lazy" onerror="this.parentElement.outerHTML=\'<div class=&quot;course-img course-img--placeholder&quot;><span>' + firstChar + '</span></div>\'"></div>'
+      : placeholder;
+
+    var inner = imgTag +
+      '<div class="course-body">' +
+      (l.badge ? '<p class="course-badge">' + esc(l.badge) + '</p>' : '') +
+      '<h2 class="course-title">' + esc(l.title) + '</h2>' +
+      (l.subtitle ? '<p class="course-desc">' + esc(l.subtitle) + '</p>' : '') +
+      '<span class="course-cta">&#31435;&#21363;&#23416;&#32722; &#8594;</span>' +
+      '</div>';
+
+    if (l.href) return '<a href="' + esc(l.href) + '" class="course-card">' + inner + '</a>';
+    return '<div class="course-card course-card--no-link">' + inner + '</div>';
+  }
+
+  function filterAndRender() {
+    var all = window.__courses__ || [];
+    var query = document.getElementById('search').value.trim().toLowerCase();
+
+    // Filter by category
+    var byCat = currentCategory
+      ? all.filter(function (l) { return (l.category || '未分類') === currentCategory; })
+      : all;
+
+    // Filter by search
+    var filtered = query
+      ? byCat.filter(function (l) {
+          return (l.title + ' ' + l.badge + ' ' + l.subtitle + ' ' + (l.category || '')).toLowerCase().indexOf(query) !== -1;
+        })
+      : byCat;
+
+    var countEl = document.getElementById('hero-count');
+    var gridEl = document.getElementById('course-grid');
+    var emptyEl = document.getElementById('empty-msg');
+    var noResultEl = document.getElementById('no-result-msg');
+
+    if (all.length === 0) {
+      emptyEl.hidden = false;
+      noResultEl.hidden = true;
+      countEl.textContent = '0 門課程';
+      return;
+    }
+    emptyEl.hidden = true;
+    var catLabel = currentCategory ? '（' + currentCategory + '）' : '';
+    countEl.textContent = query
+      ? '搜尋「' + esc(query) + '」' + catLabel + ' ' + filtered.length + ' / ' + all.length + ' 門課程'
+      : catLabel ? catLabel + ' ' + all.length + ' 門課程' : all.length + ' 門課程';
+    noResultEl.hidden = filtered.length > 0;
+    gridEl.innerHTML = filtered.map(buildCard).join('');
+  }
+
+  // Init
+  setLayout(currentLayout);
+  buildCategoryBar();
+  filterAndRender();
+
+  document.getElementById('search').addEventListener('input', filterAndRender);
+</script>
+</body>
+</html>

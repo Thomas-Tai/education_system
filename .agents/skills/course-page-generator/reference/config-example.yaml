@@ -1,0 +1,99 @@
+# ===================================================
+# Course Page Generator — YAML Config 完整範例
+# 可作為 global.yaml 或課程 config.yaml 的參考
+# 課程 config 只需寫要覆蓋的欄位（deep merge）
+# ===================================================
+
+# ---------------------------------------------------
+# 頁面基本設定
+# ---------------------------------------------------
+page:
+  lang: zh-TW
+  favicon: "https://deanlin.net/images/favicon.png"
+  title: "課程標題示意 — 從主題介紹到實作應用"
+  badge: "課程分類示意 · 主題標籤示意"
+  # hero_title 支援 <br> 換行
+  hero_title: "從核心概念理解<br>到實際案例應用"
+  subtitle: "這裡可放課程副標示意，簡要說明學習重點、適合對象與完成後可獲得的能力。"
+
+# ---------------------------------------------------
+# 講者資訊
+# ---------------------------------------------------
+instructor:
+  name: "示意講師名稱 Example Instructor"
+  tagline: "講師職稱示意 · 專長領域示意 · 教學特色示意"
+  bio: >
+    這裡可放講師簡介示意文字，用來介紹背景、實務經驗與授課風格。<br>
+    建議聚焦在學員最關心的價值，例如能學到什麼、適合誰，以及為何值得向這位講師學習。
+  # avatar 留空則使用 placeholder（人物圖示）
+  # 可省略副檔名，build 會自動偵測 jpg/jpeg/png/webp/gif/svg
+  # 路徑相對於 config/ 的父目錄（即 global.yaml 所在的 config/ 之上一層）
+  avatar: "config/assets/author"
+  # stats：text 支援 **粗體** 等 inline markdown
+  stats:
+    - text: "代表作品或經歷 **X** 項"
+      url: "https://www.tenlong.com.tw/products/9786264142083"
+    - text: "累積授課或分享 **X** 場"
+      url: "https://www.youtube.com/@dlcorner"
+    - text: "發表內容或文章 **X** 篇"
+      url: "https://medium.com/@dean-lin"
+  # 支援平台：Medium, Facebook, Threads, YouTube, GitHub, LinkedIn, Email
+  socials:
+    - platform: "Medium"
+      url: "https://medium.com/@dean-lin"
+    - platform: "Facebook"
+      url: "https://www.facebook.com/deanlinbao"
+    - platform: "Threads"
+      url: "https://www.threads.com/@deanlin5288"
+    - platform: "YouTube"
+      url: "https://www.youtube.com/@dlcorner"
+    - platform: "GitHub"
+      url: "https://github.com/dean9703111"
+    # - platform: "LinkedIn"
+    #   url: "https://linkedin.com/in/..."
+    # - platform: "Email"
+    #   url: "mailto:example@example.com"
+
+# ---------------------------------------------------
+# 引言（opening 出現在講師介紹後、closing 出現在所有章節後）
+# ---------------------------------------------------
+quotes:
+  opening:
+    text: "這裡可放課程開場引言示意，<br>用一句話傳達主題精神與學習價值。"
+    # author: "某某人"  # 可選，不填則不顯示
+  closing:
+    text: >
+      這裡可放課程結尾引言示意，<br>
+      適合用來總結重點或延伸觀點。<br><br>
+      也可以作為鼓勵學員採取下一步行動的收尾文字。
+    # author: ""
+
+# ---------------------------------------------------
+# Hero 導覽按鈕
+# 預設從 content.md 的 # 章節自動產生，不需手動維護
+# 若需自訂按鈕文字，取消註解：
+# ---------------------------------------------------
+# nav:
+#   - text: "自訂文字"
+#     href: "#section-id"
+
+# ---------------------------------------------------
+# 頁尾
+# ---------------------------------------------------
+footer:
+  cta: "這裡可放頁尾 CTA 示意，例如追蹤社群、加入社群或查看更多相關課程"
+  copyright: "© 可以放自己的名字"
+  # show_socials: true 會在 footer 重複顯示社群連結
+  show_socials: true
+
+# ---------------------------------------------------
+# SEO / Open Graph
+# 重要：image 必須使用絕對 URL，社群平台無法解析相對路徑
+# ---------------------------------------------------
+seo:
+  site_name: "網站名稱示意"
+  type: "article"
+  title: "課程 SEO 標題示意｜主題與亮點摘要"
+  description: "這裡可放 SEO 描述示意，建議濃縮課程內容、目標受眾與可獲得成果。"
+  image: "https://your-domain.example/course/example/assets/og-image.jpg"
+  url: "https://your-domain.example/course/example/"
