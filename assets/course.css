@@ -994,18 +994,18 @@
     /* ===== SYNTAX HIGHLIGHT ===== */
     .prompt-body .hl-cmd { color: var(--accent); font-weight: 700; }
     .prompt-body .hl-flag { color: var(--accent3); }
-    .prompt-body .hl-str { color: #16a34a; }
-    .prompt-body .hl-var { color: #b45309; }
+    .prompt-body .hl-str { color: var(--accent3); }
+    .prompt-body .hl-var { color: var(--warn); }
     .prompt-body .hl-cmt { color: var(--text-dim); font-style: italic; }
     .prompt-body .hl-code { color: var(--accent); background: rgb(var(--accent-rgb)/.1); border-radius: 3px; padding: 0 2px; }
     .prompt-body .hl-key { font-weight: 600; }
-    .prompt-body .hl-bool { color: #dc2626; }
-    .prompt-body .hl-num { color: #ea580c; }
+    .prompt-body .hl-bool { color: var(--bad); }
+    .prompt-body .hl-num { color: var(--warn); }
 
-    [data-theme="dark"] .prompt-body .hl-str { color: #86efac; }
-    [data-theme="dark"] .prompt-body .hl-var { color: #fbbf24; }
-    [data-theme="dark"] .prompt-body .hl-bool { color: #f87171; }
-    [data-theme="dark"] .prompt-body .hl-num { color: #fb923c; }
+    [data-theme="dark"] .prompt-body .hl-str { color: #7ec8a0; }
+    [data-theme="dark"] .prompt-body .hl-var { color: #D4A24E; }
+    [data-theme="dark"] .prompt-body .hl-bool { color: #D4604F; }
+    [data-theme="dark"] .prompt-body .hl-num { color: #D4A24E; }
 
     /* ===== IMAGES ===== */
     .content-image {
@@ -4772,12 +4772,12 @@
       height: 8px;
       border-radius: 50%;
       margin-left: .35rem;
-      background: #888;
+      background: var(--text-faint);
       vertical-align: middle;
       box-shadow: 0 0 0 1px rgba(0,0,0,.15);
     }
-    .vote-ep-dot.ok { background: #50c878; box-shadow: 0 0 6px rgba(80,200,120,.6); }
-    .vote-ep-dot.warn { background: #f0b840; box-shadow: 0 0 6px rgba(240,184,64,.55); }
+    .vote-ep-dot.ok { background: var(--accent3); box-shadow: 0 0 6px rgb(var(--accent3-rgb)/.6); }
+    .vote-ep-dot.warn { background: var(--warn); box-shadow: 0 0 6px rgb(var(--warn-rgb)/.55); }
 
     .vote-question-input {
       width: 100%;
@@ -4904,8 +4904,8 @@
       gap: .4rem;
     }
 
-    .vote-bar-row.vote-bar-correct .vote-bar-label { color: #50c878; }
-    .vote-bar-row.vote-bar-correct .vote-bar-fill { background: #50c878; }
+    .vote-bar-row.vote-bar-correct .vote-bar-label { color: var(--accent3); }
+    .vote-bar-row.vote-bar-correct .vote-bar-fill { background: var(--accent3); }
 
     .vote-bar-label {
       font-size: .78rem;
@@ -5346,7 +5346,7 @@
       transition: background .25s, border-color .25s;
     }
     [data-theme="dark"] .toc-read-dot { border-color: rgba(255,255,255,.2); }
-    .toc-read-dot.read { background: #4ade80; border-color: #4ade80; }
+    .toc-read-dot.read { background: var(--accent3); border-color: var(--accent3); }
 
 /* ─── Inline Vote (display-only) ──────────────────────────── */
     .inline-vote {
@@ -5944,7 +5944,7 @@
   font-family: var(--mono);
 }
 :root[data-theme="dark"] .code-block,
-[data-theme="dark"] .code-block { background: #0d1117; border-color: #1f2937; }
+[data-theme="dark"] .code-block { background: #0d1117; border-color: var(--border); }
 .code-header {
   display: flex;
   align-items: center;
