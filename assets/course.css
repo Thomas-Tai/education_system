@@ -8,39 +8,40 @@
       box-sizing: border-box
     }
 
+    /* Professor Slide Design — 60-30-10 palette */
     :root {
-      --bg: #0f1117;
-      --bg-card: #181b25;
-      --bg-card-alt: #1e2130;
-      --bg-widget: rgba(24, 27, 37, 0.82);
-      --text: #e4e4e7;
-      --text-dim: #8b8d9a;
-      --accent: #e03040;
-      --accent-rgb: 224 48 64;
-      --accent2: #e87858;
-      --accent2-rgb: 232 120 88;
-      --accent3: #d06080;
-      --accent3-rgb: 208 96 128;
-      --border: #2a2d3a;
-      --code-bg: #12141c;
-      --radius: 12px;
+      --bg: #F2EEE5;
+      --bg-card: #EAE4D5;
+      --bg-card-alt: #DDE3EB;
+      --bg-widget: rgba(234, 228, 213, 0.88);
+      --text: #1B1F24;
+      --text-dim: #5A5E66;
+      --accent: #A4452F;
+      --accent-rgb: 164 69 47;
+      --accent2: #3F5B7E;
+      --accent2-rgb: 63 91 126;
+      --accent3: #2F6B4A;
+      --accent3-rgb: 47 107 74;
+      --border: #DCD4BF;
+      --code-bg: #2A3B53;
+      --radius: 10px;
     }
 
-    [data-theme="light"] {
-      --bg: #f5f5f7;
-      --bg-card: #ffffff;
-      --bg-card-alt: #f0f0f3;
-      --bg-widget: rgba(255, 255, 255, 0.7);
-      --text: #1a1a2e;
-      --text-dim: #5a5b6a;
-      --accent: #b01828;
-      --accent-rgb: 176 24 40;
-      --accent2: #c05030;
-      --accent2-rgb: 192 80 48;
-      --accent3: #a03060;
-      --accent3-rgb: 160 48 96;
-      --border: #d4d4d8;
-      --code-bg: #eaeaef;
+    [data-theme="dark"] {
+      --bg: #1B1F24;
+      --bg-card: #2A3B53;
+      --bg-card-alt: #232838;
+      --bg-widget: rgba(27, 31, 36, 0.88);
+      --text: #F2EEE5;
+      --text-dim: #9A9DA6;
+      --accent: #C4614A;
+      --accent-rgb: 196 97 74;
+      --accent2: #7A9BBD;
+      --accent2-rgb: 122 155 189;
+      --accent3: #5A9B7A;
+      --accent3-rgb: 90 155 122;
+      --border: #3A3D4A;
+      --code-bg: #12161E;
     }
 
     html {
@@ -59,7 +60,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Noto Sans TC', sans-serif;
+      font-family: "Noto Sans HK","Noto Sans TC","Atkinson Hyperlegible","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
       line-height: 1.8;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
