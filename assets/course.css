@@ -5444,6 +5444,23 @@
     }
     .quiz-btn--correct .quiz-key { border-color: var(--accent3); color: var(--accent3); }
     .quiz-btn--wrong   .quiz-key { border-color: var(--bad); color: var(--bad); }
+    .quiz-result-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 50%;
+      font-size: .75rem; font-weight: 700; margin-right: .4rem;
+      flex-shrink: 0;
+    }
+    .quiz-btn--correct .quiz-result-icon {
+      background: var(--accent3); color: #fff;
+    }
+    .quiz-btn--wrong .quiz-result-icon {
+      background: var(--bad); color: #fff;
+    }
+    .quiz-multi-badge {
+      font-size: .7rem; padding: 2px 8px; margin-left: .5rem;
+      border-radius: 999px; background: var(--accent2); color: #fff;
+      font-weight: 600; vertical-align: middle;
+    }
     .quiz-hint {
       margin-top: .75rem; padding: .6rem .85rem;
       background: rgb(var(--accent-rgb)/.06); border-radius: 6px;
@@ -6203,6 +6220,49 @@
   line-height: 1.85;
   color: var(--text-dim);
   padding-top: .35rem;
+}
+
+/* ===== TEACHER / PRESENTER MODE ===== */
+body.pres-fonts {
+  font-size: 20px;
+}
+body.pres-fonts .loose-text,
+body.pres-fonts .loose-list li,
+body.pres-fonts .card p,
+body.pres-fonts .card ul li,
+body.pres-fonts .group-body p,
+body.pres-fonts .group-body ul li {
+  font-size: 1.1rem;
+}
+body.pres-fonts .tag { font-size: .85rem; }
+body.pres-fonts .section-label { font-size: .9rem; }
+body.pres-fonts .quiz-q { font-size: 1.1rem; }
+body.pres-fonts .quiz-btn { font-size: 1.05rem; }
+
+/* Disable reveal animations in presenter mode */
+body.pres-fonts .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Quick-jump bar in presenter mode */
+.pres-quickjump {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: var(--bg-card); border-bottom: 2px solid var(--accent);
+  padding: 6px 12px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--ui-font); font-size: .85rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+.pres-quickjump select {
+  flex: 1; padding: 4px 8px; border: 1px solid var(--border);
+  border-radius: 4px; background: var(--bg); color: var(--text);
+  font-family: var(--ui-font); font-size: .85rem;
+}
+.pres-quickjump button {
+  padding: 4px 12px; border: 1px solid var(--accent);
+  background: var(--accent); color: #fff; border-radius: 4px;
+  cursor: pointer; font-family: var(--ui-font); font-size: .8rem;
 }
 
 /* ─── Print overrides ─────────────────────────────────────── */

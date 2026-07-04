@@ -1353,7 +1353,7 @@ ${childrenHtml}
     }
 
     case 'quiz': {
-      let s = `<div class="quiz-block" data-quiz-id="${esc(block.quizId)}" data-quiz-answer="${block.correctIdx}">\n`;
+      let s = `<div class="quiz-block" data-quiz-id="${esc(block.quizId)}" data-quiz-answer="${block.correctIdx}" data-quiz-type="${esc(block.quizType || 'single')}">\n`;
       s += `      <div class="quiz-q">${esc(block.question)}</div>\n`;
       s += `      <div class="quiz-opts">\n`;
       block.options.forEach((opt, idx) => {

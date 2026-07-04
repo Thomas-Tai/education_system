@@ -24,7 +24,7 @@
     }
   </script>
   <link rel="stylesheet" href="../../assets/course.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async defer></script>
 </head>
 
 <body>
@@ -390,7 +390,7 @@
         </div>
       </div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-反向擴散的正確描述是" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-反向擴散的正確描述是" data-quiz-answer="1" data-quiz-type="single">
       <div class="quiz-q">反向擴散的正確描述是？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>逐步向圖像加入噪聲</span></button>
@@ -401,7 +401,7 @@
       <div class="quiz-hint" hidden>前向 = 加噪（訓練用），反向 = 去噪恢復（生成用）。</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-擴散模型的最大局限性是" data-quiz-answer="2">
+        <div class="quiz-block" data-quiz-id="q-擴散模型的最大局限性是" data-quiz-answer="2" data-quiz-type="single">
       <div class="quiz-q">擴散模型的最大局限性是？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>生成圖像質量低</span></button>
@@ -645,7 +645,7 @@
         </div>
       </div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-dalle的三個核心組件是" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-dalle的三個核心組件是" data-quiz-answer="1" data-quiz-type="single">
       <div class="quiz-q">DALL-E 的三個核心組件是？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>GAN + Transformer + CLIP</span></button>
@@ -780,7 +780,7 @@
         </tbody>
       </table>
     </div>
-        <div class="quiz-block" data-quiz-id="q-videogpt中transformer" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-videogpt中transformer" data-quiz-answer="1" data-quiz-type="single">
       <div class="quiz-q">VideoGPT 中 Transformer 使用的注意力機制是？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>全連接注意力</span></button>
@@ -1360,7 +1360,7 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
     <div class="group-block">
       <div class="group-header">易錯題 1：DALL-E 三組件（M18）</div>
       <div class="group-body">
-        <div class="quiz-block" data-quiz-id="q-dalle的架構包含哪三個組件" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-dalle的架構包含哪三個組件" data-quiz-answer="0" data-quiz-type="single">
       <div class="quiz-q">DALL-E 的架構包含哪三個組件？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>dVAE + Transformer + CLIP</span></button>
@@ -1379,7 +1379,7 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
     <div class="group-block">
       <div class="group-header">易錯題 2：單模態 AIGC（M14）</div>
       <div class="group-body">
-        <div class="quiz-block" data-quiz-id="q-以下哪些屬於單模態aigc" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-以下哪些屬於單模態aigc" data-quiz-answer="0" data-quiz-type="single">
       <div class="quiz-q">以下哪些屬於單模態 AIGC？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>文生文、圖生圖、視頻生視頻</span></button>
@@ -1398,7 +1398,7 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
     <div class="group-block">
       <div class="group-header">易錯題 3：PAS 結構（M4）</div>
       <div class="group-body">
-        <div class="quiz-block" data-quiz-id="q-pas模型的結構包括哪些部分" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-pas模型的結構包括哪些部分" data-quiz-answer="0" data-quiz-type="single">
       <div class="quiz-q">PAS 模型的結構包括哪些部分？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>Problem + Agitate + Solution</span></button>
@@ -1417,7 +1417,7 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
     <div class="group-block">
       <div class="group-header">易錯題 4：擴散模型優點（M20）</div>
       <div class="group-body">
-        <div class="quiz-block" data-quiz-id="q-擴散模型的主要優點是" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-擴散模型的主要優點是" data-quiz-answer="0" data-quiz-type="single">
       <div class="quiz-q">擴散模型的主要優點是？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>生成圖像質量高、能生成多樣化圖像</span></button>
@@ -1436,7 +1436,7 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
     <div class="group-block">
       <div class="group-header">易錯題 5：高質量 Prompt 要素（M23）</div>
       <div class="group-body">
-        <div class="quiz-block" data-quiz-id="q-設計高質量提示詞時應注意哪些要素" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-設計高質量提示詞時應注意哪些要素" data-quiz-answer="0" data-quiz-type="single">
       <div class="quiz-q">設計高質量提示詞時應注意哪些要素？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>明確目標、簡明語言、背景信息、指定格式</span></button>
@@ -1727,6 +1727,13 @@ Q: 小明有 12 支畫筆。他給了妹妹 1/4。小明還剩下多少支畫筆
           data-accent-light="#6A4F7C" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
           data-accent3-light="#A4452F"
           style="background:linear-gradient(135deg,#6A4F7C 40%,#3F5B7E 70%,#A4452F)"></button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">教師模式</div>
+      <div class="settings-controls-row">
+        <button class="settings-toggle" id="pres-mode-toggle" title="教師模式 (Shift+P)" style="width:auto;border-radius:4px;padding:4px 10px;font-size:.72rem;">放大字體</button>
       </div>
     </div>
     <div class="settings-divider"></div>

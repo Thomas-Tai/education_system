@@ -273,6 +273,8 @@
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.M
           });
+        } else {
+          shareQrContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:.5rem;"><p style="font-size:.75rem;color:var(--text-dim);margin:0 0 .4rem">QR Code 無法載入（離線模式）</p><p style="font-size:.72rem;word-break:break-all;color:var(--accent);margin:0;user-select:all;">' + url + '</p></div>';
         }
         if (ogImgUrl) {
           shareOgImg.src = ogImgUrl;
@@ -1480,8 +1482,11 @@
 
       document.addEventListener('keydown', function (e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        if ((e.key === 'p' || e.key === 'P') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if ((e.key === 'p' || e.key === 'P') && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
           document.body.classList.contains('pres-active') ? exitPresentation() : enterPresentation();
+        }
+        if (e.key === 'P' && e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          if (window.__togglePresMode) window.__togglePresMode();
         }
         if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey && !document.body.classList.contains('pres-active')) {
           document.fullscreenElement
@@ -2431,7 +2436,12 @@
       var lectureQrObs = null;
       function renderLectureQr() {
         var qrContainer = document.getElementById('vote-qr-container');
-        if (!qrContainer || typeof QRCode === 'undefined') return;
+        if (!qrContainer) return;
+        if (typeof QRCode === 'undefined') {
+          if (!lectureQrUrl) lectureQrUrl = getVotePageUrl(lectureSessionId);
+          qrContainer.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:.5rem;"><p style="font-size:.75rem;color:var(--text-dim);margin:0 0 .4rem">QR Code 無法載入（離線模式）</p><p style="font-size:.72rem;word-break:break-all;color:var(--accent);margin:0;user-select:all;">' + lectureQrUrl + '</p></div>';
+          return;
+        }
         if (!lectureQrUrl) lectureQrUrl = getVotePageUrl(lectureSessionId);
 
         var wrap = qrContainer.parentElement;
@@ -2858,13 +2868,18 @@
       var hintEl = block.querySelector('.quiz-hint');
       var fbEl = block.querySelector('.quiz-fb');
       var answerIdx = parseInt(block.dataset.quizAnswer);
-      btns.forEach(function (b) { b.disabled = true; });
+      btns.forEach(function (b) { b.disabled = true; b.querySelectorAll('.quiz-result-icon').forEach(function (ic) { ic.remove(); }); });
       if (correct) {
         btns[chosenIdx] && btns[chosenIdx].classList.add('quiz-btn--correct');
+        if (btns[chosenIdx]) btns[chosenIdx].insertAdjacentHTML('afterbegin', '<span class="quiz-result-icon" aria-label="正確">&#10003;</span>');
         if (fbEl) { fbEl.textContent = '正確！'; fbEl.className = 'quiz-fb quiz-fb--correct'; fbEl.removeAttribute('hidden'); }
       } else {
         btns[chosenIdx] && btns[chosenIdx].classList.add('quiz-btn--wrong');
-        if (answerIdx >= 0) btns[answerIdx] && btns[answerIdx].classList.add('quiz-btn--correct');
+        if (btns[chosenIdx]) btns[chosenIdx].insertAdjacentHTML('afterbegin', '<span class="quiz-result-icon" aria-label="錯誤">&#10007;</span>');
+        if (answerIdx >= 0) {
+          btns[answerIdx] && btns[answerIdx].classList.add('quiz-btn--correct');
+          if (btns[answerIdx]) btns[answerIdx].insertAdjacentHTML('afterbegin', '<span class="quiz-result-icon" aria-label="正確">&#10003;</span>');
+        }
         if (hintEl) hintEl.removeAttribute('hidden');
         if (fbEl) { fbEl.textContent = '答錯了，正確答案已標示'; fbEl.className = 'quiz-fb quiz-fb--wrong'; fbEl.removeAttribute('hidden'); }
       }
@@ -2878,6 +2893,22 @@
       var prevIdx = prev === 'correct' ? answerIdx : -1;
       applyQuizResult(block, prev === 'correct', prevIdx);
     }
+
+    // Add ARIA attributes and multi-select badges to all quiz blocks
+    document.querySelectorAll('.quiz-block').forEach(function (block) {
+      var opts = block.querySelector('.quiz-opts');
+      if (opts) opts.setAttribute('role', 'radiogroup');
+      var fb = block.querySelector('.quiz-fb');
+      if (fb) fb.setAttribute('aria-live', 'polite');
+      // Detect multi-select: check data-quiz-type attribute
+      var quizType = block.getAttribute('data-quiz-type');
+      if (quizType === 'multi') {
+        var qEl = block.querySelector('.quiz-q');
+        if (qEl && !qEl.querySelector('.quiz-multi-badge')) {
+          qEl.insertAdjacentHTML('beforeend', '<span class="quiz-multi-badge">多選</span>');
+        }
+      }
+    });
 
     document.querySelectorAll('.quiz-block').forEach(restoreQuizBlock);
     window.__restoreQuiz = restoreQuizBlock;
@@ -3455,4 +3486,75 @@
       if (targetRow) targetRow.appendChild(settingsBtn);
       else setTimeout(appendBtn, 50);
     })();
+  })();
+
+  // ─── Teacher / Presenter Mode ──────────────────────────────
+  (function () {
+    var PRES_KEY = 'presMode';
+    var quickjumpBar = null;
+
+    function buildQuickjump() {
+      var bar = document.createElement('div');
+      bar.className = 'pres-quickjump';
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', '章節快速跳轉');
+      document.querySelectorAll('.section-label[id]').forEach(function (el) {
+        var opt = document.createElement('option');
+        opt.value = el.id;
+        opt.textContent = el.textContent.trim();
+        sel.appendChild(opt);
+      });
+      var btn = document.createElement('button');
+      btn.textContent = 'Jump';
+      btn.addEventListener('click', function () {
+        var id = sel.value;
+        if (id) {
+          var target = document.getElementById(id);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      sel.addEventListener('change', function () {
+        var id = sel.value;
+        if (id) {
+          var target = document.getElementById(id);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      bar.appendChild(sel);
+      bar.appendChild(btn);
+      return bar;
+    }
+
+    function enterPresMode() {
+      document.body.classList.add('pres-fonts');
+      if (!quickjumpBar) {
+        quickjumpBar = buildQuickjump();
+        document.body.insertBefore(quickjumpBar, document.body.firstChild);
+      }
+      var btn = document.getElementById('pres-mode-toggle');
+      if (btn) { btn.textContent = '關閉放大'; btn.style.background = 'var(--accent)'; btn.style.color = '#fff'; }
+      localStorage.setItem(PRES_KEY, '1');
+    }
+
+    function exitPresMode() {
+      document.body.classList.remove('pres-fonts');
+      if (quickjumpBar) { quickjumpBar.remove(); quickjumpBar = null; }
+      var btn = document.getElementById('pres-mode-toggle');
+      if (btn) { btn.textContent = '放大字體'; btn.style.background = ''; btn.style.color = ''; }
+      localStorage.setItem(PRES_KEY, '0');
+    }
+
+    function togglePresMode() {
+      if (document.body.classList.contains('pres-fonts')) exitPresMode();
+      else enterPresMode();
+    }
+
+    window.__togglePresMode = togglePresMode;
+
+    // Wire up settings panel button
+    var btn = document.getElementById('pres-mode-toggle');
+    if (btn) btn.addEventListener('click', togglePresMode);
+
+    // Restore from localStorage
+    if (localStorage.getItem(PRES_KEY) === '1') enterPresMode();
   })();
