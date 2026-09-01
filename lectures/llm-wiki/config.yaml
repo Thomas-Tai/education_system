@@ -9,8 +9,6 @@ page:
 seo:
   title: "LLM Wiki 從入門到策略實作｜AI 時代的知識管理課程"
   description: "結合入門導向、實作導向與策略導向的 240 分鐘 LLM Wiki 課程，帶領學員理解 Karpathy LLM Wiki 模式、建立 Markdown 知識庫、用 AI Agent 維護索引與交叉連結，並設計可落地的教育與研究團隊知識管理流程。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/llm-wiki/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/llm-wiki/"
 
 quotes:
   opening:

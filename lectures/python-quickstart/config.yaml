@@ -8,8 +8,6 @@ page:
 seo:
   title: "Python 快速入門｜零基礎 Google Colab 教學"
   description: "專為 Python 初學者設計的快速入門課程。用 Google Colab 學習變數、for 迴圈、函式、List 與 Dictionary，以及字串操作技巧，從零開始建立 Python 程式設計基礎。"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/python-quickstart/"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/python-quickstart/assets/og-image.jpg"
 
 quotes:
   opening: "寫程式不需要天賦，只需要從第一行 print() 開始。"

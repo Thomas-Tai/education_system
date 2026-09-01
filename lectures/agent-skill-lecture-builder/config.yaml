@@ -9,8 +9,6 @@ page:
 seo:
   title: "Agent Skill 課程頁生成器｜安裝、使用、新增課程完整教學"
   description: "學習如何安裝與使用 agent-skill-lecture-builder，掌握 Markdown 語法、config 設定、建置流程，並透過 Agent Skills 一鍵生成可部署的課程頁面。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/agent-skill-lecture-builder/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/agent-skill-lecture-builder/"
 
 quotes:
   opening:

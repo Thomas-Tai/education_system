@@ -9,8 +9,6 @@ page:
 seo:
   title: "AI 圖片到印刷完整流程｜Photopea + Vectorpea 設計課程"
   description: "整合 Photopea 與 Vectorpea 的完整印刷前處理課程：AI 圖片修復調色、SVG 生成與排版、出血設定、CMYK 轉換，到 PDF 送印輸出。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/ai-print-workflow/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/ai-print-workflow/"
 
 quotes:
   opening:

@@ -9,8 +9,6 @@ page:
 seo:
   title: "Photopea 印刷前處理｜AI 生圖到印刷輸出完整指南"
   description: "完整的 Photopea 課程，聚焦 AI 生成圖片的印刷前處理：瑕疵修復、300dpi 解析度調整、RGB 到 CMYK 轉換、出血設定與 PDF 匯出。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/photopea-print-prep/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/photopea-print-prep/"
 
 quotes:
   opening:

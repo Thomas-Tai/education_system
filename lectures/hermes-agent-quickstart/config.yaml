@@ -9,8 +9,6 @@ page:
 seo:
   title: "Hermes Agent 快速入門｜開源 AI Agent 框架實戰指南"
   description: "介紹 Hermes Agent 的核心架構、安裝設定、CLI 操作、Skills 與記憶系統、Gateway 多平台連接，以及進階的 Subagent 與 Cron 排程，帶你從零開始掌握這款開源 AI Agent 框架。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/hermes-agent-quickstart/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/hermes-agent-quickstart/"
 
 quotes:
   opening:

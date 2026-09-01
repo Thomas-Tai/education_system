@@ -9,8 +9,6 @@ page:
 seo:
   title: "Git & GitHub 從零開始｜版本控制完整入門教學"
   description: "從 Git 基礎概念到 GitHub 團隊協作，涵蓋安裝設定、分支操作、Pull Request 流程，適合完全新手的逐步實作教學。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/git-github-basics/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/lectures/git-github-basics/"
 
 quotes:
   opening:

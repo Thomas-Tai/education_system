@@ -9,8 +9,6 @@ page:
 seo:
   title: "生成式 AI 資訊安全｜Prompt Injection、資料外洩、模型防護實戰"
   description: "以真實攻擊案例解析生成式 AI 的資安風險，涵蓋 Prompt Injection、RAG 資料外洩、供應鏈攻擊、LLM 濫用防護，協助企業建立 AI 治理框架。"
-  image: "https://mch000534.github.io/agent-skill-lecture-builder/gen-ai-security/assets/og-image.jpg"
-  url: "https://mch000534.github.io/agent-skill-lecture-builder/gen-ai-security/"
 
 quotes:
   opening:
