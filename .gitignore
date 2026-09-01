@@ -18,5 +18,8 @@ tmp/
 .claude/
 .qoder/
 
-# Build artifacts (auto-generated, can be regenerated)
-lectures/*/assets/og-image.jpg
+# og-image.jpg 曾經被當成「可以重生的建置產物」而忽略，但那是錯的：
+# GitHub Pages 只會送出 repo 裡有的檔案，忽略它等於全站 26 門課的
+# og:image 通通 404（2026-09-01 逐一 curl 實測，26 門全中）。
+# CLAUDE.md 的「建置產物需 commit」本來就把它列為部署必要對象，
+# 是這一行跟那份文件互相矛盾。已移除。
