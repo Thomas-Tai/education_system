@@ -27,7 +27,7 @@ window.__courses__ = [
     "title": "什麼是 AI：定義與發展歷程",
     "badge": "大專與公眾課程 · 單元一",
     "subtitle": "AI 通識課單元一第一堂：用四種能力（感知、推理、學習、決策）拆解 AI 的定義，走一遍從圖靈測試到大模型的七十年，並認識三大應用領域。",
-    "ogImage": "lectures/ai-ml-1/assets/images/cover-ai-ml-1.png",
+    "ogImage": "lectures/ai-ml-1/assets/og-image.jpg",
     "href": "lectures/ai-ml-1/",
     "category": "AI 通識"
   }
