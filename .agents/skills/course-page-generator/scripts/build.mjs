@@ -15,7 +15,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, statSync, openSync, readSync, closeSync } from 'fs';
-import { resolve, dirname, join, relative } from 'path';
+import { resolve, dirname, join, relative, sep } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
@@ -1776,7 +1776,13 @@ function build(courseDir) {
 
   // Auto-detect GitHub Pages URL as fallback for SEO fields
   const ghPagesBase = detectGitHubPagesBase(globalRoot);
-  const coursePath = relative(globalRoot, courseDir);
+  // `relative()` returns an OS-native path — on Windows that is `lectures\ai-ml-1`.
+  // Interpolating it straight into a URL produced
+  // `https://…/education_system/lectures\ai-ml-1/` in og:url and og:image,
+  // which is not a valid URL: link previews got no image and the wrong canonical.
+  // Pages generated on macOS/Linux were fine, so this only showed up on
+  // Windows-authored lectures (ai-ml-1, aigc-comic-p4p6, aigc-exam-hour1/2).
+  const coursePath = relative(globalRoot, courseDir).split(sep).join('/');
   const autoUrl = ghPagesBase ? `${ghPagesBase}/${coursePath}/` : '';
   const autoImage = ghPagesBase ? `${ghPagesBase}/${coursePath}/assets/og-image.jpg` : '';
 

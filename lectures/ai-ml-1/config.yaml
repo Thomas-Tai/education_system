@@ -12,3 +12,10 @@ page:
 
 seo:
   description: "AI 通識課單元一第一堂：用四種能力（感知、推理、學習、決策）拆解 AI 的定義，走一遍從圖靈測試到大模型的七十年，並認識三大應用領域。"
+  # 這一門是全站唯一沒有 assets/og-image.jpg 的課（其餘 25 門都有），
+  # 而 build.mjs 的自動值就是指向那個檔——於是 og:image 線上實測 404。
+  # 正規做法是 `npm run og lectures/ai-ml-1` 生一張 1200x630 的卡，
+  # 但那支要 puppeteer 的 Chrome，這台機器上沒有下載
+  #（`npx puppeteer browsers install chrome`，約 150MB）。
+  # 在補上那張卡之前先指向封面圖：預覽有圖，比 404 好。
+  image: "https://Thomas-Tai.github.io/education_system/lectures/ai-ml-1/assets/images/cover-ai-ml-1.png"

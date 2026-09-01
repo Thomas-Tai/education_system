@@ -36,7 +36,12 @@ instructor:
 #       可用來引導學員後續行動或延伸學習。
 
 seo:
-  title: "課程標題示意｜主題副標示意"
+  # 這裡**不要**放 title。放了就會蓋掉每一門課自己的 page.title——
+  # build.mjs 的順序是 `cfg.seo?.title || cfg.page?.title`，而課程設定與這份
+  # 全域設定是深合併的，所以全域一旦有 title，沒有自己寫 seo.title 的課
+  # 就會全部把示意字當成 og:title 送出去。實測受害的有四門：
+  # ai-ml-1、aigc-comic-p4p6、aigc-exam-hour1、aigc-exam-hour2。
+  # 分享連結時預覽卡的標題會顯示「課程標題示意｜主題副標示意」。
   description: "歡迎追蹤我的社群，獲取更多 AI 開發實戰內容"
 
 footer:
