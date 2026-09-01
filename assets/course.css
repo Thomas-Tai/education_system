@@ -76,7 +76,12 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: "Noto Sans HK","Noto Sans TC","Atkinson Hyperlegible","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+      /* Atkinson Hyperlegible 從這裡拿掉了：它排在兩支一定會命中的 Noto
+         後面，所以永遠輪不到它（實測線上 document.fonts.check 回 false），
+         而 base.html 還為它多要一份 Google Fonts。**要真的用它，得把它
+         排到兩支 Noto 前面**——那會改掉全站 26 頁的字體長相，是版面決定，
+         不是清理，所以沒有那樣做。 */
+      font-family: "Noto Sans HK","Noto Sans TC","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -6317,7 +6322,14 @@
 
 /* ===== TEACHER / PRESENTER MODE ===== */
 body.pres-fonts {
-  font-size: 20px;
+  /* **要用 rem，不能寫死 px。** 這裡原本是 20px，而根字級是由字級切換鈕
+     設定的（course.js 的 fontSizes = [16, 21, 22, 23, 24]，預設 22px）。
+     於是五段字級裡有四段，一進教師模式 body 反而**變小**
+     （實測線上 22px → 20px）——只有 16px 那一段才是變大的。
+     旁邊那幾條 .loose-text／.quiz-btn 都是 rem，所以它們照常放大，
+     結果是同一個模式裡一部分變大、一部分變小。
+     改成 1.1rem，跟 .loose-text 對齊，五段字級都一定變大。 */
+  font-size: 1.1rem;
 }
 body.pres-fonts .loose-text,
 body.pres-fonts .loose-list li,
