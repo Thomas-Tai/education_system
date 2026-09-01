@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@300;400;500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
     rel="stylesheet">
   <script>
     if (window.location.protocol === 'file:') {
@@ -24,7 +24,7 @@
     }
   </script>
   <link rel="stylesheet" href="../../assets/course.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async defer></script>
 </head>
 
 <body>
@@ -330,7 +330,7 @@
       <div class="insight-title">本章為背景鋪陳</div>
       <p>第 1 章只提供心智模型，沒有實作步驟。下一章開始我們會打開終端機，一行一行驗證每個概念。</p>
     </div>
-        <div class="quiz-block" data-quiz-id="q-claudecode與copilot最根" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-claudecode與copilot最根" data-quiz-answer="1" data-quiz-type="single" data-review-anchor="sub-section-2">
       <div class="quiz-q">Claude Code 與 Copilot 最根本的差異是什麼？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>Claude Code 的模型參數更大</span></button>
@@ -340,7 +340,7 @@
       <div class="quiz-hint" hidden>回想本章「補完型」與「代理型」的比較</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-ai產生的程式碼若沒有測試驗證就可以先c" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-ai產生的程式碼若沒有測試驗證就可以先c" data-quiz-answer="1" data-quiz-type="bool" data-review-anchor="sub-section-2">
       <div class="quiz-q">AI 產生的程式碼若沒有測試驗證，就可以先 commit？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -504,7 +504,7 @@ claude</code></pre>
       <span class="tag blue">/model — 切換模型（Opus / Sonnet / Haiku）</span>
       <span class="tag blue">/cost — 查看本次對話累計 token 用量</span>
     </div>
-        <div class="quiz-block" data-quiz-id="q-安裝claudecode後第一次執行cl" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-安裝claudecode後第一次執行cl" data-quiz-answer="1" data-quiz-type="single" data-review-anchor="sub-section-4">
       <div class="quiz-q">安裝 Claude Code 後，第一次執行 `claude` 時會發生什麼事？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>自動建立 CLAUDE.md 檔案</span></button>
@@ -514,7 +514,7 @@ claude</code></pre>
       <div class="quiz-hint" hidden>查看「安裝指令」段落的說明</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-compact指令的用途是壓縮對話歷史以" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-compact指令的用途是壓縮對話歷史以" data-quiz-answer="0" data-quiz-type="bool" data-review-anchor="sub-section-4">
       <div class="quiz-q">`/compact` 指令的用途是壓縮對話歷史以節省 context？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -737,7 +737,7 @@ claude</code></pre>
     <ul><li>當 AI 在同一輪中改了 3 個以上的 feature，出錯機率會大幅增加</li><li>正確做法：每次只要求一個明確的變更，改完即 commit，再進行下一步</li><li>若發現 AI 開始「順便也修了 X」，立刻停下，逐一檢查每項變更</li></ul>
   </div>
 </div>
-        <div class="quiz-block" data-quiz-id="q-在plan階段最重要的動作是什麼" data-quiz-answer="2">
+        <div class="quiz-block" data-quiz-id="q-在plan階段最重要的動作是什麼" data-quiz-answer="2" data-quiz-type="single" data-review-anchor="sub-verify">
       <div class="quiz-q">在 Plan 階段最重要的動作是什麼？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>讓 AI 直接開始改程式碼以節省時間</span></button>
@@ -748,7 +748,7 @@ claude</code></pre>
       <div class="quiz-hint" hidden>Plan 的真正價值在於「你能不能讀懂並挑出問題」</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-verify階段應該驗證哪些項目" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-verify階段應該驗證哪些項目" data-quiz-answer="0" data-quiz-type="single" data-review-anchor="sub-verify">
       <div class="quiz-q">Verify 階段應該驗證哪些項目？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>Type check、Lint、Test、手動驗證關鍵路徑</span></button>
@@ -970,7 +970,7 @@ description: 對當前 branch 的變更做一次 code review
         </div>
       </div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-claudemd的主要用途是什麼" data-quiz-answer="2">
+        <div class="quiz-block" data-quiz-id="q-claudemd的主要用途是什麼" data-quiz-answer="2" data-quiz-type="single" data-review-anchor="sub-slash-commands">
       <div class="quiz-q">CLAUDE.md 的主要用途是什麼？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>讓 Claude Code 的 UI 變得更漂亮</span></button>
@@ -981,7 +981,7 @@ description: 對當前 branch 的變更做一次 code review
       <div class="quiz-hint" hidden>查看「它是什麼、放哪裡」段落</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-claudesettingsjson的p" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-claudesettingsjson的p" data-quiz-answer="1" data-quiz-type="bool" data-review-anchor="sub-slash-commands">
       <div class="quiz-q">`.claude/settings.json` 的 permissions 設定應該 commit 進 repo 讓團隊共用？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -1155,7 +1155,7 @@ description: 當使用者要建立 commit 時觸發，分析變更並拆成多�
 回報檔案、行號、用途分類，最多 30 筆。
 你（主對話）不需要讀檔，等子代理結果就好。</code></pre>
     </div>
-        <div class="quiz-block" data-quiz-id="q-什麼時候應該使用subagent" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-什麼時候應該使用subagent" data-quiz-answer="1" data-quiz-type="single" data-review-anchor="sub-subagents">
       <div class="quiz-q">什麼時候應該使用 Subagent？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>需要跟使用者持續互動的對話任務</span></button>
@@ -1166,7 +1166,7 @@ description: 當使用者要建立 commit 時觸發，分析變更並拆成多�
       <div class="quiz-hint" hidden>查看「呼叫 Subagent 的時機」流程</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-subagent的探索任務會污染主對話的" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-subagent的探索任務會污染主對話的" data-quiz-answer="1" data-quiz-type="bool" data-review-anchor="sub-subagents">
       <div class="quiz-q">Subagent 的探索任務會污染主對話的 context？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -1400,7 +1400,7 @@ claude</code></pre>
         </div>
       </div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-mcp最適合接入哪種外部資源" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-mcp最適合接入哪種外部資源" data-quiz-answer="1" data-quiz-type="single" data-review-anchor="sub-worktree">
       <div class="quiz-q">MCP 最適合接入哪種外部資源？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>高頻寫入操作的資料庫</span></button>
@@ -1411,7 +1411,7 @@ claude</code></pre>
       <div class="quiz-hint" hidden>查看「MCP 適合接什麼」標籤</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-gitworktree可以讓同一個rep" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-gitworktree可以讓同一個rep" data-quiz-answer="0" data-quiz-type="bool" data-review-anchor="sub-worktree">
       <div class="quiz-q">Git Worktree 可以讓同一個 repo 的多個分支同時開發而不互相干擾？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -1594,7 +1594,7 @@ claude</code></pre>
       <p>工具的終點不是個人英雄主義，而是團隊韌性。當你的工作流被寫進 CLAUDE.md、Skill、Hook、Slash Command — 任何一位同事（或未來的你）都能無痛接手。</p>
       <p style="margin-top:.5rem">Claude Code 最終要解決的不是「我寫得多快」，而是「我們團隊能多有韌性地交付產品」。</p>
     </div>
-        <div class="quiz-block" data-quiz-id="q-系統化debug的第一步應該是什麼" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-系統化debug的第一步應該是什麼" data-quiz-answer="0" data-quiz-type="single" data-review-anchor="sub-ai-2">
       <div class="quiz-q">系統化 Debug 的第一步應該是什麼？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>建立穩定的重現步驟</span></button>
@@ -1605,7 +1605,7 @@ claude</code></pre>
       <div class="quiz-hint" hidden>查看系統化 Debug 的流程，第一步是「重現」</div>
       <div class="quiz-fb" hidden></div>
     </div>
-        <div class="quiz-block" data-quiz-id="q-當ai提出bug的可能原因時應該要求它至" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-當ai提出bug的可能原因時應該要求它至" data-quiz-answer="0" data-quiz-type="bool" data-review-anchor="sub-ai-2">
       <div class="quiz-q">當 AI 提出 bug 的可能原因時，應該要求它至少列出 2 個以上假設？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -1683,36 +1683,33 @@ claude</code></pre>
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="color-swatches" id="color-swatches">
-        <button class="color-swatch" data-theme-id="red" title="正紅" data-accent="#e03040"
-          data-accent-light="#b01828" data-accent2="#e87858" data-accent2-light="#c05030" data-accent3="#d06080"
-          data-accent3-light="#a03060"
-          style="background:linear-gradient(135deg,#e03040 40%,#e87858 70%,#d06080)"></button>
-        <button class="color-swatch" data-theme-id="coral" title="暖陽珊瑚" data-accent="#e8845a"
-          data-accent-light="#c45c28" data-accent2="#e8b878" data-accent2-light="#9a7028" data-accent3="#e08898"
-          data-accent3-light="#b04860"
-          style="background:linear-gradient(135deg,#e8845a 40%,#e8b878 70%,#e08898)"></button>
-        <button class="color-swatch" data-theme-id="ocean" title="深海藍" data-accent="#60a5fa" data-accent-light="#2563eb"
-          data-accent2="#5eead4" data-accent2-light="#0d9488" data-accent3="#a5b4fc" data-accent3-light="#6366f1"
-          style="background:linear-gradient(135deg,#60a5fa 40%,#5eead4 70%,#a5b4fc)"></button>
-        <button class="color-swatch" data-theme-id="forest" title="翡翠森林" data-accent="#50d890"
-          data-accent-light="#15803d" data-accent2="#c8d858" data-accent2-light="#6a7a18" data-accent3="#50c0a8"
-          data-accent3-light="#0d7060"
-          style="background:linear-gradient(135deg,#50d890 40%,#c8d858 70%,#50c0a8)"></button>
-        <button class="color-swatch" data-theme-id="galaxy" title="星河紫" data-accent="#a78bfa"
-          data-accent-light="#7c3aed" data-accent2="#e8a8e0" data-accent2-light="#a21caf" data-accent3="#7db8f8"
-          data-accent3-light="#2563eb"
-          style="background:linear-gradient(135deg,#a78bfa 40%,#e8a8e0 70%,#7db8f8)"></button>
-        <button class="color-swatch" data-theme-id="sakura" title="花見櫻" data-accent="#f472b6"
-          data-accent-light="#db2777" data-accent2="#b0a8f0" data-accent2-light="#6d28d9" data-accent3="#f0a8a0"
-          data-accent3-light="#c05050"
-          style="background:linear-gradient(135deg,#f472b6 40%,#b0a8f0 70%,#f0a8a0)"></button>
-        <button class="color-swatch" data-theme-id="amber" title="琥珀" data-accent="#f0b840" data-accent-light="#a87808"
-          data-accent2="#e09870" data-accent2-light="#a86040" data-accent3="#c8b080" data-accent3-light="#887048"
-          style="background:linear-gradient(135deg,#f0b840 40%,#e09870 70%,#c8b080)"></button>
-        <button class="color-swatch" data-theme-id="white" title="銀白" data-accent="#c8cdd8"
-          data-accent-light="#607090" data-accent2="#b0c0c8" data-accent2-light="#506870" data-accent3="#c0bcd8"
-          data-accent3-light="#706888"
-          style="background:linear-gradient(135deg,#e0e2ec 40%,#c8d0dc 70%,#d4cce8)"></button>
+        <button class="color-swatch selected" data-theme-id="terracotta" title="赤陶" data-accent="#A4452F"
+          data-accent-light="#A4452F" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#A4452F 40%,#3F5B7E 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="slate" title="岩灰藍" data-accent="#3F5B7E"
+          data-accent-light="#3F5B7E" data-accent2="#A4452F" data-accent2-light="#A4452F" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#3F5B7E 40%,#A4452F 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="forest" title="森綠" data-accent="#2F6B4A"
+          data-accent-light="#2F6B4A" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#2F6B4A 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="ochre" title="赭黃" data-accent="#B5781E"
+          data-accent-light="#B5781E" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#B5781E 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="plum" title="梅紫" data-accent="#6A4F7C"
+          data-accent-light="#6A4F7C" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#6A4F7C 40%,#3F5B7E 70%,#A4452F)"></button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">教師模式</div>
+      <div class="settings-controls-row">
+        <button class="settings-toggle" id="pres-mode-toggle" title="教師模式 (Shift+P)" style="width:auto;border-radius:4px;padding:4px 10px;font-size:.72rem;">放大字體</button>
       </div>
     </div>
     <div class="settings-divider"></div>
@@ -1975,15 +1972,15 @@ claude</code></pre>
       var s = localStorage.getItem('theme');
       var d = window.matchMedia('(prefers-color-scheme:dark)').matches;
       var t = s || (d ? 'dark' : 'light');
-      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       var b = document.getElementById('theme-toggle');
-      if (b) b.innerHTML = t === 'light' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      if (b) b.innerHTML = t === 'dark' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
       // Restore accent color
       var accentData = localStorage.getItem('accentTheme');
       if (accentData) {
         try {
           var ac = JSON.parse(accentData);
-          var isLight = t === 'light';
+          var isLight = t !== 'dark';
           document.documentElement.style.setProperty('--accent', isLight ? ac.light : ac.dark);
         } catch (e) { }
       }

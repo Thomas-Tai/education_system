@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@300;400;500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
     rel="stylesheet">
   <script>
     if (window.location.protocol === 'file:') {
@@ -24,7 +24,7 @@
     }
   </script>
   <link rel="stylesheet" href="../../assets/course.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async defer></script>
 </head>
 
 <body>
@@ -666,7 +666,7 @@
       <div class="insight-title">壓縮是藝術，不是工程</div>
       <p>壓縮器的參數沒有標準答案，只有適合當下素材的選擇。同一組參數套在不同人的聲音上，效果天差地遠。多聽、多比較、多嘗試——耳朵比數字重要。</p>
     </div>
-        <div class="quiz-block" data-quiz-id="q-壓縮器的attack時間設得太快例如1m" data-quiz-answer="0">
+        <div class="quiz-block" data-quiz-id="q-壓縮器的attack時間設得太快例如1m" data-quiz-answer="0" data-quiz-type="single" data-review-anchor="sub-section-6">
       <div class="quiz-q">壓縮器的 Attack 時間設得太快（例如 1ms），對人聲會造成什麼影響？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>壓掉自然的起音，人聲聽起來扁平無力</span></button>
@@ -827,7 +827,7 @@
       <div class="insight-title">混音的本質是取捨</div>
       <p>每個聲音都想被聽見，但同時大聲等於沒有重點。混音師的工作就是決定什麼時候誰該被聽見——這是選擇的藝術，不是音量的競賽。</p>
     </div>
-        <div class="quiz-block" data-quiz-id="q-混音時應該先把所有軌道的音量推到最大再逐" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-混音時應該先把所有軌道的音量推到最大再逐" data-quiz-answer="1" data-quiz-type="bool" data-review-anchor="sub-section-8">
       <div class="quiz-q">混音時應該先把所有軌道的音量推到最大，再逐一調低？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>是</span></button>
@@ -1081,7 +1081,7 @@
       <div class="insight-title">響度標準不是限制，是共通語言</div>
       <p>當所有節目都遵循同一個響度標準時，觀眾切換頻道不需要調整音量。這是對觀眾體驗的尊重，也是專業製作的基本素養。</p>
     </div>
-        <div class="quiz-block" data-quiz-id="q-針對youtube平台輸出時目標響度應該" data-quiz-answer="1">
+        <div class="quiz-block" data-quiz-id="q-針對youtube平台輸出時目標響度應該" data-quiz-answer="1" data-quiz-type="single" data-review-anchor="sub-section-12">
       <div class="quiz-q">針對 YouTube 平台輸出時，目標響度應該設定在什麼範圍？</div>
       <div class="quiz-opts">
         <button class="quiz-btn" data-idx="0"><span class="quiz-key">A</span><span>-24 LUFS（廣播標準）</span></button>
@@ -1172,36 +1172,33 @@
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="color-swatches" id="color-swatches">
-        <button class="color-swatch" data-theme-id="red" title="正紅" data-accent="#e03040"
-          data-accent-light="#b01828" data-accent2="#e87858" data-accent2-light="#c05030" data-accent3="#d06080"
-          data-accent3-light="#a03060"
-          style="background:linear-gradient(135deg,#e03040 40%,#e87858 70%,#d06080)"></button>
-        <button class="color-swatch" data-theme-id="coral" title="暖陽珊瑚" data-accent="#e8845a"
-          data-accent-light="#c45c28" data-accent2="#e8b878" data-accent2-light="#9a7028" data-accent3="#e08898"
-          data-accent3-light="#b04860"
-          style="background:linear-gradient(135deg,#e8845a 40%,#e8b878 70%,#e08898)"></button>
-        <button class="color-swatch" data-theme-id="ocean" title="深海藍" data-accent="#60a5fa" data-accent-light="#2563eb"
-          data-accent2="#5eead4" data-accent2-light="#0d9488" data-accent3="#a5b4fc" data-accent3-light="#6366f1"
-          style="background:linear-gradient(135deg,#60a5fa 40%,#5eead4 70%,#a5b4fc)"></button>
-        <button class="color-swatch" data-theme-id="forest" title="翡翠森林" data-accent="#50d890"
-          data-accent-light="#15803d" data-accent2="#c8d858" data-accent2-light="#6a7a18" data-accent3="#50c0a8"
-          data-accent3-light="#0d7060"
-          style="background:linear-gradient(135deg,#50d890 40%,#c8d858 70%,#50c0a8)"></button>
-        <button class="color-swatch" data-theme-id="galaxy" title="星河紫" data-accent="#a78bfa"
-          data-accent-light="#7c3aed" data-accent2="#e8a8e0" data-accent2-light="#a21caf" data-accent3="#7db8f8"
-          data-accent3-light="#2563eb"
-          style="background:linear-gradient(135deg,#a78bfa 40%,#e8a8e0 70%,#7db8f8)"></button>
-        <button class="color-swatch" data-theme-id="sakura" title="花見櫻" data-accent="#f472b6"
-          data-accent-light="#db2777" data-accent2="#b0a8f0" data-accent2-light="#6d28d9" data-accent3="#f0a8a0"
-          data-accent3-light="#c05050"
-          style="background:linear-gradient(135deg,#f472b6 40%,#b0a8f0 70%,#f0a8a0)"></button>
-        <button class="color-swatch" data-theme-id="amber" title="琥珀" data-accent="#f0b840" data-accent-light="#a87808"
-          data-accent2="#e09870" data-accent2-light="#a86040" data-accent3="#c8b080" data-accent3-light="#887048"
-          style="background:linear-gradient(135deg,#f0b840 40%,#e09870 70%,#c8b080)"></button>
-        <button class="color-swatch" data-theme-id="white" title="銀白" data-accent="#c8cdd8"
-          data-accent-light="#607090" data-accent2="#b0c0c8" data-accent2-light="#506870" data-accent3="#c0bcd8"
-          data-accent3-light="#706888"
-          style="background:linear-gradient(135deg,#e0e2ec 40%,#c8d0dc 70%,#d4cce8)"></button>
+        <button class="color-swatch selected" data-theme-id="terracotta" title="赤陶" data-accent="#A4452F"
+          data-accent-light="#A4452F" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#A4452F 40%,#3F5B7E 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="slate" title="岩灰藍" data-accent="#3F5B7E"
+          data-accent-light="#3F5B7E" data-accent2="#A4452F" data-accent2-light="#A4452F" data-accent3="#2F6B4A"
+          data-accent3-light="#2F6B4A"
+          style="background:linear-gradient(135deg,#3F5B7E 40%,#A4452F 70%,#2F6B4A)"></button>
+        <button class="color-swatch" data-theme-id="forest" title="森綠" data-accent="#2F6B4A"
+          data-accent-light="#2F6B4A" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#2F6B4A 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="ochre" title="赭黃" data-accent="#B5781E"
+          data-accent-light="#B5781E" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#B5781E 40%,#3F5B7E 70%,#A4452F)"></button>
+        <button class="color-swatch" data-theme-id="plum" title="梅紫" data-accent="#6A4F7C"
+          data-accent-light="#6A4F7C" data-accent2="#3F5B7E" data-accent2-light="#3F5B7E" data-accent3="#A4452F"
+          data-accent3-light="#A4452F"
+          style="background:linear-gradient(135deg,#6A4F7C 40%,#3F5B7E 70%,#A4452F)"></button>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">教師模式</div>
+      <div class="settings-controls-row">
+        <button class="settings-toggle" id="pres-mode-toggle" title="教師模式 (Shift+P)" style="width:auto;border-radius:4px;padding:4px 10px;font-size:.72rem;">放大字體</button>
       </div>
     </div>
     <div class="settings-divider"></div>
@@ -1464,15 +1461,15 @@
       var s = localStorage.getItem('theme');
       var d = window.matchMedia('(prefers-color-scheme:dark)').matches;
       var t = s || (d ? 'dark' : 'light');
-      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       var b = document.getElementById('theme-toggle');
-      if (b) b.innerHTML = t === 'light' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      if (b) b.innerHTML = t === 'dark' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
       // Restore accent color
       var accentData = localStorage.getItem('accentTheme');
       if (accentData) {
         try {
           var ac = JSON.parse(accentData);
-          var isLight = t === 'light';
+          var isLight = t !== 'dark';
           document.documentElement.style.setProperty('--accent', isLight ? ac.light : ac.dark);
         } catch (e) { }
       }
